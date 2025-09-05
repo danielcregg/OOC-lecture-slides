@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Build outputs
+dist/reveal.js.map
+dist/reveal.css.map
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Logs
+logs/
+*.log
+
+# Coverage reports
+coverage/
+
+# Local development
+.env
+.env.local
