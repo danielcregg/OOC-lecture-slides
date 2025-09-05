@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lecture 01: Introduction to AI-Assisted Programming</title>
+    <link rel="stylesheet" href="../../dist/reset.css">
+    <link rel="stylesheet" href="../../dist/reveal.css">
+    <link rel="stylesheet" href="../../dist/theme/black.css" id="theme">
+    <link rel="stylesheet" href="../../plugin/highlight/monokai.css">
+    <style>
+        .reveal .slides section .fragment.highlight-current-blue.current-fragment {
+            color: #42affa;
+        }
+        .reveal .progress {
+            color: #42affa;
+        }
+        .reveal .controls {
+            color: #42affa;
+        }
+        .chart-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: rgba(66, 175, 250, 0.1);
+            border: 2px solid #42affa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            color: #42affa;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-top: 10px;
+        }
+        .comparison-table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #42affa;
+            padding: 12px;
+            text-align: left;
+        }
+        .comparison-table th {
+            background: rgba(66, 175, 250, 0.2);
+            color: #42affa;
+        }
+        .pros { color: #4CAF50; }
+        .cons { color: #f44336; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Title Slide -->
+            <section>
+                <h1>AI-Assisted Programming</h1>
+                <h3>Lecture 01: Introduction</h3>
+                <p>
+                    <small>AI-Assisted Programming Course | 2024</small>
+                </p>
+                <p>
+                    <small>Duration: 60 minutes</small>
+                </p>
+            </section>
+
+            <!-- Learning Objectives -->
+            <section>
+                <h2>Learning Objectives</h2>
+                <ul>
+                    <li class="fragment">Understand the concept of AI-assisted programming</li>
+                    <li class="fragment">Explore current AI tools for developers</li>
+                    <li class="fragment">Analyze the impact on productivity and code quality</li>
+                    <li class="fragment">Examine real-world adoption statistics</li>
+                    <li class="fragment">Discuss benefits and challenges</li>
+                    <li class="fragment">Look ahead to the future of programming</li>
+                </ul>
+            </section>
+
+            <!-- What is AI-Assisted Programming? -->
+            <section>
+                <h2>What is AI-Assisted Programming?</h2>
+                <div class="fragment">
+                    <p>AI-Assisted Programming is the use of artificial intelligence tools to:</p>
+                    <ul>
+                        <li class="fragment">Generate code automatically</li>
+                        <li class="fragment">Complete code as you type</li>
+                        <li class="fragment">Suggest improvements and optimizations</li>
+                        <li class="fragment">Find and fix bugs</li>
+                        <li class="fragment">Generate documentation and tests</li>
+                        <li class="fragment">Translate between programming languages</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Current Market Statistics -->
+            <section>
+                <h2>Market Adoption (2024)</h2>
+                <div class="stat-grid">
+                    <div class="stat-card fragment">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">of developers use AI tools</div>
+                    </div>
+                    <div class="stat-card fragment">
+                        <div class="stat-number">46%</div>
+                        <div class="stat-label">productivity improvement</div>
+                    </div>
+                    <div class="stat-card fragment">
+                        <div class="stat-number">70%</div>
+                        <div class="stat-label">faster code completion</div>
+                    </div>
+                    <div class="stat-card fragment">
+                        <div class="stat-number">25%</div>
+                        <div class="stat-label">reduction in bugs</div>
+                    </div>
+                </div>
+                <p class="fragment"><small>Sources: Stack Overflow Developer Survey 2024, GitHub Research</small></p>
+            </section>
+
+            <!-- Popular AI Tools -->
+            <section>
+                <h2>Popular AI Programming Tools</h2>
+                <table class="comparison-table fragment">
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Company</th>
+                            <th>Primary Feature</th>
+                            <th>Languages</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="fragment">
+                            <td><strong>GitHub Copilot</strong></td>
+                            <td>Microsoft/GitHub</td>
+                            <td>Code completion</td>
+                            <td>40+ languages</td>
+                        </tr>
+                        <tr class="fragment">
+                            <td><strong>ChatGPT/GPT-4</strong></td>
+                            <td>OpenAI</td>
+                            <td>Code generation</td>
+                            <td>All major languages</td>
+                        </tr>
+                        <tr class="fragment">
+                            <td><strong>Claude</strong></td>
+                            <td>Anthropic</td>
+                            <td>Code analysis</td>
+                            <td>All major languages</td>
+                        </tr>
+                        <tr class="fragment">
+                            <td><strong>Tabnine</strong></td>
+                            <td>Tabnine</td>
+                            <td>AI completion</td>
+                            <td>30+ languages</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- GitHub Copilot Deep Dive -->
+            <section>
+                <section>
+                    <h2>GitHub Copilot</h2>
+                    <p>The most widely adopted AI programming assistant</p>
+                    <ul>
+                        <li class="fragment">Trained on billions of lines of public code</li>
+                        <li class="fragment">Integrated directly into IDEs (VS Code, JetBrains, etc.)</li>
+                        <li class="fragment">Real-time code suggestions</li>
+                        <li class="fragment">Context-aware completions</li>
+                        <li class="fragment">Chat interface for code explanation</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Copilot Capabilities</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <h4 class="pros">✅ Strengths</h4>
+                            <ul>
+                                <li>Fast code completion</li>
+                                <li>Understands context</li>
+                                <li>Learns from comments</li>
+                                <li>Multiple suggestions</li>
+                                <li>Wide language support</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="cons">⚠️ Limitations</h4>
+                            <ul>
+                                <li>May suggest incorrect code</li>
+                                <li>Requires code review</li>
+                                <li>Limited business logic</li>
+                                <li>Potential licensing issues</li>
+                                <li>Internet dependency</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- Code Example -->
+            <section>
+                <h2>Live Demo: AI Code Generation</h2>
+                <pre><code class="javascript" data-trim contenteditable>
+// Comment: Create a function to calculate fibonacci numbers
+function fibonacci(n) {
+    if (n <= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Comment: Create an optimized version with memoization
+function fibonacciMemo(n, memo = {}) {
+    if (n in memo) return memo[n];
+    if (n <= 1) return n;
+    memo[n] = fibonacciMemo(n - 1, memo) + fibonacciMemo(n - 2, memo);
+    return memo[n];
+}
+
+// Comment: Generate test cases
+console.log(fibonacci(10)); // Expected: 55
+console.log(fibonacciMemo(50)); // Much faster for large numbers
+                </code></pre>
+                <p><small>Example of AI-generated code with improvements</small></p>
+            </section>
+
+            <!-- Productivity Impact -->
+            <section>
+                <h2>Productivity Impact</h2>
+                <div class="chart-container">
+                    <h3 style="color: #333;">Developer Task Time Reduction</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; color: #333;">
+                        <div>
+                            <ul>
+                                <li>Code writing: <strong>55% faster</strong></li>
+                                <li>Bug fixing: <strong>37% faster</strong></li>
+                                <li>Code review: <strong>30% faster</strong></li>
+                                <li>Documentation: <strong>60% faster</strong></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul>
+                                <li>Testing: <strong>45% faster</strong></li>
+                                <li>Refactoring: <strong>40% faster</strong></li>
+                                <li>Learning new APIs: <strong>65% faster</strong></li>
+                                <li>Debugging: <strong>35% faster</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p><small>Source: GitHub Copilot Research Study 2024</small></p>
+                </div>
+            </section>
+
+            <!-- Benefits -->
+            <section>
+                <h2>Key Benefits</h2>
+                <div class="fragment">
+                    <h3 class="pros">🚀 For Developers</h3>
+                    <ul>
+                        <li>Faster coding and reduced boilerplate</li>
+                        <li>Learning new languages and frameworks</li>
+                        <li>Reduced context switching</li>
+                        <li>Enhanced creativity and problem-solving</li>
+                    </ul>
+                </div>
+                <div class="fragment">
+                    <h3 class="pros">🏢 For Organizations</h3>
+                    <ul>
+                        <li>Increased development velocity</li>
+                        <li>Reduced time-to-market</li>
+                        <li>Lower training costs</li>
+                        <li>Improved code consistency</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Challenges -->
+            <section>
+                <h2>Challenges & Considerations</h2>
+                <div class="fragment">
+                    <h3 class="cons">⚠️ Technical Challenges</h3>
+                    <ul>
+                        <li>Code quality and correctness</li>
+                        <li>Security vulnerabilities</li>
+                        <li>Over-reliance on AI suggestions</li>
+                        <li>Debugging AI-generated code</li>
+                    </ul>
+                </div>
+                <div class="fragment">
+                    <h3 class="cons">🔒 Ethical & Legal</h3>
+                    <ul>
+                        <li>Code ownership and licensing</li>
+                        <li>Privacy and data security</li>
+                        <li>Bias in AI models</li>
+                        <li>Impact on developer skills</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section>
+                <h2>Best Practices</h2>
+                <ul>
+                    <li class="fragment"><strong>Always review AI-generated code</strong></li>
+                    <li class="fragment"><strong>Write clear comments</strong> to guide AI suggestions</li>
+                    <li class="fragment"><strong>Test thoroughly</strong> - AI code may have subtle bugs</li>
+                    <li class="fragment"><strong>Understand the code</strong> before accepting suggestions</li>
+                    <li class="fragment"><strong>Use AI as a tool, not a replacement</strong> for thinking</li>
+                    <li class="fragment"><strong>Stay updated</strong> on security and licensing implications</li>
+                    <li class="fragment"><strong>Maintain coding skills</strong> alongside AI usage</li>
+                </ul>
+            </section>
+
+            <!-- Future Outlook -->
+            <section>
+                <h2>Future of AI-Assisted Programming</h2>
+                <div class="fragment">
+                    <h3>🔮 Emerging Trends</h3>
+                    <ul>
+                        <li>More specialized AI models for specific domains</li>
+                        <li>Better integration with development workflows</li>
+                        <li>AI-powered code review and testing</li>
+                        <li>Natural language to code translation</li>
+                        <li>Automated refactoring and optimization</li>
+                    </ul>
+                </div>
+                <div class="fragment">
+                    <h3>🎯 What This Means for Developers</h3>
+                    <ul>
+                        <li>Focus shifts to higher-level problem solving</li>
+                        <li>Increased importance of code review skills</li>
+                        <li>Need for AI literacy in development</li>
+                        <li>Emphasis on creative and architectural thinking</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Course Preview -->
+            <section>
+                <h2>This Course Preview</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h4>Upcoming Lectures:</h4>
+                        <ul style="font-size: 0.8em;">
+                            <li>Code Generation & Completion</li>
+                            <li>Code Review & QA</li>
+                            <li>Testing & Debugging</li>
+                            <li>Documentation</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>What You'll Learn:</h4>
+                        <ul style="font-size: 0.8em;">
+                            <li>Hands-on tool usage</li>
+                            <li>Best practices</li>
+                            <li>Real-world applications</li>
+                            <li>Ethical considerations</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Q&A -->
+            <section>
+                <h2>Questions & Discussion</h2>
+                <p class="fragment">What questions do you have about AI-assisted programming?</p>
+                <div class="fragment">
+                    <h3>Discussion Topics:</h3>
+                    <ul>
+                        <li>Have you used AI programming tools before?</li>
+                        <li>What concerns do you have about AI in development?</li>
+                        <li>Which tools are you most excited to learn about?</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Thank You -->
+            <section>
+                <h1>Thank You!</h1>
+                <h3>Next Lecture: Code Generation and Completion</h3>
+                <p>
+                    <small>
+                        <a href="../../">← Back to Course Index</a><br>
+                        Contact: [Your Email] | Course Materials: GitHub
+                    </small>
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <script src="../../dist/reveal.js"></script>
+    <script src="../../plugin/notes/notes.js"></script>
+    <script src="../../plugin/markdown/markdown.js"></script>
+    <script src="../../plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            controls: true,
+            progress: true,
+            center: true,
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ],
+            dependencies: [
+                { src: '../../plugin/highlight/highlight.js', async: true }
+            ]
+        });
+    </script>
+</body>
+</html>

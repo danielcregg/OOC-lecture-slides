@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Assisted Programming - Lecture Slides</title>
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme">
+    <style>
+        .lecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px;
+        }
+        .lecture-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .lecture-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        .lecture-number {
+            font-size: 2em;
+            color: #42affa;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .lecture-title {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .lecture-description {
+            color: #ccc;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .lecture-duration {
+            color: #42affa;
+            font-size: 0.8em;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        body {
+            background: #191919;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+        }
+        .coming-soon {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .available {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI-Assisted Programming</h1>
+        <p>Interactive Lecture Slides - 2024</p>
+    </div>
+    
+    <div class="lecture-grid">
+        <div class="lecture-card available" onclick="window.location.href='lectures/lecture-01/'">
+            <div class="lecture-number">01</div>
+            <div class="lecture-title">Introduction to AI-Assisted Programming</div>
+            <div class="lecture-description">
+                Overview of AI tools in software development, GitHub Copilot, and the future of programming with AI assistance.
+            </div>
+            <div class="lecture-duration">60 minutes</div>
+        </div>
+        
+        <div class="lecture-card coming-soon">
+            <div class="lecture-number">02</div>
+            <div class="lecture-title">Code Generation and Completion</div>
+            <div class="lecture-description">
+                Deep dive into AI-powered code generation, best practices, and hands-on exercises with various AI tools.
+            </div>
+            <div class="lecture-duration">60 minutes - Coming Soon</div>
+        </div>
+        
+        <div class="lecture-card coming-soon">
+            <div class="lecture-number">03</div>
+            <div class="lecture-title">Code Review and Quality Assurance</div>
+            <div class="lecture-description">
+                Using AI for code review, bug detection, and maintaining code quality in collaborative environments.
+            </div>
+            <div class="lecture-duration">60 minutes - Coming Soon</div>
+        </div>
+        
+        <div class="lecture-card coming-soon">
+            <div class="lecture-number">04</div>
+            <div class="lecture-title">Testing and Debugging with AI</div>
+            <div class="lecture-description">
+                AI-assisted test generation, automated debugging techniques, and improving software reliability.
+            </div>
+            <div class="lecture-duration">60 minutes - Coming Soon</div>
+        </div>
+        
+        <div class="lecture-card coming-soon">
+            <div class="lecture-number">05</div>
+            <div class="lecture-title">Documentation and Communication</div>
+            <div class="lecture-description">
+                Generating documentation, comments, and technical communication using AI tools and best practices.
+            </div>
+            <div class="lecture-duration">60 minutes - Coming Soon</div>
+        </div>
+        
+        <div class="lecture-card coming-soon">
+            <div class="lecture-number">06</div>
+            <div class="lecture-title">AI in Software Architecture</div>
+            <div class="lecture-description">
+                Using AI for system design, architecture decisions, and scalability planning in modern applications.
+            </div>
+            <div class="lecture-duration">60 minutes - Coming Soon</div>
+        </div>
+        
+        <div class="lecture-card coming-soon">
+            <div class="lecture-number">07</div>
+            <div class="lecture-title">Ethics and Limitations</div>
+            <div class="lecture-description">
+                Understanding the ethical implications, limitations, and responsible use of AI in software development.
+            </div>
+            <div class="lecture-duration">60 minutes - Coming Soon</div>
+        </div>
+        
+        <div class="lecture-card coming-soon">
+            <div class="lecture-number">08</div>
+            <div class="lecture-title">Future of AI-Assisted Programming</div>
+            <div class="lecture-description">
+                Emerging trends, new tools, and preparing for the evolving landscape of AI-assisted development.
+            </div>
+            <div class="lecture-duration">60 minutes - Coming Soon</div>
+        </div>
+    </div>
+    
+    <footer style="text-align: center; padding: 40px; color: #666;">
+        <p>© 2024 AI-Assisted Programming Course | Interactive slides powered by Reveal.js</p>
+    </footer>
+</body>
+</html>
