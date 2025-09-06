@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>Lecture 01: Introduction to AI-Assisted Programming</title>
     <link rel="stylesheet" href="../../dist/reset.css">
     <link rel="stylesheet" href="../../dist/reveal.css">
@@ -85,6 +85,21 @@
             top: -10px;
             left: 10px;
             opacity: 0.3;
+        }
+        
+        /* Mobile-specific grid improvements */
+        @media (max-width: 768px) {
+            div[style*="grid-template-columns"] {
+                display: block !important;
+            }
+            
+            div[style*="grid-template-columns"] > div {
+                margin-bottom: 1.5rem;
+            }
+            
+            div[style*="grid-template-columns"] > div:last-child {
+                margin-bottom: 0;
+            }
         }
     </style>
 </head>
@@ -463,10 +478,10 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             autoAnimateUnmatched: false,
             autoAnimateDuration: 0.8,
             
-            // Responsive sizing for proper 100% zoom display
-            width: 1280,
-            height: 720,
-            margin: 0.04,
+            // Responsive sizing - better mobile adaptation
+            width: 960,
+            height: 700,
+            margin: 0.1,
             minScale: 0.2,
             maxScale: 2.0,
             

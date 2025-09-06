@@ -248,7 +248,7 @@
     border-left: 4px solid var(--primary-color);
 }
 
-/* Responsive Design - Optimized for 100% zoom */
+/* Responsive Design - Enhanced for mobile devices */
 @media (max-width: 1280px) {
     .stat-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -291,9 +291,69 @@
     .reveal .slides section {
         padding: 1rem;
     }
+    
+    /* Improve readability on mobile */
+    .reveal p {
+        font-size: 1.05em;
+        line-height: 1.7;
+    }
+    
+    .reveal li {
+        font-size: 1em;
+        line-height: 1.6;
+    }
 }
 
-/* Ensure content fits at 100% zoom */
+/* Extra small screens (phones in portrait) */
+@media (max-width: 480px) {
+    .reveal h1 {
+        font-size: 2em;
+        line-height: 1.1;
+    }
+    
+    .reveal h2 {
+        font-size: 1.5em;
+        line-height: 1.2;
+    }
+    
+    .reveal h3 {
+        font-size: 1.3em;
+    }
+    
+    .reveal .slides section {
+        padding: 0.8rem;
+    }
+    
+    .stat-grid {
+        gap: 0.8rem;
+    }
+    
+    .stat-card {
+        padding: 1.5rem 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2em;
+    }
+    
+    .comparison-table {
+        font-size: 0.7em;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+        padding: 0.8rem 1rem;
+    }
+    
+    /* Better code readability on small screens */
+    .reveal pre code {
+        font-size: 0.75em;
+        line-height: 1.5;
+        max-height: 300px;
+    }
+}
+
+/* Ensure content fits properly on all screen sizes */
 .reveal .slides {
     width: 100%;
     height: 100%;
@@ -310,6 +370,29 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* Enable text selection on mobile */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* Improve touch targets for mobile */
+.reveal .controls {
+    pointer-events: auto;
+}
+
+.reveal .controls button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+}
+
+/* Better spacing for mobile grids */
+@media (max-width: 768px) {
+    .reveal .slides section div[style*="grid"] {
+        gap: 1rem !important;
+    }
 }
 
 /* Professional Animation Classes */
