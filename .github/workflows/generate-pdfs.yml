@@ -31,10 +31,17 @@ jobs:
       with:
         node-version: '18'
         
+    - name: Install Chrome dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable || echo "Chrome already installed"
+        
     - name: Install dependencies
       run: |
         npm init -y
-        npm install puppeteer
+        PUPPETEER_SKIP_DOWNLOAD=true npm install puppeteer
+      env:
+        PUPPETEER_SKIP_DOWNLOAD: true
         
     - name: Create PDF generation script
       run: |
@@ -68,12 +75,28 @@ jobs:
           const fullPath = 'file://' + path.resolve(htmlPath);
           console.log(`Loading: ${fullPath}`);
           
-          await page.goto(fullPath, { 
-            waitUntil: 'networkidle0',
-            timeout: 30000 
-          });
+          try {
+            await page.goto(fullPath, { 
+              waitUntil: 'networkidle0',
+              timeout: 20000 
+            });
+          } catch (timeoutError) {
+            console.log('Network idle timeout, trying with domcontentloaded...');
+            await page.goto(fullPath, { 
+              waitUntil: 'domcontentloaded',
+              timeout: 10000 
+            });
+          }
           
-          console.log('Page loaded, adding print styles...');
+          console.log('Page loaded, waiting for Reveal.js and adding print styles...');
+          
+          // Wait for Reveal.js to be ready
+          await page.waitForFunction(
+            () => typeof window.Reveal !== 'undefined' && window.Reveal.isReady && window.Reveal.isReady(),
+            { timeout: 10000 }
+          );
+          
+          console.log('Reveal.js is ready, adding print styles...');
           
           // Add reveal.js print CSS
           await page.addStyleTag({
@@ -112,8 +135,8 @@ jobs:
             `
           });
           
-          // Wait for styles to apply
-          await new Promise(resolve => setTimeout(resolve, 3000));
+          // Wait for styles to apply and Reveal.js to fully initialize
+          await new Promise(resolve => setTimeout(resolve, 5000));
           
           console.log('Generating PDF...');
           
@@ -203,7 +226,8 @@ jobs:
           fi
         done
         
-        if [ ! -f "pdfs/*.pdf" ]; then
+        # Check if no PDF files were found
+        if ! ls pdfs/*.pdf 1> /dev/null 2>&1; then
           echo "- No PDF files available yet" >> pdfs/README.md
         fi
         
