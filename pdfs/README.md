@@ -4,7 +4,7 @@ This directory contains PDF exports of all lecture slides, automatically generat
 
 ## Available Lectures:
 
-- [Lecture 01](./lecture-01.pdf) - Introduction to AI-Assisted Programming
+- [Lecture 01](./lecture-01.pdf) - Lecture-01 slides
 
 ## Features:
 
@@ -19,13 +19,6 @@ This directory contains PDF exports of all lecture slides, automatically generat
 2. **Download**: Right-click and "Save As" to download PDFs locally
 3. **Print**: PDFs are optimized for A4 landscape printing
 
-## Generation Details:
-
-- **Format**: A4 Landscape orientation
-- **Resolution**: Optimized for both screen and print
-- **Styling**: Professional white theme with enhanced typography
-- **Automation**: Generated via GitHub Actions on every commit
-
 ---
 
-*Last updated: Automatically maintained by GitHub Actions*
+*Last updated: 2025-09-06 17:54:05 UTC by GitHub Actions*
