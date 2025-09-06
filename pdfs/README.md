@@ -4,7 +4,7 @@ This directory contains PDF exports of all lecture slides, automatically generat
 
 ## Available Lectures:
 
-- [lecture-01](./lecture-01.pdf) - Introduction to AI-Assisted Programming
+- [Lecture 01](./lecture-01.pdf) - Introduction to AI-Assisted Programming
 
 ## Features:
 

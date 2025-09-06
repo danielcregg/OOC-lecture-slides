@@ -1,0 +1,15 @@
+{
+  "name": "aiap-lecture-slides",
+  "version": "1.0.0",
+  "description": "A comprehensive collection of interactive lecture slides for the AI-Assisted Programming course, built with Reveal.js and hosted on GitHub Pages.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^24.19.0"
+  }
+}
