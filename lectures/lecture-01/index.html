@@ -28,14 +28,14 @@
         }
         
         .subtitle {
-            font-size: 1.4em;
+            font-size: 1.1em;
             color: var(--text-color);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             opacity: 0.8;
         }
         
         .instructor-info {
-            font-size: 1.1em;
+            font-size: 0.9em;
             color: var(--text-color);
             opacity: 0.7;
         }
@@ -54,8 +54,8 @@
         }
         
         .reveal ul li {
-            padding-left: 0.5rem;
-            margin-bottom: 1rem;
+            padding-left: 0.3rem;
+            margin-bottom: 0.4rem;
         }
         
         /* Image enhancements */
@@ -102,7 +102,7 @@
             }
         }
         
-        /* Enhanced mobile responsiveness - working with Reveal.js scaling */
+        /* Enhanced mobile responsiveness - minimal interference with Reveal.js */
         @media (max-width: 768px) {
             .comparison-table {
                 font-size: 0.85em;
@@ -340,50 +340,54 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Benefits -->
             <section>
                 <h2>Key Benefits</h2>
-                <div class="fragment">
-                    <h3 class="pros">🚀 For Developers</h3>
-                    <ul>
-                        <li>Faster coding and reduced boilerplate</li>
-                        <li>Learning new languages and frameworks</li>
-                        <li>Reduced context switching</li>
-                        <li>Enhanced creativity and problem-solving</li>
-                    </ul>
-                </div>
-                <div class="fragment">
-                    <h3 class="pros">🏢 For Organizations</h3>
-                    <ul>
-                        <li>Increased development velocity</li>
-                        <li>Reduced time-to-market</li>
-                        <li>Lower training costs</li>
-                        <li>Improved code consistency</li>
-                    </ul>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div class="fragment">
+                        <h3 class="pros">🚀 For Developers</h3>
+                        <ul>
+                            <li>Faster coding and reduced boilerplate</li>
+                            <li>Learning new languages and frameworks</li>
+                            <li>Reduced context switching</li>
+                            <li>Enhanced creativity and problem-solving</li>
+                        </ul>
+                    </div>
+                    <div class="fragment">
+                        <h3 class="pros">🏢 For Organizations</h3>
+                        <ul>
+                            <li>Increased development velocity</li>
+                            <li>Reduced time-to-market</li>
+                            <li>Lower training costs</li>
+                            <li>Improved code consistency</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
             <!-- Challenges -->
             <section>
                 <h2>Challenges & Considerations</h2>
-                <div class="fragment">
-                    <h3 class="cons">⚠️ Technical Challenges</h3>
-                    <ul>
-                        <li>Code quality and correctness</li>
-                        <li>Security vulnerabilities</li>
-                        <li>Over-reliance on AI suggestions</li>
-                        <li>Debugging AI-generated code</li>
-                    </ul>
-                </div>
-                <div class="fragment">
-                    <h3 class="cons">🔒 Ethical & Legal</h3>
-                    <ul>
-                        <li>Code ownership and licensing</li>
-                        <li>Privacy and data security</li>
-                        <li>Bias in AI models</li>
-                        <li>Impact on developer skills</li>
-                    </ul>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div class="fragment">
+                        <h3 class="cons">⚠️ Technical Challenges</h3>
+                        <ul>
+                            <li>Code quality and correctness</li>
+                            <li>Security vulnerabilities</li>
+                            <li>Over-reliance on AI suggestions</li>
+                            <li>Debugging AI-generated code</li>
+                        </ul>
+                    </div>
+                    <div class="fragment">
+                        <h3 class="cons">🔒 Ethical & Legal</h3>
+                        <ul>
+                            <li>Code ownership and licensing</li>
+                            <li>Privacy and data security</li>
+                            <li>Bias in AI models</li>
+                            <li>Impact on developer skills</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
-            <!-- Best Practices -->
+            <!-- Best Practices Part 1 -->
             <section>
                 <h2>Best Practices</h2>
                 <ul>
@@ -391,34 +395,42 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
                     <li class="fragment"><strong>Write clear comments</strong> to guide AI suggestions</li>
                     <li class="fragment"><strong>Test thoroughly</strong> - AI code may have subtle bugs</li>
                     <li class="fragment"><strong>Understand the code</strong> before accepting suggestions</li>
-                    <li class="fragment"><strong>Use AI as a tool, not a replacement</strong> for thinking</li>
-                    <li class="fragment"><strong>Stay updated</strong> on security and licensing implications</li>
-                    <li class="fragment"><strong>Maintain coding skills</strong> alongside AI usage</li>
                 </ul>
             </section>
 
-            <!-- Future Outlook -->
+            <!-- Best Practices Part 2 -->
             <section>
-                <h2>Future of AI-Assisted Programming</h2>
-                <div class="fragment">
-                    <h3>🔮 Emerging Trends</h3>
-                    <ul>
-                        <li>More specialized AI models for specific domains</li>
-                        <li>Better integration with development workflows</li>
-                        <li>AI-powered code review and testing</li>
-                        <li>Natural language to code translation</li>
-                        <li>Automated refactoring and optimization</li>
-                    </ul>
-                </div>
-                <div class="fragment">
-                    <h3>🎯 What This Means for Developers</h3>
-                    <ul>
-                        <li>Focus shifts to higher-level problem solving</li>
-                        <li>Increased importance of code review skills</li>
-                        <li>Need for AI literacy in development</li>
-                        <li>Emphasis on creative and architectural thinking</li>
-                    </ul>
-                </div>
+                <h2>Best Practices (continued)</h2>
+                <ul>
+                    <li class="fragment"><strong>Use AI as a tool, not a replacement</strong> for thinking</li>
+                    <li class="fragment"><strong>Stay updated</strong> on security and licensing implications</li>
+                    <li class="fragment"><strong>Maintain coding skills</strong> alongside AI usage</li>
+                    <li class="fragment"><strong>Consider team consistency</strong> in AI tool usage</li>
+                </ul>
+            </section>
+
+            <!-- Future Outlook - Trends -->
+            <section>
+                <h2>Future: Emerging Trends</h2>
+                <ul>
+                    <li class="fragment">More specialized AI models for specific domains</li>
+                    <li class="fragment">Better integration with development workflows</li>
+                    <li class="fragment">AI-powered code review and testing</li>
+                    <li class="fragment">Natural language to code translation</li>
+                    <li class="fragment">Automated refactoring and optimization</li>
+                </ul>
+            </section>
+
+            <!-- Future Outlook - Developer Impact -->
+            <section>
+                <h2>Future: Impact on Developers</h2>
+                <ul>
+                    <li class="fragment">Focus shifts to higher-level problem solving</li>
+                    <li class="fragment">Increased importance of code review skills</li>
+                    <li class="fragment">Need for AI literacy in development</li>
+                    <li class="fragment">Emphasis on creative and architectural thinking</li>
+                    <li class="fragment">Continuous learning becomes more critical</li>
+                </ul>
             </section>
 
             <!-- Course Preview -->
@@ -509,12 +521,19 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             autoAnimateUnmatched: false,
             autoAnimateDuration: 0.8,
             
-            // Responsive sizing - optimized for all devices
+            // Responsive sizing - let Reveal.js handle content fitting automatically
             width: 960,
             height: 700,
-            margin: 0.1,
-            minScale: 0.3,
-            maxScale: 1.5,
+            margin: 0.04,
+            minScale: 0.2,
+            maxScale: 2.0,
+            
+            // Enable Reveal.js built-in content fitting
+            disableLayout: false,
+            
+            // Better content fitting
+            scrollActivationWidth: null,
+            hideInactiveCursor: true,
             
             // Display quality
             display: 'block',

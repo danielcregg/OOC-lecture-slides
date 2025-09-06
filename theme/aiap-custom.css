@@ -55,46 +55,47 @@
     border-color: var(--secondary-color);
 }
 
-/* Professional Typography */
+/* Professional Typography - work with Reveal.js scaling */
 .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
     color: var(--heading-color);
     font-weight: 700;
     line-height: 1.2;
-    margin-bottom: 1.5rem;
     text-shadow: none;
     letter-spacing: -0.02em;
 }
 
 .reveal h1 {
-    font-size: 3.2em;
+    font-size: 2.2em;
     color: var(--primary-color);
+    margin-bottom: 0.6em;
 }
 
 .reveal h2 {
-    font-size: 2.2em;
+    font-size: 1.4em;
     color: var(--heading-color);
     border-bottom: 3px solid var(--accent-color);
-    padding-bottom: 0.5rem;
-    margin-bottom: 2rem;
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.6em;
 }
 
 .reveal h3 {
-    font-size: 1.6em;
+    font-size: 1.1em;
     color: var(--secondary-color);
+    margin-bottom: 0.4em;
 }
 
 .reveal p {
-    margin-bottom: 1.5rem;
-    font-size: 1.1em;
+    margin-bottom: 0.6em;
+    font-size: 0.9em;
 }
 
 .reveal ul, .reveal ol {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.6em;
 }
 
 .reveal li {
-    margin-bottom: 0.8rem;
-    font-size: 1.05em;
+    margin-bottom: 0.3em;
+    font-size: 0.9em;
 }
 
 .reveal blockquote {
@@ -132,15 +133,15 @@
 }
 
 .stat-number {
-    font-size: 3em;
+    font-size: 2.2em;
     color: var(--primary-color);
     font-weight: 800;
     line-height: 1;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .stat-label {
-    font-size: 0.95em;
+    font-size: 0.8em;
     color: var(--text-color);
     font-weight: 500;
     opacity: 0.8;
@@ -351,11 +352,11 @@
     }
 }
 
-/* Ensure content fits properly on all screen sizes - let Reveal.js handle positioning */
+/* Let Reveal.js handle slide positioning and sizing */
 
 .reveal .slides section {
     width: 100%;
-    padding: 30px;
+    padding: 20px;
     box-sizing: border-box;
     text-align: left;
     /* Enable text selection on mobile */
@@ -373,13 +374,13 @@
 /* Mobile section adjustments */
 @media (max-width: 768px) {
     .reveal .slides section {
-        padding: 20px;
+        padding: 15px;
     }
 }
 
 @media (max-width: 480px) {
     .reveal .slides section {
-        padding: 15px;
+        padding: 10px;
     }
 }
 
