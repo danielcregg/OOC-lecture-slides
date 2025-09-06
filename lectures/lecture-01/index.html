@@ -101,6 +101,37 @@
                 margin-bottom: 0;
             }
         }
+        
+        /* Enhanced mobile responsiveness - working with Reveal.js scaling */
+        @media (max-width: 768px) {
+            .comparison-table {
+                font-size: 0.85em;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.8rem 0.6rem;
+            }
+            
+            .stat-card {
+                padding: 1.5rem 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .comparison-table {
+                font-size: 0.8em;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.7rem 0.5rem;
+            }
+            
+            .stat-card {
+                padding: 1.2rem 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -478,12 +509,12 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             autoAnimateUnmatched: false,
             autoAnimateDuration: 0.8,
             
-            // Responsive sizing - better mobile adaptation
+            // Responsive sizing - optimized for all devices
             width: 960,
             height: 700,
             margin: 0.1,
-            minScale: 0.2,
-            maxScale: 2.0,
+            minScale: 0.3,
+            maxScale: 1.5,
             
             // Display quality
             display: 'block',
