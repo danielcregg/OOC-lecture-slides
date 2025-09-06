@@ -1,0 +1,176 @@
+name: Generate PDF Slides
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'lectures/**/*.html'
+      - 'theme/**/*.css'
+      - 'dist/**'
+  pull_request:
+    branches: [ main ]
+    paths: 
+      - 'lectures/**/*.html'
+      - 'theme/**/*.css'
+      - 'dist/**'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  generate-pdfs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm init -y
+        npm install puppeteer
+        
+    - name: Create PDF generation script
+      run: |
+        cat > generate-pdfs.js << 'EOF'
+        const puppeteer = require('puppeteer');
+        const fs = require('fs');
+        const path = require('path');
+        
+        async function generatePDF(htmlPath, outputPath) {
+          const browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+          });
+          
+          const page = await browser.newPage();
+          await page.setViewport({ width: 1280, height: 720 });
+          
+          const fullPath = 'file://' + path.resolve(htmlPath);
+          console.log(`Loading: ${fullPath}`);
+          
+          await page.goto(fullPath, { 
+            waitUntil: 'networkidle0',
+            timeout: 30000 
+          });
+          
+          // Add reveal.js print CSS
+          await page.addStyleTag({
+            content: `
+              .reveal .slides {
+                width: 297mm !important;
+                height: 210mm !important;
+                left: 0 !important;
+                top: 0 !important;
+                transform: none !important;
+                zoom: 1 !important;
+              }
+              .reveal .slides section {
+                width: 297mm !important;
+                height: 210mm !important;
+                page-break-after: always !important;
+                position: relative !important;
+                margin: 0 !important;
+                padding: 40px !important;
+                box-sizing: border-box !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+              }
+              .reveal .backgrounds {
+                display: none !important;
+              }
+              .reveal .progress {
+                display: none !important;
+              }
+              .reveal .controls {
+                display: none !important;
+              }
+            `
+          });
+          
+          // Wait a moment for styles to apply
+          await page.waitForTimeout(2000);
+          
+          const pdf = await page.pdf({
+            path: outputPath,
+            format: 'A4',
+            landscape: true,
+            printBackground: true,
+            preferCSSPageSize: true,
+            margin: {
+              top: '10mm',
+              right: '10mm',
+              bottom: '10mm',
+              left: '10mm'
+            }
+          });
+          
+          await browser.close();
+          console.log(`PDF generated: ${outputPath}`);
+        }
+        
+        async function main() {
+          // Create PDFs directory
+          if (!fs.existsSync('pdfs')) {
+            fs.mkdirSync('pdfs', { recursive: true });
+          }
+          
+          // Find all lecture HTML files
+          const lecturesDir = 'lectures';
+          const lectures = fs.readdirSync(lecturesDir, { withFileTypes: true })
+            .filter(dirent => dirent.isDirectory())
+            .map(dirent => dirent.name);
+          
+          for (const lecture of lectures) {
+            const htmlPath = path.join(lecturesDir, lecture, 'index.html');
+            if (fs.existsSync(htmlPath)) {
+              const pdfPath = path.join('pdfs', `${lecture}.pdf`);
+              await generatePDF(htmlPath, pdfPath);
+            }
+          }
+          
+          console.log('All PDFs generated successfully!');
+        }
+        
+        main().catch(console.error);
+        EOF
+        
+    - name: Generate PDFs
+      run: node generate-pdfs.js
+      
+    - name: Create PDF directory structure
+      run: |
+        if [ ! -d "pdfs" ]; then
+          mkdir -p pdfs
+          echo "# AI-Assisted Programming - PDF Slides" > pdfs/README.md
+          echo "" >> pdfs/README.md
+          echo "This directory contains PDF exports of all lecture slides." >> pdfs/README.md
+          echo "" >> pdfs/README.md
+          echo "## Available Lectures:" >> pdfs/README.md
+          for file in pdfs/*.pdf; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file" .pdf)
+              echo "- [${filename}](./${filename}.pdf)" >> pdfs/README.md
+            fi
+          done
+          echo "" >> pdfs/README.md
+          echo "Generated on: $(date)" >> pdfs/README.md
+        fi
+      
+    - name: Commit PDF files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add pdfs/
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Auto-generate PDF slides [skip ci]" || exit 0
+          git push
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

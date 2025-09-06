@@ -1,0 +1,90 @@
+/*
+Professional Light Theme for Code Highlighting
+Based on GitHub's light theme with enhancements for presentations
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1rem;
+  background: #f8fafc;
+  color: #24292e;
+  border-radius: 8px;
+  font-size: 0.9em;
+  line-height: 1.6;
+  border: 1px solid #e1e8ed;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #6a737d;
+  font-style: italic;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #d73a49;
+}
+
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #005cc5;
+}
+
+.hljs-attribute {
+  color: #e36209;
+}
+
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #032f62;
+}
+
+.hljs-title,
+.hljs-section {
+  color: #6f42c1;
+  font-weight: bold;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #d73a49;
+  font-weight: bold;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+/* Language specific enhancements */
+.hljs-function .hljs-title {
+  color: #6f42c1;
+}
+
+.hljs-class .hljs-title {
+  color: #22863a;
+}
+
+/* Selection styling */
+.hljs::selection,
+.hljs *::selection {
+  background: rgba(37, 99, 235, 0.2);
+}
