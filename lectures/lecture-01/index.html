@@ -9,130 +9,6 @@
     <link rel="stylesheet" href="../../dist/theme/white.css" id="theme">
     <link rel="stylesheet" href="../../theme/aiap-custom.css">
     <link rel="stylesheet" href="../../plugin/highlight/light-professional.css">
-    <style>
-        /* Additional slide-specific professional styling */
-        .reveal .slides section {
-            text-align: left;
-        }
-        
-        .reveal .slides section[data-state="title"] {
-            text-align: center;
-        }
-        
-        .title-slide h1 {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 2rem;
-        }
-        
-        .subtitle {
-            font-size: 1.1em;
-            color: var(--text-color);
-            margin-bottom: 1.5rem;
-            opacity: 0.8;
-        }
-        
-        .instructor-info {
-            font-size: 0.9em;
-            color: var(--text-color);
-            opacity: 0.7;
-        }
-        
-        .section-divider {
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            margin: 2rem auto;
-            border-radius: 2px;
-        }
-        
-        /* Professional list styling */
-        .reveal ul li::marker {
-            color: var(--primary-color);
-        }
-        
-        .reveal ul li {
-            padding-left: 0.3rem;
-            margin-bottom: 0.4rem;
-        }
-        
-        /* Image enhancements */
-        .reveal img {
-            border-radius: 12px;
-            box-shadow: 0 8px 16px var(--shadow-color);
-            max-width: 100%;
-            height: auto;
-        }
-        
-        /* Quote styling */
-        .professional-quote {
-            background: var(--accent-color);
-            border-left: 5px solid var(--primary-color);
-            padding: 1.5rem 2rem;
-            margin: 2rem 0;
-            border-radius: 0 12px 12px 0;
-            font-style: italic;
-            position: relative;
-        }
-        
-        .professional-quote::before {
-            content: '"';
-            font-size: 4em;
-            color: var(--primary-color);
-            position: absolute;
-            top: -10px;
-            left: 10px;
-            opacity: 0.3;
-        }
-        
-        /* Mobile-specific grid improvements */
-        @media (max-width: 768px) {
-            div[style*="grid-template-columns"] {
-                display: block !important;
-            }
-            
-            div[style*="grid-template-columns"] > div {
-                margin-bottom: 1.5rem;
-            }
-            
-            div[style*="grid-template-columns"] > div:last-child {
-                margin-bottom: 0;
-            }
-        }
-        
-        /* Enhanced mobile responsiveness - minimal interference with Reveal.js */
-        @media (max-width: 768px) {
-            .comparison-table {
-                font-size: 0.85em;
-            }
-            
-            .comparison-table th,
-            .comparison-table td {
-                padding: 0.8rem 0.6rem;
-            }
-            
-            .stat-card {
-                padding: 1.5rem 1rem;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .comparison-table {
-                font-size: 0.8em;
-            }
-            
-            .comparison-table th,
-            .comparison-table td {
-                padding: 0.7rem 0.5rem;
-            }
-            
-            .stat-card {
-                padding: 1.2rem 0.8rem;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="reveal">
@@ -260,7 +136,7 @@
 
                 <section>
                     <h3>Copilot Capabilities</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="grid-2-col">
                         <div>
                             <h4 class="pros">✅ Strengths</h4>
                             <ul>
@@ -283,6 +159,52 @@
                         </div>
                     </div>
                 </section>
+
+                <section>
+                    <h3>Our Lab Environment: GitHub Codespaces</h3>
+                    <div class="fragment">
+                        <p>A cloud-based development environment fully configured for our course.</p>
+                        <ul>
+                            <li><strong>Instant Setup:</strong> Click "Open in Codespace" and you're ready to go.</li>
+                            <li><strong>Pre-installed Tools:</strong> Comes with Python, Jupyter, and all necessary extensions.</li>
+                            <li><strong>Integrated Copilot:</strong> GitHub Copilot is built-in and ready to assist.</li>
+                            <li><strong>Consistent Environment:</strong> Everyone has the exact same setup, eliminating "it works on my machine" issues.</li>
+                        </ul>
+                    </div>
+                    <p class="fragment professional-quote" style="font-size: 0.8em; margin-top: 1.5rem;">Codespaces provides a managed, on-demand development environment, allowing you to focus on learning, not on setup.</p>
+                </section>
+
+                <section>
+                    <h3>Completing Labs with Copilot</h3>
+                    <p>Follow these steps to complete your first lab:</p>
+                    <ol>
+                        <li class="fragment">Open the lab by creating a new **Codespace**.</li>
+                        <li class="fragment">Navigate to the lab file (e.g., `setup_lab.py`).</li>
+                        <li class="fragment">Read the `TODO` comments to understand the task.</li>
+                        <li class="fragment">Use **Copilot's suggestions** to help you write the code.</li>
+                        <li class="fragment">**Test your code** using the provided test block.</li>
+                        <li class="fragment">Commit and push your changes to GitHub.</li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h3>Lab 1: Structure Overview</h3>
+                    <p>Your first lab will guide you through several common programming tasks with AI assistance.</p>
+                    <div class="fragment" style="display: flex; justify-content: center; align-items: center; margin-top: 2rem;">
+                        <pre style="width: 80%;"><code class="mermaid" data-trim>
+graph TD
+    A[setup_lab.py] --&gt; B[Task 1: Greeting Function]
+    A --&gt; C[Task 2: Statistics Function]
+    A --&gt; D[Task 3: Calculator Class]
+    A --&gt; E[Task 4: Sorting Algorithms]
+    A --&gt; F[Task 5: Search Algorithms]
+    A --&gt; G[Task 6: Data Structure]
+    A --&gt; H[Task 7: Benchmarking]
+                        </code></pre>
+                    </div>
+                    <p class="fragment"><small>Use the Mermaid diagram to visualize the tasks in the lab file.</small></p>
+                </section>
+
             </section>
 
             <!-- Code Example -->
@@ -315,7 +237,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
                 <h2>Productivity Impact</h2>
                 <div class="chart-container">
                     <h3 style="color: #333;">Developer Task Time Reduction</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; color: #333;">
+                    <div class="grid-2-col" style="color: #333; gap: 30px;">
                         <div>
                             <ul>
                                 <li>Code writing: <strong>55% faster</strong></li>
@@ -340,7 +262,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Benefits -->
             <section>
                 <h2>Key Benefits</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div class="grid-2-col" style="gap: 30px;">
                     <div class="fragment">
                         <h3 class="pros">🚀 For Developers</h3>
                         <ul>
@@ -365,7 +287,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Challenges -->
             <section>
                 <h2>Challenges & Considerations</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div class="grid-2-col" style="gap: 30px;">
                     <div class="fragment">
                         <h3 class="cons">⚠️ Technical Challenges</h3>
                         <ul>
@@ -436,7 +358,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Course Preview -->
             <section>
                 <h2>This Course Preview</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="grid-2-col">
                     <div>
                         <h4>Upcoming Lectures:</h4>
                         <ul style="font-size: 0.8em;">
@@ -475,13 +397,6 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Thank You -->
             <section>
                 <h1>Thank You!</h1>
-                <h3>Next Lecture: Code Generation and Completion</h3>
-                <p>
-                    <small>
-                        <a href="../../">← Back to Course Index</a><br>
-                        Contact: [Your Email] | Course Materials: GitHub
-                    </small>
-                </p>
             </section>
         </div>
     </div>
