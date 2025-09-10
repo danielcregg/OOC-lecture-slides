@@ -4,7 +4,8 @@ This directory contains PDF exports of all lecture slides, automatically generat
 
 ## Available Lectures:
 
-- [Lecture 01](./lecture-01.pdf) - Lecture-01 slides
+- [Lecture 1: Course Introduction](./lecture1-course-introduction.pdf) - Course introduction slides
+- [Lecture 2: Ai Assisted Programming Intro](./lecture2-ai-assisted-programming-intro.pdf) - Introduction to AI programming slides
 
 ## Features:
 
@@ -21,4 +22,4 @@ This directory contains PDF exports of all lecture slides, automatically generat
 
 ---
 
-*Last updated: 2025-09-06 21:33:45 UTC by GitHub Actions*
+*Last updated: 2025-09-10 15:34:23 UTC by GitHub Actions*

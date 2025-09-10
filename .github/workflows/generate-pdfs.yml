@@ -10,8 +10,23 @@ on:
   pull_request:
     branches: [ main ]
     paths: 
-      - 'lectures/**/*.html'
-      - 'theme/**/*.css'
+      - 'lectures/**/        # List all PDF files
+        for file in pdfs/*.pdf; do
+          if [ -f "$file" ]; then
+            filename=$(basename "$file" .pdf)
+            # Convert lecture1-course-introduction to "Lecture 1: Course Introduction"
+            if [[ $filename =~ lecture([0-9]+)-(.+) ]]; then
+              number="${BASH_REMATCH[1]}"
+              title="${BASH_REMATCH[2]}"
+              # Convert hyphen-separated title to title case
+              title=$(echo "$title" | sed 's/-/ /g' | sed 's/\b./\u&/g')
+              display_name="Lecture ${number}: ${title}"
+            else
+              display_name="$filename"
+            fi
+            echo "- [${display_name}](./${filename}.pdf) - ${filename} slides" >> pdfs/README.md
+          fi
+        done     - 'theme/**/*.css'
       - 'dist/**'
   workflow_dispatch: # Allow manual triggering
 
@@ -169,29 +184,27 @@ jobs:
               console.log('Created pdfs directory');
             }
             
-            // Find all lecture HTML files
+            // Find all lecture HTML files in the simplified structure
             const lecturesDir = 'lectures';
             if (!fs.existsSync(lecturesDir)) {
               throw new Error(`Lectures directory does not exist: ${lecturesDir}`);
             }
             
             const lectures = fs.readdirSync(lecturesDir, { withFileTypes: true })
-              .filter(dirent => dirent.isDirectory())
+              .filter(dirent => dirent.isFile() && dirent.name.endsWith('.html'))
               .map(dirent => dirent.name)
               .sort();
             
             console.log(`Found lectures: ${lectures.join(', ')}`);
             
             let generatedCount = 0;
-            for (const lecture of lectures) {
-              const htmlPath = path.join(lecturesDir, lecture, 'index.html');
-              if (fs.existsSync(htmlPath)) {
-                const pdfPath = path.join('pdfs', `${lecture}.pdf`);
-                await generatePDF(htmlPath, pdfPath);
-                generatedCount++;
-              } else {
-                console.log(`Skipping ${lecture}: index.html not found`);
-              }
+            for (const lectureFile of lectures) {
+              const htmlPath = path.join(lecturesDir, lectureFile);
+              const lectureName = path.basename(lectureFile, '.html');
+              const pdfPath = path.join('pdfs', `${lectureName}.pdf`);
+              
+              await generatePDF(htmlPath, pdfPath);
+              generatedCount++;
             }
             
             console.log(`Successfully generated ${generatedCount} PDF files!`);
