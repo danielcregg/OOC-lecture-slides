@@ -186,60 +186,60 @@ jobs:
                 
                 And so on for each slide."""
                 
-                    # Retry logic with optimized model fallback order
-                    models = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-flash-latest"]
-                    last_error = None
-                    for model_name in models:
-                        print(f"Attempting Gemini generation with model: {model_name}")
-                        try:
-                            # Reconfigure model dynamically
-                            self.model = genai.GenerativeModel(model_name)
-                            # The SDK will base64 encode raw bytes automatically when passed this dict
-                            response = self.model.generate_content([
-                                prompt,
-                                {"mime_type": "application/pdf", "data": pdf_data}
-                            ])
-                            script = response.text or ""
-                            print("Generated script with Gemini")
-                            print(f"Gemini response length: {len(script)}")
-                            print(f"First 500 chars: {script[:500]}")
-                            scripts = self.parse_script(script)
-                            print(f"Parsed {len(scripts)} scripts from Gemini response")
-                            if not scripts:
-                                print("Script parsing failed, using fallback text scaffolding")
-                                images = convert_from_path(pdf_path, dpi=150)
-                                scripts = {i: f"This is slide {i} of the presentation." for i in range(1, len(images)+1)}
-                                print(f"Created {len(scripts)} basic scripts")
-                            if scripts:
-                                script_list = [
-                                    {"slide": slide_num, "script": script_text}
-                                    for slide_num, script_text in scripts.items()
-                                ]
-                                script_data = {
-                                    'lecture_name': lecture_name,
-                                    'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
-                                    'total_slides': len(scripts),
-                                    'scripts': script_list,
-                                    'raw_gemini_response': script[:1000] + "..." if len(script) > 1000 else script,
-                                    'model_used': model_name,
-                                    'force_regenerated': force_regenerate
-                                }
-                                with open(script_file_path, 'w', encoding='utf-8') as f:
-                                    json.dump(script_data, f, indent=2, ensure_ascii=False)
-                                print(f"Scripts saved to {script_file_path}")
-                            return scripts
-                        except Exception as e:
-                            last_error = e
-                            # Handle rate limit or transient errors with backoff
-                            msg = str(e)
-                            if '429' in msg or 'quota' in msg.lower():
-                                wait = 15
-                                print(f"Rate limit/quota hit for {model_name}. Backing off {wait}s then trying next model...")
-                                time.sleep(wait)
-                            else:
-                                print(f"Model {model_name} failed: {e}")
-                    print(f"All Gemini model attempts failed. Last error: {last_error}")
-                    return None
+                # Retry logic with optimized model fallback order
+                models = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-flash-latest"]
+                last_error = None
+                for model_name in models:
+                    print(f"Attempting Gemini generation with model: {model_name}")
+                    try:
+                        # Reconfigure model dynamically
+                        self.model = genai.GenerativeModel(model_name)
+                        # The SDK will base64 encode raw bytes automatically when passed this dict
+                        response = self.model.generate_content([
+                            prompt,
+                            {"mime_type": "application/pdf", "data": pdf_data}
+                        ])
+                        script = response.text or ""
+                        print("Generated script with Gemini")
+                        print(f"Gemini response length: {len(script)}")
+                        print(f"First 500 chars: {script[:500]}")
+                        scripts = self.parse_script(script)
+                        print(f"Parsed {len(scripts)} scripts from Gemini response")
+                        if not scripts:
+                            print("Script parsing failed, using fallback text scaffolding")
+                            images = convert_from_path(pdf_path, dpi=150)
+                            scripts = {i: f"This is slide {i} of the presentation." for i in range(1, len(images)+1)}
+                            print(f"Created {len(scripts)} basic scripts")
+                        if scripts:
+                            script_list = [
+                                {"slide": slide_num, "script": script_text}
+                                for slide_num, script_text in scripts.items()
+                            ]
+                            script_data = {
+                                'lecture_name': lecture_name,
+                                'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
+                                'total_slides': len(scripts),
+                                'scripts': script_list,
+                                'raw_gemini_response': script[:1000] + "..." if len(script) > 1000 else script,
+                                'model_used': model_name,
+                                'force_regenerated': force_regenerate
+                            }
+                            with open(script_file_path, 'w', encoding='utf-8') as f:
+                                json.dump(script_data, f, indent=2, ensure_ascii=False)
+                            print(f"Scripts saved to {script_file_path}")
+                        return scripts
+                    except Exception as e:
+                        last_error = e
+                        # Handle rate limit or transient errors with backoff
+                        msg = str(e)
+                        if '429' in msg or 'quota' in msg.lower():
+                            wait = 15
+                            print(f"Rate limit/quota hit for {model_name}. Backing off {wait}s then trying next model...")
+                            time.sleep(wait)
+                        else:
+                            print(f"Model {model_name} failed: {e}")
+                print(f"All Gemini model attempts failed. Last error: {last_error}")
+                return None
                     
             def parse_script(self, script_text):
                 print("=== GEMINI RESPONSE DEBUGGING ===")
