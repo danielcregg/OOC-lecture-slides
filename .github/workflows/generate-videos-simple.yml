@@ -8,6 +8,11 @@ on:
         required: false
         default: 'all'
         type: string
+      force_regenerate:
+        description: 'Force regeneration of scripts and videos even if they exist'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -111,13 +116,13 @@ jobs:
                 print(f"Extracted {len(slide_paths)} slides")
                 return slide_paths
                 
-            def generate_script_with_gemini(self, pdf_path):
+            def generate_script_with_gemini(self, pdf_path, force_regenerate=False):
                 lecture_name = pdf_path.stem
                 scripts_dir = Path('scripts')
                 scripts_dir.mkdir(exist_ok=True)
                 script_file_path = scripts_dir / f"{lecture_name}_script.json"
                 
-                if script_file_path.exists():
+                if script_file_path.exists() and not force_regenerate:
                     print(f"Loading existing script from {script_file_path}")
                     try:
                         with open(script_file_path, 'r', encoding='utf-8') as f:
@@ -310,17 +315,36 @@ jobs:
                     response.raise_for_status()
                     
                     result = response.json()
+                    print(f"MiniMax API response keys: {list(result.keys())}")
+                    print(f"MiniMax API response (first 500 chars): {str(result)[:500]}")
                     
                     if 'audio_file' in result:
                         audio_url = result['audio_file']
+                        print(f"Found audio_file URL: {audio_url}")
                         audio_response = requests.get(audio_url)
                         audio_response.raise_for_status()
                         audio_data = audio_response.content
                     elif 'data' in result and 'audio' in result['data']:
                         hex_audio = result['data']['audio']
+                        print(f"Found hex audio data (length: {len(hex_audio)})")
                         audio_data = bytes.fromhex(hex_audio)
+                    elif 'audio' in result:
+                        # Try direct audio field
+                        audio_data = result['audio']
+                        print(f"Found direct audio field (type: {type(audio_data)})")
+                        if isinstance(audio_data, str):
+                            # Assume it's base64 or hex
+                            try:
+                                audio_data = bytes.fromhex(audio_data)
+                                print("Converted hex string to bytes")
+                            except ValueError:
+                                # Try base64
+                                import base64
+                                audio_data = base64.b64decode(audio_data)
+                                print("Converted base64 string to bytes")
                     else:
                         print(f"No audio data for slide {slide_num}")
+                        print(f"Available keys in response: {list(result.keys())}")
                         return None
                     
                     audio_path = self.temp_dir / lecture_name / f"audio_slide_{slide_num:03d}.mp3"
@@ -437,7 +461,7 @@ jobs:
                     print(f"Extracted {len(slide_paths)} slides")
                     
                     print(f"Generating scripts with Gemini...")
-                    scripts = self.generate_script_with_gemini(pdf_path)
+                    scripts = self.generate_script_with_gemini(pdf_path, force_regenerate)
                     print(f"Generated scripts for {len(scripts) if scripts else 0} slides")
                     
                     if not scripts:
@@ -532,6 +556,7 @@ jobs:
         MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
         MINIMAX_GROUP_ID: ${{ secrets.MINIMAX_GROUP_ID }}
         LECTURE_FILTER: ${{ inputs.lecture_filter }}
+        FORCE_REGENERATE: ${{ inputs.force_regenerate }}
         
     - name: Create videos README
       run: |
