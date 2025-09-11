@@ -243,7 +243,9 @@ jobs:
                     
                 except Exception as e:
                     print(f"Error generating script: {e}")
-                    return None            def parse_script(self, script_text):
+                    return None
+                    
+            def parse_script(self, script_text):
                 """Parse script into individual slide scripts"""
                 print("=== GEMINI RESPONSE DEBUGGING ===")
                 print(f"Response length: {len(script_text)}")
@@ -327,7 +329,9 @@ jobs:
           headers = {
               "Authorization": f"Bearer {self.minimax_api_key}",
               "Content-Type": "application/json"
-          }                payload = {
+          }
+          
+          payload = {
                     "model": "speech-01-turbo",
                     "text": text,
                     "stream": False,
