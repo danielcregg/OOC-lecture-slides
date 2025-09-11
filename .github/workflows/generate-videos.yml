@@ -316,7 +316,8 @@ jobs:
                         hex_audio = result['data']['audio']
                         audio_data = bytes.fromhex(hex_audio)
                     else:
-                        print(f"Unexpected API response format: {result}")
+                        print(f"No audio data in response for slide {slide_num}")
+                        print(f"Response keys: {result.keys()}")
                         return None
                     
                     audio_path = self.temp_dir / lecture_name / f"audio_slide_{slide_num:03d}.mp3"
@@ -333,9 +334,6 @@ jobs:
                     if hasattr(e, 'response') and e.response:
                         print(f"Response: {e.response.text}")
                     return None
-                    else:
-                        print(f"No audio data in response for slide {slide_num}")
-                        return None
                         
                 except Exception as e:
                     print(f"Error generating audio for slide {slide_num}: {e}")
@@ -347,9 +345,11 @@ jobs:
             def create_video_with_ffmpeg(self, slide_paths, audio_paths, lecture_name):
                 """Create final video using FFmpeg"""
                 print(f"Creating video for {lecture_name}")
+                print(f"Slide paths: {len(slide_paths)}, Audio paths: {len(audio_paths)}")
                 
                 # Filter out None audio paths and get valid pairs
                 valid_pairs = [(slide_path, audio_path) for slide_path, audio_path in zip(slide_paths, audio_paths) if audio_path and audio_path.exists()]
+                print(f"Valid pairs found: {len(valid_pairs)}")
                 
                 if not valid_pairs:
                     print("No valid audio files found, cannot create video")
@@ -358,17 +358,23 @@ jobs:
                 # Create temporary video files for each slide
                 temp_videos = []
                 for i, (slide_path, audio_path) in enumerate(valid_pairs):
+                    print(f"Processing slide {i+1}: {slide_path.name} with audio {audio_path.name}")
+                    
                     # Get audio duration
                     duration_cmd = [
                         'ffprobe', '-v', 'quiet', '-show_entries', 'format=duration',
                         '-of', 'csv=p=0', str(audio_path)
                     ]
                     try:
-                        duration = float(subprocess.check_output(duration_cmd).decode().strip())
+                        duration_output = subprocess.check_output(duration_cmd).decode().strip()
+                        duration = float(duration_output)
                         if duration <= 0:
                             duration = 3.0
-                    except:
+                    except Exception as e:
+                        print(f"Could not get audio duration, using 3.0s: {e}")
                         duration = 3.0
+                    
+                    print(f"Using duration: {duration}s")
                     
                     # Create individual video segment
                     temp_video = self.temp_dir / lecture_name / f"segment_{i:03d}.mp4"
@@ -385,12 +391,14 @@ jobs:
                         str(temp_video)
                     ]
                     
+                    print(f"Running FFmpeg command for segment {i+1}")
                     try:
-                        subprocess.run(cmd, check=True, capture_output=True)
+                        result = subprocess.run(cmd, check=True, capture_output=True)
                         temp_videos.append(temp_video)
-                        print(f"Created segment {i+1}/{len(valid_pairs)}")
+                        print(f"✅ Created segment {i+1}/{len(valid_pairs)}")
                     except subprocess.CalledProcessError as e:
-                        print(f"Error creating segment {i}: {e}")
+                        print(f"❌ Error creating segment {i}: {e}")
+                        print(f"FFmpeg command: {' '.join(cmd)}")
                         print(f"FFmpeg stderr: {e.stderr.decode()}")
                         return None
                 
@@ -582,11 +590,20 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add videos/ scripts/
+        
+        # Add videos and scripts directories
+        if [ -d "videos" ]; then
+          git add videos/
+        fi
+        if [ -d "scripts" ]; then
+          git add scripts/
+        fi
+        
         # Add cache file if it exists
         if [ -f video_generation_cache.json ]; then
           git add video_generation_cache.json
         fi
+        
         if git diff --staged --quiet; then
           echo "No new videos or scripts to commit"
         else
