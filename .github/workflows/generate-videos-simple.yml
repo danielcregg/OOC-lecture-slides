@@ -203,7 +203,24 @@ jobs:
                 for line_num, line in enumerate(script_text.split('\n')):
                     line = line.strip()
                     
-                    if line.startswith('Slide ') and ':' in line:
+                    # Handle markdown bold format: **Slide 1:**
+                    if '**Slide ' in line and ':**' in line:
+                        if current_slide and current_text:
+                            scripts[current_slide] = ' '.join(current_text).strip()
+                        
+                        # Extract slide number from **Slide X:**
+                        parts = line.split(':**', 1)
+                        slide_part = parts[0].replace('**Slide ', '').strip()
+                        try:
+                            current_slide = int(slide_part)
+                            current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
+                            print(f"Found slide {current_slide} (markdown format)")
+                        except ValueError:
+                            print(f"Could not parse slide: {slide_part}")
+                            continue
+                    
+                    # Handle regular format: Slide 1:
+                    elif line.startswith('Slide ') and ':' in line:
                         if current_slide and current_text:
                             scripts[current_slide] = ' '.join(current_text).strip()
                         
@@ -212,7 +229,7 @@ jobs:
                         try:
                             current_slide = int(slide_part)
                             current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
-                            print(f"Found slide {current_slide}")
+                            print(f"Found slide {current_slide} (regular format)")
                         except ValueError:
                             print(f"Could not parse slide: {slide_part}")
                             continue
@@ -234,7 +251,8 @@ jobs:
                             if current_slide and line:
                                 current_text.append(line)
                                 
-                    elif current_slide and line:
+                    elif current_slide and line and not line.startswith('**') and not line.startswith('***'):
+                        # Skip markdown formatting lines but keep content
                         current_text.append(line)
                 
                 if current_slide and current_text:
