@@ -203,47 +203,47 @@ jobs:
                         }
                     ])
                     
-              script = response.text
-              print("Successfully generated script with Gemini")
-              scripts = self.parse_script(script)
-              
-              # Fallback: if no scripts parsed, create basic scripts for each slide
-              if not scripts:
-                  print("WARNING: Script parsing failed, creating basic scripts...")
-                  # Extract images to get slide count
-                  images = convert_from_path(pdf_path, dpi=150)  # Lower DPI for counting
-                  scripts = {}
-                  for i in range(1, len(images) + 1):
-                      scripts[i] = f"This is slide {i} of the presentation."
-                  print(f"Created {len(scripts)} basic fallback scripts")
-              
-              # Save the generated scripts for future editing
-              if scripts:
-                  script_list = []
-                  for slide_num, script_text in scripts.items():
-                      script_list.append({
-                          'slide': slide_num,
-                          'script': script_text
-                      })
-                  
-                  script_data = {
-                      'lecture_name': lecture_name,
-                      'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
-                      'total_slides': len(scripts),
-                      'scripts': script_list,
-                      'raw_gemini_response': script[:1000] + "..." if len(script) > 1000 else script  # Save first 1000 chars for debugging
-                  }
-                  
-                  with open(script_file_path, 'w', encoding='utf-8') as f:
-                      json.dump(script_data, f, indent=2, ensure_ascii=False)
-                  
-                  print(f"Scripts saved to {script_file_path}")
-              
-              return scripts                except Exception as e:
-                    print(f"Error generating script: {e}")
-                    return None
+                    script = response.text
+                    print("Successfully generated script with Gemini")
+                    scripts = self.parse_script(script)
                     
-            def parse_script(self, script_text):
+                    # Fallback: if no scripts parsed, create basic scripts for each slide
+                    if not scripts:
+                        print("WARNING: Script parsing failed, creating basic scripts...")
+                        # Extract images to get slide count
+                        images = convert_from_path(pdf_path, dpi=150)  # Lower DPI for counting
+                        scripts = {}
+                        for i in range(1, len(images) + 1):
+                            scripts[i] = f"This is slide {i} of the presentation."
+                        print(f"Created {len(scripts)} basic fallback scripts")
+                    
+                    # Save the generated scripts for future editing
+                    if scripts:
+                        script_list = []
+                        for slide_num, script_text in scripts.items():
+                            script_list.append({
+                                'slide': slide_num,
+                                'script': script_text
+                            })
+                        
+                        script_data = {
+                            'lecture_name': lecture_name,
+                            'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
+                            'total_slides': len(scripts),
+                            'scripts': script_list,
+                            'raw_gemini_response': script[:1000] + "..." if len(script) > 1000 else script  # Save first 1000 chars for debugging
+                        }
+                        
+                        with open(script_file_path, 'w', encoding='utf-8') as f:
+                            json.dump(script_data, f, indent=2, ensure_ascii=False)
+                        
+                        print(f"Scripts saved to {script_file_path}")
+                    
+                    return scripts
+                    
+                except Exception as e:
+                    print(f"Error generating script: {e}")
+                    return None            def parse_script(self, script_text):
                 """Parse script into individual slide scripts"""
                 print("=== GEMINI RESPONSE DEBUGGING ===")
                 print(f"Response length: {len(script_text)}")
@@ -324,12 +324,10 @@ jobs:
                     url = base_url
                     print("Using default voice (no cloning)")
                 
-                headers = {
+          headers = {
               "Authorization": f"Bearer {self.minimax_api_key}",
               "Content-Type": "application/json"
-          }
-                
-                payload = {
+          }                payload = {
                     "model": "speech-01-turbo",
                     "text": text,
                     "stream": False,
