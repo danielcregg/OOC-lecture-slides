@@ -48,16 +48,15 @@ jobs:
       run: |
         cat > generate_videos.py << 'EOF'
         import os
-        import json
-        import hashlib
-        import requests
+        import sys
         import time
+        import hashlib
+        import subprocess
+        import json
         from pathlib import Path
         from pdf2image import convert_from_path
-        from PIL import Image
         import google.generativeai as genai
-        import subprocess
-        import base64
+        import requests
         
         class LectureVideoGenerator:
             def __init__(self):
@@ -66,10 +65,12 @@ jobs:
                 self.temp_dir = Path("temp_video_generation")
                 self.cache_file = Path("video_generation_cache.json")
                 self.voice_sample = Path("my-voice-sample.wav")
+                self.scripts_dir = Path("scripts")  # Directory for saving generated scripts
                 
                 # Create directories
                 self.videos_dir.mkdir(exist_ok=True)
                 self.temp_dir.mkdir(exist_ok=True)
+                self.scripts_dir.mkdir(exist_ok=True)
                 
                 # Load cache
                 self.cache = self.load_cache()
@@ -82,7 +83,7 @@ jobs:
                 if not os.getenv('MINIMAX_API_KEY'):
                     raise ValueError("MINIMAX_API_KEY environment variable is required") 
                 if not os.getenv('MINIMAX_GROUP_ID'):
-                    raise ValueError("MINIMAX_GROUP_ID environment variable is required")
+                    print("WARNING: MINIMAX_GROUP_ID not provided. Using default voice without cloning.")
                     
                 genai.configure(api_key=os.getenv('GOOGLE_AI_STUDIO_API_KEY'))
                 self.model = genai.GenerativeModel('gemini-2.5-pro')
@@ -143,6 +144,31 @@ jobs:
                 
             def generate_script_with_gemini(self, pdf_path):
                 """Generate narration script using Gemini"""
+                lecture_name = pdf_path.stem
+                
+                # Check if script file already exists
+                scripts_dir = Path('scripts')
+                scripts_dir.mkdir(exist_ok=True)
+                script_file_path = scripts_dir / f"{lecture_name}_script.json"
+                
+                if script_file_path.exists():
+                    print(f"Loading existing script from {script_file_path}")
+                    try:
+                        with open(script_file_path, 'r', encoding='utf-8') as f:
+                            script_data = json.load(f)
+                            
+                        # Convert to the expected format
+                        scripts = {}
+                        for item in script_data.get('scripts', []):
+                            if isinstance(item, dict) and 'slide' in item and 'script' in item:
+                                scripts[item['slide']] = item['script']
+                        
+                        print(f"Loaded scripts for {len(scripts)} slides")
+                        return scripts
+                        
+                    except Exception as e:
+                        print(f"Error loading script file: {e}, generating new script...")
+                
                 print("Generating script with Gemini...")
                 
                 # Read PDF file
@@ -179,7 +205,30 @@ jobs:
                     
                     script = response.text
                     print("Successfully generated script with Gemini")
-                    return self.parse_script(script)
+                    scripts = self.parse_script(script)
+                    
+                    # Save the generated scripts for future editing
+                    if scripts:
+                        script_list = []
+                        for slide_num, script_text in scripts.items():
+                            script_list.append({
+                                'slide': slide_num,
+                                'script': script_text
+                            })
+                        
+                        script_data = {
+                            'lecture_name': lecture_name,
+                            'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
+                            'total_slides': len(scripts),
+                            'scripts': script_list
+                        }
+                        
+                        with open(script_file_path, 'w', encoding='utf-8') as f:
+                            json.dump(script_data, f, indent=2, ensure_ascii=False)
+                        
+                        print(f"Scripts saved to {script_file_path}")
+                    
+                    return scripts
                     
                 except Exception as e:
                     print(f"Error generating script: {e}")
@@ -216,30 +265,37 @@ jobs:
                 """Generate audio using MiniMax TTS API"""
                 print(f"Generating audio for slide {slide_num}")
                 
-                # MiniMax TTS API call (updated for correct API format)
-                url = f"https://api.minimax.io/v1/t2a_v2?GroupId={os.getenv('MINIMAX_GROUP_ID')}"
+                # MiniMax TTS API call 
+                base_url = "https://api.minimax.chat/v1/t2a_pro"
+                
+                # Add group_id parameter if available
+                if self.minimax_group_id:
+                    url = f"{base_url}?GroupId={self.minimax_group_id}"
+                    print(f"Using voice cloning with group_id: {self.minimax_group_id}")
+                else:
+                    url = base_url
+                    print("Using default voice (no cloning)")
+                
                 headers = {
                     "Authorization": f"Bearer {self.minimax_api_key}",
                     "Content-Type": "application/json"
                 }
                 
                 payload = {
-                    "model": "speech-2.5-hd-preview",  # Use the latest HD model
+                    "model": "speech-01-turbo",
                     "text": text,
                     "stream": False,
                     "voice_setting": {
-                        "voice_id": "male-qn-qingse",  # Default voice, will be enhanced with voice cloning if available
+                        "voice_id": "male-qn-qingse",
                         "speed": 1.0,
-                        "vol": 1.0,
-                        "pitch": 0
+                        "vol": 1.0
                     },
                     "audio_setting": {
-                        "sample_rate": 22050,
+                        "sample_rate": 32000,
                         "bitrate": 128000,
-                        "format": "wav",  # Use WAV for better quality
+                        "format": "mp3",
                         "channel": 1
-                    },
-                    "language_boost": "English"  # Enhance English recognition
+                    }
                 }
                 
                 try:
@@ -248,19 +304,35 @@ jobs:
                     
                     result = response.json()
                     
-                    # Extract audio from hex format
-                    if 'data' in result and 'audio' in result['data']:
+                    # Handle audio response - check for audio_file URL or direct audio data
+                    if 'audio_file' in result:
+                        # Download from URL
+                        audio_url = result['audio_file']
+                        audio_response = requests.get(audio_url)
+                        audio_response.raise_for_status()
+                        audio_data = audio_response.content
+                    elif 'data' in result and 'audio' in result['data']:
+                        # Direct hex audio data
                         hex_audio = result['data']['audio']
-                        audio_bytes = bytes.fromhex(hex_audio)
+                        audio_data = bytes.fromhex(hex_audio)
+                    else:
+                        print(f"Unexpected API response format: {result}")
+                        return None
+                    
+                    audio_path = self.temp_dir / lecture_name / f"audio_slide_{slide_num:03d}.mp3"
+                    audio_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    with open(audio_path, 'wb') as f:
+                        f.write(audio_data)
+                    
+                    print(f"Generated audio for slide {slide_num}")
+                    return audio_path
                         
-                        audio_path = self.temp_dir / lecture_name / f"audio_slide_{slide_num:03d}.wav"
-                        audio_path.parent.mkdir(parents=True, exist_ok=True)
-                        
-                        with open(audio_path, 'wb') as f:
-                            f.write(audio_bytes)
-                        
-                        print(f"Generated audio for slide {slide_num}")
-                        return audio_path
+                except requests.RequestException as e:
+                    print(f"Error calling MiniMax API: {e}")
+                    if hasattr(e, 'response') and e.response:
+                        print(f"Response: {e.response.text}")
+                    return None
                     else:
                         print(f"No audio data in response for slide {slide_num}")
                         return None
@@ -276,60 +348,82 @@ jobs:
                 """Create final video using FFmpeg"""
                 print(f"Creating video for {lecture_name}")
                 
-                video_inputs = []
-                filter_complex = []
+                # Filter out None audio paths and get valid pairs
+                valid_pairs = [(slide_path, audio_path) for slide_path, audio_path in zip(slide_paths, audio_paths) if audio_path and audio_path.exists()]
                 
-                # Create video segments for each slide
-                for i, (slide_path, audio_path) in enumerate(zip(slide_paths, audio_paths)):
-                    if audio_path and audio_path.exists():
-                        # Get audio duration
-                        duration_cmd = [
-                            'ffprobe', '-v', 'quiet', '-show_entries', 'format=duration',
-                            '-of', 'csv=p=0', str(audio_path)
-                        ]
-                        try:
-                            duration = float(subprocess.check_output(duration_cmd).decode().strip())
-                        except:
-                            duration = 3.0  # Default duration
-                        
-                        video_inputs.extend(['-loop', '1', '-t', str(duration), '-i', str(slide_path)])
-                        video_inputs.extend(['-i', str(audio_path)])
-                        
-                        # Create filter for this segment
-                        video_idx = i * 2
-                        audio_idx = i * 2 + 1
-                        filter_complex.append(f"[{video_idx}:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2[v{i}]")
-                        filter_complex.append(f"[v{i}][{audio_idx}:a]concat=n=1:v=1:a=1[v{i}a{i}]")
-                
-                if not filter_complex:
-                    print("No audio generated, cannot create video")
+                if not valid_pairs:
+                    print("No valid audio files found, cannot create video")
                     return None
+                
+                # Create temporary video files for each slide
+                temp_videos = []
+                for i, (slide_path, audio_path) in enumerate(valid_pairs):
+                    # Get audio duration
+                    duration_cmd = [
+                        'ffprobe', '-v', 'quiet', '-show_entries', 'format=duration',
+                        '-of', 'csv=p=0', str(audio_path)
+                    ]
+                    try:
+                        duration = float(subprocess.check_output(duration_cmd).decode().strip())
+                        if duration <= 0:
+                            duration = 3.0
+                    except:
+                        duration = 3.0
+                    
+                    # Create individual video segment
+                    temp_video = self.temp_dir / lecture_name / f"segment_{i:03d}.mp4"
+                    temp_video.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    cmd = [
+                        'ffmpeg', '-y',
+                        '-loop', '1', '-t', str(duration), '-i', str(slide_path),
+                        '-i', str(audio_path),
+                        '-c:v', 'libx264', '-crf', '23', '-preset', 'medium',
+                        '-c:a', 'aac', '-b:a', '128k',
+                        '-vf', 'scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2',
+                        '-shortest',
+                        str(temp_video)
+                    ]
+                    
+                    try:
+                        subprocess.run(cmd, check=True, capture_output=True)
+                        temp_videos.append(temp_video)
+                        print(f"Created segment {i+1}/{len(valid_pairs)}")
+                    except subprocess.CalledProcessError as e:
+                        print(f"Error creating segment {i}: {e}")
+                        print(f"FFmpeg stderr: {e.stderr.decode()}")
+                        return None
                 
                 # Concatenate all segments
-                concat_inputs = ''.join([f"[v{i}a{i}]" for i in range(len(audio_paths)) if audio_paths[i]])
-                filter_complex.append(f"{concat_inputs}concat=n={len([a for a in audio_paths if a])}:v=1:a=1[final]")
+                if len(temp_videos) == 1:
+                    # Single video, just copy
+                    output_path = self.videos_dir / f"{lecture_name}.mp4"
+                    subprocess.run(['cp', str(temp_videos[0]), str(output_path)], check=True)
+                else:
+                    # Multiple videos, concatenate
+                    concat_file = self.temp_dir / lecture_name / "concat.txt"
+                    with open(concat_file, 'w') as f:
+                        for video in temp_videos:
+                            f.write(f"file '{video.absolute()}'\n")
+                    
+                    output_path = self.videos_dir / f"{lecture_name}.mp4"
+                    cmd = [
+                        'ffmpeg', '-y',
+                        '-f', 'concat', '-safe', '0', '-i', str(concat_file),
+                        '-c', 'copy',
+                        '-movflags', '+faststart',
+                        str(output_path)
+                    ]
+                    
+                    try:
+                        subprocess.run(cmd, check=True, capture_output=True)
+                    except subprocess.CalledProcessError as e:
+                        print(f"Error concatenating videos: {e}")
+                        print(f"FFmpeg stderr: {e.stderr.decode()}")
+                        return None
                 
-                output_path = self.videos_dir / f"{lecture_name}.mp4"
-                
-                cmd = [
-                    'ffmpeg', '-y'  # Overwrite output
-                ] + video_inputs + [
-                    '-filter_complex', ';'.join(filter_complex),
-                    '-map', '[final]',
-                    '-c:v', 'libx264', '-crf', '23', '-preset', 'medium',
-                    '-c:a', 'aac', '-b:a', '128k',
-                    '-movflags', '+faststart',
-                    str(output_path)
-                ]
-                
-                try:
-                    subprocess.run(cmd, check=True, capture_output=True)
-                    print(f"Successfully created video: {output_path}")
-                    return output_path
-                except subprocess.CalledProcessError as e:
-                    print(f"Error creating video: {e}")
-                    print(f"FFmpeg stderr: {e.stderr.decode()}")
-                    return None
+                print(f"Successfully created video: {output_path}")
+                return output_path
                     
             def process_lecture(self, pdf_path, force_regenerate=False):
                 """Process a single lecture PDF into video"""
@@ -488,15 +582,15 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add videos/
+        git add videos/ scripts/
         # Add cache file if it exists
         if [ -f video_generation_cache.json ]; then
           git add video_generation_cache.json
         fi
         if git diff --staged --quiet; then
-          echo "No new videos to commit"
+          echo "No new videos or scripts to commit"
         else
-          git commit -m "Auto-generate lecture videos [skip ci]" || exit 0
+          git commit -m "Auto-generate lecture videos and scripts [skip ci]" || exit 0
           git push
         fi
       env:
