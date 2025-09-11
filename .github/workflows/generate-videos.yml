@@ -245,18 +245,18 @@ jobs:
                     
             def parse_script(self, script_text):
                 """Parse script into individual slide scripts"""
-                print("=== DEBUGGING SCRIPT PARSING ===")
-                print(f"Script text preview (first 500 chars):")
-                print(script_text[:500])
-                print("=== END PREVIEW ===")
+                print("=== GEMINI RESPONSE DEBUGGING ===")
+                print(f"Response length: {len(script_text)}")
+                print("First 800 characters:")
+                print(script_text[:800])
+                print("=== END DEBUGGING ===")
                 
                 scripts = {}
                 current_slide = None
                 current_text = []
                 
-                for line in script_text.split('\n'):
+                for line_num, line in enumerate(script_text.split('\n')):
                     line = line.strip()
-                    print(f"Processing line: '{line}'")  # Debug each line
                     
                     # More flexible parsing - handle different formats
                     if line.startswith('Slide ') and ':' in line:
@@ -270,19 +270,17 @@ jobs:
                         try:
                             current_slide = int(slide_part)
                             current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
-                            print(f"Found slide {current_slide}")
+                            print(f"✅ Found slide {current_slide}")
                         except ValueError:
-                            print(f"Could not parse slide number from: {slide_part}")
+                            print(f"❌ Could not parse slide number from: {slide_part}")
                             continue
                             
-                    # Also try to match numbered slides without "Slide" prefix
+                    # Also try to match numbered slides without "Slide" prefix  
                     elif line and line[0].isdigit() and (':' in line or '.' in line):
                         # Handle "1:" or "1." format
-                        if ':' in line:
-                            parts = line.split(':', 1)
-                        else:
-                            parts = line.split('.', 1)
-                            
+                        separator = ':' if ':' in line else '.'
+                        parts = line.split(separator, 1)
+                        
                         try:
                             slide_num = int(parts[0].strip())
                             
@@ -292,7 +290,7 @@ jobs:
                             
                             current_slide = slide_num
                             current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
-                            print(f"Found slide {current_slide} (numbered format)")
+                            print(f"✅ Found slide {current_slide} (number format)")
                         except (ValueError, IndexError):
                             if current_slide and line:
                                 current_text.append(line)
@@ -304,8 +302,11 @@ jobs:
                 if current_slide and current_text:
                     scripts[current_slide] = ' '.join(current_text).strip()
                     
-                print(f"Final parsed scripts: {list(scripts.keys())}")
-                print(f"Parsed scripts for {len(scripts)} slides")
+                print(f"Final result: Found {len(scripts)} slides")
+                for slide_num in sorted(scripts.keys())[:3]:  # Show first 3 for debugging
+                    preview = scripts[slide_num][:100] + "..." if len(scripts[slide_num]) > 100 else scripts[slide_num]
+                    print(f"Slide {slide_num}: {preview}")
+                    
                 return scripts
                 
             def generate_audio_with_minimax(self, text, slide_num, lecture_name):
