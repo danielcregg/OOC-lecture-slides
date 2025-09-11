@@ -1,0 +1,528 @@
+import os
+import sys
+import time
+import hashlib
+import subprocess
+import json
+from pathlib import Path
+from pdf2image import convert_from_path
+import google.generativeai as genai
+import requests
+
+class LectureVideoGenerator:
+    def __init__(self):
+        self.setup_apis()
+        self.videos_dir = Path("videos")
+        self.temp_dir = Path("temp_video_generation")
+        self.cache_file = Path("video_generation_cache.json")
+        self.voice_sample = Path("my-voice-sample.wav")
+        self.scripts_dir = Path("scripts")  # Directory for saving generated scripts
+        
+        # Create directories
+        self.videos_dir.mkdir(exist_ok=True)
+        self.temp_dir.mkdir(exist_ok=True)
+        self.scripts_dir.mkdir(exist_ok=True)
+        
+        # Load cache
+        self.cache = self.load_cache()
+        
+    def setup_apis(self):
+        """Setup API clients"""
+        # Validate API keys
+        if not os.getenv('GOOGLE_AI_STUDIO_API_KEY'):
+            raise ValueError("GOOGLE_AI_STUDIO_API_KEY environment variable is required")
+        if not os.getenv('MINIMAX_API_KEY'):
+            raise ValueError("MINIMAX_API_KEY environment variable is required") 
+        if not os.getenv('MINIMAX_GROUP_ID'):
+            print("WARNING: MINIMAX_GROUP_ID not provided. Using default voice without cloning.")
+            
+        genai.configure(api_key=os.getenv('GOOGLE_AI_STUDIO_API_KEY'))
+        self.model = genai.GenerativeModel('gemini-2.5-pro')
+        self.minimax_api_key = os.getenv('MINIMAX_API_KEY')
+        self.minimax_group_id = os.getenv('MINIMAX_GROUP_ID')
+        
+        print("APIs configured successfully")
+        
+    def load_cache(self):
+        """Load video generation cache"""
+        if self.cache_file.exists():
+            with open(self.cache_file, 'r') as f:
+                return json.load(f)
+        return {}
+        
+    def save_cache(self):
+        """Save video generation cache"""
+        with open(self.cache_file, 'w') as f:
+            json.dump(self.cache, f, indent=2)
+            
+    def get_pdf_hash(self, pdf_path):
+        """Get hash of PDF file for change detection"""
+        with open(pdf_path, 'rb') as f:
+            return hashlib.md5(f.read()).hexdigest()
+            
+    def should_regenerate_video(self, lecture_name, pdf_path, force=False):
+        """Check if video should be regenerated"""
+        if force:
+            return True
+            
+        video_path = self.videos_dir / f"{lecture_name}.mp4"
+        if not video_path.exists():
+            return True
+            
+        current_hash = self.get_pdf_hash(pdf_path)
+        cached_hash = self.cache.get(lecture_name, {}).get('pdf_hash')
+        
+        return current_hash != cached_hash
+        
+    def extract_slides_from_pdf(self, pdf_path, lecture_name):
+        """Extract slides as images from PDF"""
+        print(f"Extracting slides from {pdf_path}")
+        
+        slides_dir = self.temp_dir / lecture_name / "slides"
+        slides_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Convert PDF to images
+        images = convert_from_path(pdf_path, dpi=300, fmt='PNG')
+        
+        slide_paths = []
+        for i, image in enumerate(images):
+            slide_path = slides_dir / f"slide_{i+1:03d}.png"
+            image.save(slide_path, 'PNG')
+            slide_paths.append(slide_path)
+            
+        print(f"Extracted {len(slide_paths)} slides")
+        return slide_paths
+        
+    def generate_script_with_gemini(self, pdf_path):
+        """Generate narration script using Gemini"""
+        lecture_name = pdf_path.stem
+        
+        # Check if script file already exists
+        scripts_dir = Path('scripts')
+        scripts_dir.mkdir(exist_ok=True)
+        script_file_path = scripts_dir / f"{lecture_name}_script.json"
+        
+        if script_file_path.exists():
+            print(f"Loading existing script from {script_file_path}")
+            try:
+                with open(script_file_path, 'r', encoding='utf-8') as f:
+                    script_data = json.load(f)
+                    
+                # Convert to the expected format
+                scripts = {}
+                for item in script_data.get('scripts', []):
+                    if isinstance(item, dict) and 'slide' in item and 'script' in item:
+                        scripts[item['slide']] = item['script']
+                
+                print(f"Loaded scripts for {len(scripts)} slides")
+                return scripts
+                
+            except Exception as e:
+                print(f"Error loading script file: {e}, generating new script...")
+        
+        print("Generating script with Gemini...")
+        
+        # Read PDF file
+        with open(pdf_path, 'rb') as f:
+            pdf_data = f.read()
+        
+        # Create prompt
+        prompt = """Create a short educational narration script for each slide in this PDF lecture presentation. 
+        
+        Requirements:
+        - Use an academic tone suitable for university students
+        - Keep each slide narration concise but informative (approximately 15-30 seconds when spoken)
+        - Include natural pauses between slides
+        - Number each slide script clearly (e.g., "Slide 1:", "Slide 2:", etc.)
+        - Focus on explaining key concepts and connecting ideas
+        - Avoid reading bullet points verbatim - instead explain and elaborate
+        
+        Format your response as:
+        Slide 1: [narration text]
+        
+        Slide 2: [narration text]
+        
+        And so on for each slide."""
+        
+        try:
+            # Upload PDF to Gemini
+            response = self.model.generate_content([
+                prompt,
+                {
+                    "mime_type": "application/pdf",
+                    "data": pdf_data
+                }
+            ])
+            
+            script = response.text
+            print("Successfully generated script with Gemini")
+            scripts = self.parse_script(script)
+            
+            # Fallback: if no scripts parsed, create basic scripts for each slide
+            if not scripts:
+                print("WARNING: Script parsing failed, creating basic scripts...")
+                # Extract images to get slide count
+                images = convert_from_path(pdf_path, dpi=150)  # Lower DPI for counting
+                scripts = {}
+                for i in range(1, len(images) + 1):
+                    scripts[i] = f"This is slide {i} of the presentation."
+                print(f"Created {len(scripts)} basic fallback scripts")
+            
+            # Save the generated scripts for future editing
+            if scripts:
+                script_list = []
+                for slide_num, script_text in scripts.items():
+                    script_list.append({
+                        'slide': slide_num,
+                        'script': script_text
+                    })
+                
+                script_data = {
+                    'lecture_name': lecture_name,
+                    'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
+                    'total_slides': len(scripts),
+                    'scripts': script_list,
+                    'raw_gemini_response': script[:1000] + "..." if len(script) > 1000 else script  # Save first 1000 chars for debugging
+                }
+                
+                with open(script_file_path, 'w', encoding='utf-8') as f:
+                    json.dump(script_data, f, indent=2, ensure_ascii=False)
+                
+                print(f"Scripts saved to {script_file_path}")
+            
+            return scripts
+            
+        except Exception as e:
+            print(f"Error generating script: {e}")
+            return None
+            
+    def parse_script(self, script_text):
+        """Parse script into individual slide scripts"""
+        print("=== GEMINI RESPONSE DEBUGGING ===")
+        print(f"Response length: {len(script_text)}")
+        print("First 800 characters:")
+        print(script_text[:800])
+        print("=== END DEBUGGING ===")
+        
+        scripts = {}
+        current_slide = None
+        current_text = []
+        
+        for line_num, line in enumerate(script_text.split('\n')):
+            line = line.strip()
+            
+            # More flexible parsing - handle different formats
+            if line.startswith('Slide ') and ':' in line:
+                # Save previous slide
+                if current_slide and current_text:
+                    scripts[current_slide] = ' '.join(current_text).strip()
+                
+                # Start new slide
+                parts = line.split(':', 1)
+                slide_part = parts[0].replace('Slide ', '').strip()
+                try:
+                    current_slide = int(slide_part)
+                    current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
+                    print(f"✅ Found slide {current_slide}")
+                except ValueError:
+                    print(f"❌ Could not parse slide number from: {slide_part}")
+                    continue
+                    
+            # Also try to match numbered slides without "Slide" prefix  
+            elif line and line[0].isdigit() and (':' in line or '.' in line):
+                # Handle "1:" or "1." format
+                separator = ':' if ':' in line else '.'
+                parts = line.split(separator, 1)
+                
+                try:
+                    slide_num = int(parts[0].strip())
+                    
+                    # Save previous slide
+                    if current_slide and current_text:
+                        scripts[current_slide] = ' '.join(current_text).strip()
+                    
+                    current_slide = slide_num
+                    current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
+                    print(f"✅ Found slide {current_slide} (number format)")
+                except (ValueError, IndexError):
+                    if current_slide and line:
+                        current_text.append(line)
+                        
+            elif current_slide and line:
+                current_text.append(line)
+        
+        # Save last slide
+        if current_slide and current_text:
+            scripts[current_slide] = ' '.join(current_text).strip()
+            
+        print(f"Final result: Found {len(scripts)} slides")
+        for slide_num in sorted(scripts.keys())[:3]:  # Show first 3 for debugging
+            preview = scripts[slide_num][:100] + "..." if len(scripts[slide_num]) > 100 else scripts[slide_num]
+            print(f"Slide {slide_num}: {preview}")
+            
+        return scripts
+        
+    def generate_audio_with_minimax(self, text, slide_num, lecture_name):
+        """Generate audio using MiniMax TTS API"""
+        print(f"Generating audio for slide {slide_num}")
+        
+        # MiniMax TTS API call 
+        base_url = "https://api.minimax.chat/v1/t2a_pro"
+        
+        # Add group_id parameter if available
+        if self.minimax_group_id:
+            url = f"{base_url}?GroupId={self.minimax_group_id}"
+            print(f"Using voice cloning with group_id: {self.minimax_group_id}")
+        else:
+            url = base_url
+            print("Using default voice (no cloning)")
+        
+        headers = {
+            "Authorization": f"Bearer {self.minimax_api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "model": "speech-01-turbo",
+            "text": text,
+            "stream": False,
+            "voice_setting": {
+                "voice_id": "male-qn-qingse",
+                "speed": 1.0,
+                "vol": 1.0
+            },
+            "audio_setting": {
+                "sample_rate": 32000,
+                "bitrate": 128000,
+                "format": "mp3",
+                "channel": 1
+            }
+        }
+        
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=60)
+            response.raise_for_status()
+            
+            result = response.json()
+            
+            # Handle audio response - check for audio_file URL or direct audio data
+            if 'audio_file' in result:
+                # Download from URL
+                audio_url = result['audio_file']
+                audio_response = requests.get(audio_url)
+                audio_response.raise_for_status()
+                audio_data = audio_response.content
+            elif 'data' in result and 'audio' in result['data']:
+                # Direct hex audio data
+                hex_audio = result['data']['audio']
+                audio_data = bytes.fromhex(hex_audio)
+            else:
+                print(f"No audio data in response for slide {slide_num}")
+                print(f"Response keys: {result.keys()}")
+                return None
+            
+            audio_path = self.temp_dir / lecture_name / f"audio_slide_{slide_num:03d}.mp3"
+            audio_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(audio_path, 'wb') as f:
+                f.write(audio_data)
+            
+            print(f"Generated audio for slide {slide_num}")
+            return audio_path
+                
+        except requests.RequestException as e:
+            print(f"Error calling MiniMax API: {e}")
+            if hasattr(e, 'response') and e.response:
+                print(f"Response: {e.response.text}")
+            return None
+                
+        except Exception as e:
+            print(f"Error generating audio for slide {slide_num}: {e}")
+            if hasattr(e, 'response'):
+                print(f"Response status: {e.response.status_code}")
+                print(f"Response text: {e.response.text}")
+            return None
+            
+    def create_video_with_ffmpeg(self, slide_paths, audio_paths, lecture_name):
+        """Create final video using FFmpeg"""
+        print(f"Creating video for {lecture_name}")
+        print(f"Slide paths: {len(slide_paths)}, Audio paths: {len(audio_paths)}")
+        
+        # Filter out None audio paths and get valid pairs
+        valid_pairs = [(slide_path, audio_path) for slide_path, audio_path in zip(slide_paths, audio_paths) if audio_path and audio_path.exists()]
+        print(f"Valid pairs found: {len(valid_pairs)}")
+        
+        if not valid_pairs:
+            print("No valid audio files found, cannot create video")
+            return None
+        
+        # Create temporary video files for each slide
+        temp_videos = []
+        for i, (slide_path, audio_path) in enumerate(valid_pairs):
+            print(f"Processing slide {i+1}: {slide_path.name} with audio {audio_path.name}")
+            
+            # Get audio duration
+            duration_cmd = [
+                'ffprobe', '-v', 'quiet', '-show_entries', 'format=duration',
+                '-of', 'csv=p=0', str(audio_path)
+            ]
+            try:
+                duration_output = subprocess.check_output(duration_cmd).decode().strip()
+                duration = float(duration_output)
+                if duration <= 0:
+                    duration = 3.0
+            except Exception as e:
+                print(f"Could not get audio duration, using 3.0s: {e}")
+                duration = 3.0
+            
+            print(f"Using duration: {duration}s")
+            
+            # Create individual video segment
+            temp_video = self.temp_dir / lecture_name / f"segment_{i:03d}.mp4"
+            temp_video.parent.mkdir(parents=True, exist_ok=True)
+            
+            cmd = [
+                'ffmpeg', '-y',
+                '-loop', '1', '-t', str(duration), '-i', str(slide_path),
+                '-i', str(audio_path),
+                '-c:v', 'libx264', '-crf', '23', '-preset', 'medium',
+                '-c:a', 'aac', '-b:a', '128k',
+                '-vf', 'scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2',
+                '-shortest',
+                str(temp_video)
+            ]
+            
+            print(f"Running FFmpeg command for segment {i+1}")
+            try:
+                result = subprocess.run(cmd, check=True, capture_output=True)
+                temp_videos.append(temp_video)
+                print(f"✅ Created segment {i+1}/{len(valid_pairs)}")
+            except subprocess.CalledProcessError as e:
+                print(f"❌ Error creating segment {i}: {e}")
+                print(f"FFmpeg command: {' '.join(cmd)}")
+                print(f"FFmpeg stderr: {e.stderr.decode()}")
+                return None
+        
+        # Concatenate all segments
+        if len(temp_videos) == 1:
+            # Single video, just copy
+            output_path = self.videos_dir / f"{lecture_name}.mp4"
+            subprocess.run(['cp', str(temp_videos[0]), str(output_path)], check=True)
+        else:
+            # Multiple videos, concatenate
+            concat_file = self.temp_dir / lecture_name / "concat.txt"
+            with open(concat_file, 'w') as f:
+                for video in temp_videos:
+                    f.write(f"file '{video.absolute()}'\n")
+            
+            output_path = self.videos_dir / f"{lecture_name}.mp4"
+            cmd = [
+                'ffmpeg', '-y',
+                '-f', 'concat', '-safe', '0', '-i', str(concat_file),
+                '-c', 'copy',
+                '-movflags', '+faststart',
+                str(output_path)
+            ]
+            
+            try:
+                subprocess.run(cmd, check=True, capture_output=True)
+            except subprocess.CalledProcessError as e:
+                print(f"Error concatenating videos: {e}")
+                print(f"FFmpeg stderr: {e.stderr.decode()}")
+                return None
+        
+        print(f"Successfully created video: {output_path}")
+        return output_path
+            
+    def process_lecture(self, pdf_path, force_regenerate=False):
+        """Process a single lecture PDF into video"""
+        lecture_name = pdf_path.stem
+        print(f"\n=== Processing {lecture_name} ===")
+        
+        if not self.should_regenerate_video(lecture_name, pdf_path, force_regenerate):
+            print(f"Video for {lecture_name} is up to date, skipping")
+            return True
+        
+        try:
+            # Extract slides
+            slide_paths = self.extract_slides_from_pdf(pdf_path, lecture_name)
+            
+            # Generate script
+            scripts = self.generate_script_with_gemini(pdf_path)
+            if not scripts:
+                return False
+            
+            # Generate audio for each slide
+            audio_paths = []
+            for i, slide_path in enumerate(slide_paths, 1):
+                if i in scripts:
+                    audio_path = self.generate_audio_with_minimax(scripts[i], i, lecture_name)
+                    audio_paths.append(audio_path)
+                    # Add pause between slides
+                    time.sleep(1)
+                else:
+                    print(f"No script found for slide {i}")
+                    audio_paths.append(None)
+            
+            # Create video
+            video_path = self.create_video_with_ffmpeg(slide_paths, audio_paths, lecture_name)
+            
+            if video_path:
+                # Update cache
+                self.cache[lecture_name] = {
+                    'pdf_hash': self.get_pdf_hash(pdf_path),
+                    'video_path': str(video_path),
+                    'generated_at': time.time()
+                }
+                self.save_cache()
+                
+                print(f"Successfully processed {lecture_name}")
+                return True
+            
+        except Exception as e:
+            print(f"Error processing {lecture_name}: {e}")
+            return False
+        
+        return False
+        
+    def cleanup_temp_files(self):
+        """Clean up temporary files"""
+        import shutil
+        if self.temp_dir.exists():
+            shutil.rmtree(self.temp_dir)
+            
+def main():
+    generator = LectureVideoGenerator()
+    
+    # Get input parameters
+    lecture_filter = os.getenv('LECTURE_FILTER', 'all')
+    force_regenerate = os.getenv('FORCE_REGENERATE', 'false').lower() == 'true'
+    
+    # Find PDFs to process
+    pdfs_dir = Path("pdfs")
+    pdf_files = list(pdfs_dir.glob("lecture*.pdf"))
+    
+    if not pdf_files:
+        print("No lecture PDFs found")
+        return
+    
+    # Filter PDFs if specified
+    if lecture_filter != 'all':
+        filter_names = [name.strip() for name in lecture_filter.split(',')]
+        pdf_files = [pdf for pdf in pdf_files if any(filter_name in pdf.stem for filter_name in filter_names)]
+    
+    print(f"Processing {len(pdf_files)} PDFs: {[pdf.stem for pdf in pdf_files]}")
+    
+    success_count = 0
+    for pdf_path in pdf_files:
+        if generator.process_lecture(pdf_path, force_regenerate):
+            success_count += 1
+    
+    print(f"\n=== Summary ===")
+    print(f"Successfully processed: {success_count}/{len(pdf_files)} lectures")
+    
+    # Cleanup
+    generator.cleanup_temp_files()
+    
+if __name__ == "__main__":
+    main()
