@@ -47,6 +47,7 @@ Add these secrets in your repository settings:
 ```
 GOOGLE_AI_STUDIO_API_KEY=your_gemini_api_key
 MINIMAX_API_KEY=your_minimax_api_key
+MINIMAX_GROUP_ID=your_minimax_group_id
 ```
 
 ### Voice Sample

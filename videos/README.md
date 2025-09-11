@@ -13,6 +13,7 @@ Before running video generation, ensure:
 - [ ] **GitHub Secrets Configured**
   - `GOOGLE_AI_STUDIO_API_KEY` - Your Google AI Studio API key
   - `MINIMAX_API_KEY` - Your MiniMax API key
+  - `MINIMAX_GROUP_ID` - Your MiniMax Group ID
 
 - [ ] **Voice Sample Ready**
   - `my-voice-sample.wav` exists in repository root ✅
