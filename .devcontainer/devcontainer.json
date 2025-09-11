@@ -17,7 +17,8 @@
         "mathematic.vscode-pdf",
         "ms-vscode.live-server",
         "ms-vscode.vscode-copilot-vision",
-        "ms-vscode.vscode-websearchforcopilot"
+        "ms-vscode.vscode-websearchforcopilot",
+        "ritwickdey.LiveServer"
       ],
       
       // VS Code settings
