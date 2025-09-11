@@ -1,70 +1,70 @@
 {
   "lecture_name": "lecture1-course-introduction",
-  "generated_at": "2025-09-11 22:38:10",
+  "generated_at": "2025-09-11 23:19:36",
   "total_slides": 15,
   "scripts": [
     {
       "slide": 1,
-      "script": "Hello everyone, and welcome. This is the module introduction for AI-Assisted Programming, part of your curriculum here at Atlantic Technological University. In this initial session, we will cover the foundational information you need to get started and succeed in this course."
+      "script": "Welcome everyone to the Module Introduction for AI-Assisted Programming. This module, offered through the Atlantic Technological University, will introduce you to the transformative field of AI-assisted programming. Throughout this course, we will explore how artificial intelligence is reshaping software development practices and empowering developers to work more efficiently and innovatively."
     },
     {
       "slide": 2,
-      "script": "Welcome to what we believe is the future of software engineering. This module is designed as your launchpad into this new era, where we will explore how to partner with Artificial Intelligence to develop software more efficiently. You will master key tools like GitHub Copilot, boost your overall productivity, and learn advanced techniques for AI-assisted coding and debugging."
+      "script": "This module serves as your launchpad into the next generation of software development. Our focus will be on understanding how to effectively partner with AI to build better software, and to do so faster. By the end of this course, you will master essential AI tools like GitHub Copilot, significantly boost your coding productivity and creativity, and gain proficiency in writing and debugging code with intelligent AI assistance."
     },
     {
       "slide": 3,
-      "script": "For all administrative and academic inquiries related to this module, the most effective way to contact me is via email. Please make a note of the address on the screen: daniel.cregg@atu.ie. I will make every effort to respond to your queries in a timely manner."
+      "script": "For all course-related inquiries, please ensure you contact me via email. My address is prominently displayed on the slide: daniel.cregg@atu.ie. Please use this channel for any questions regarding course content, assignments, or any technical issues you might encounter throughout the module. I aim to respond to all emails promptly."
     },
     {
       "slide": 4,
-      "script": "Your first critical task is to enroll in this module on Moodle. Please follow the steps outlined on this slide carefully. You will need to navigate to the ATU Moodle page, search for the course, and then find your assigned group—A, B, or C. Use the corresponding password shown to complete your enrollment."
+      "script": "To formally enroll in this module on Moodle, please follow these step-by-step instructions. First, navigate to the Moodle platform using the URL provided: https://vlegalwaymayo.atu.ie/. Next, search for course ID 10720, then click on \"AI ASSISTED PROGRAMMING.\" You will then select your designated group – A, B, or C – and click the 'Enrol' button. Finally, enter the appropriate password for your group: 'groupa', 'groupb', or 'groupc', as displayed on the slide."
     },
     {
       "slide": 5,
-      "script": "Let’s briefly review the structure of the course. The module runs for a total of 13 weeks, and we are currently in Week 1. Each week will consist of a one-hour lecture and a two-hour lab session per group. Please note, there are no lab sessions in this first week. For your specific times, please consult the official university timetable at timetables.atu.ie."
+      "script": "Let's review the course structure. This module spans a total of thirteen weeks, with this current week marking Week 1. During Week 1, please note that there will be no practical lab sessions. For our weekly schedule, each group will have a one-hour lecture and a two-hour lab session. For the precise timings and locations of these sessions, please refer to the official university timetables at timetables.atu.ie."
     },
     {
       "slide": 6,
-      "script": "Upon successful completion of this module, you will be able to identify and evaluate various AI coding tools. You will also be able to integrate these tools into a practical development workflow, critically analyze their benefits and limitations, and explore emerging trends in this rapidly advancing field."
+      "script": "Upon successful completion of this module, you will achieve several key learning outcomes. You will be able to identify and evaluate various AI-powered coding tools, including those for code generation, completion, and debugging. Furthermore, you'll integrate these AI-based tools into practical software development workflows, demonstrating their utility in real-world scenarios. We will also critically analyse both the benefits and limitations of AI coding assistance, considering factors like code quality, potential over-reliance, and inherent biases. Finally, you will explore emerging trends within the rapidly evolving field of AI-assisted programming."
     },
     {
       "slide": 7,
-      "script": "The definitive guide for this course is the live syllabus, which you can find on the module's Moodle page. This document contains a detailed week-by-week breakdown of topics and will be updated regularly throughout the course. I encourage you to check it frequently to stay informed."
+      "script": "The comprehensive course syllabus, which provides a detailed week-by-week breakdown of topics and activities, is available at the top of our module's Moodle page. It's important to note that this is a 'live syllabus,' meaning it will be updated regularly throughout the course to reflect any necessary adjustments or to incorporate new relevant content. Please ensure you refer to it frequently for the most current information."
     },
     {
       "slide": 8,
-      "script": "Your performance in this module will be evaluated through three assessments. There will be two multiple-choice quizzes, one in Week 7 and another in Week 12, each accounting for 30% of your final grade. The remaining 40% will be determined by a final project due in Week 13."
+      "script": "Regarding assessments, this module includes three main components contributing to your final grade. In Week 7, you will complete MCQ1, which accounts for 30% of your total grade. Following this, in Week 12, MCQ2 will be administered, also contributing 30%. The final assessment, a comprehensive project, is due in Week 13 and holds the largest weighting at 40% of your overall mark."
     },
     {
       "slide": 9,
-      "script": "To provide more detail on assessments: the multiple-choice quizzes will be based on material from previous lectures and labs. For the final project, you will build an application in a language of your choice, but you must use and incorporate AI tools in its development. A detailed project brief will be provided later in the semester."
+      "script": "Delving into the assessment details: our MCQ assessments will consist of sequential multiple-choice questions, directly based on content covered in previous lectures and labs. For an effective study tip, consider using tools like Google NotebookLM to generate practice questions based on your notes. The final project will involve developing an application in a language of your choice, requiring you to utilize AI tools for assistance, and critically, to incorporate AI technology as a core component. A detailed project brief will be provided to guide your development."
     },
     {
       "slide": 10,
-      "script": "This is a five-credit module, which translates to an expected student effort of 100 to 125 hours over the 13 weeks. Please be aware that self-directed learning is a major component of this module. The practical skills are best developed through your own hands-on exploration and practice."
+      "script": "Let's discuss the expected effort and expectations for this module. This is a 5-credit module, implying an estimated commitment of between 100 to 125 hours of study over its 13-week duration. It's crucial to understand that self-directed learning will be the primary source of knowledge acquisition in this module. Your active engagement outside of scheduled class times is essential for success."
     },
     {
       "slide": 11,
-      "script": "We will be using a suite of essential development and AI tools. Your core toolkit will include GitHub for repository storage, Codespaces for a cloud-based development environment, and of course, GitHub Copilot. These platforms will be our primary interface for working with various AI code assistants."
+      "script": "To succeed in this module, you'll need access to several essential tools and resources. For development, we'll primarily use GitHub for repository storage, Codespaces for free virtual machines in the cloud, and GitHub Copilot, which is our core AI programming assistant. We'll also leverage various command-line interface tools. On the AI side, we'll explore code generation assistants, debugging companions, documentation generators, and advanced code completion tools."
     },
     {
       "slide": 12,
-      "script": "Before our next class, please complete these essential action items. You must sign up for the GitHub Student Developer Pack for free access to our tools. It is also important that you change your GitHub username to your actual name for grading purposes. Finally, ensure you are enrolled on Moodle and have reviewed the live syllabus."
+      "script": "Before our next class, there are several important action items to complete. Firstly, please sign up for the GitHub Student Developer Pack, which grants free access to numerous premium development tools. Secondly, ensure you change your GitHub username to reflect your actual name; this simplifies collaboration and grading. Thirdly, please enroll in the Moodle course immediately to access all materials and announcements. Finally, take time to review the live syllabus to fully understand our weekly progression and upcoming topics."
     },
     {
       "slide": 13,
-      "script": "Looking ahead, we will be diving directly into hands-on work. You can expect to gain practical experience with GitHub Copilot in our coding sessions, where we will move from foundational concepts to building real-world applications with AI assistance. Get ready to fundamentally change the way you write code."
+      "script": "Looking ahead, our next sessions will involve a deep dive into the fundamental concepts of AI-assisted programming. We will then transition to hands-on experience with GitHub Copilot, engaging in practical coding sessions with various AI tools. Our ultimate goal is to empower you to build real-world applications with the sophisticated assistance of AI. So, get ready to revolutionize how you write code with the incredible power of artificial intelligence!"
     },
     {
       "slide": 14,
-      "script": "I will now open the floor for any questions. Please feel free to ask about the course structure, assessment methods, required tools, or any technical issues with enrollment. And always remember the central philosophy of this course: this is about learning to work *with* AI, not being replaced by it."
+      "script": "This concludes our module introduction. I'd now like to open the floor for any questions or discussion you might have. Please feel free to ask about the course structure and expectations, assessment methods and timelines, the tools and resources needed, or any enrollment and technical issues you may be facing. Remember, a core principle of this course is learning to work *with* AI, not to be replaced by it."
     },
     {
       "slide": 15,
-      "script": "Thank you for your time and attention. I am genuinely excited to embark on this journey with you and explore the cutting edge of software development. That concludes our introductory session. Our next lecture will provide a formal introduction to the core concepts of AI-assisted programming."
+      "script": "Thank you for attending this module introduction. I extend a warm welcome to AI-Assisted Programming, and I'm very much looking forward to our journey together. You can navigate back to the course index or proceed to our next lecture, which will be an in-depth introduction to AI-Assisted Programming concepts."
     }
   ],
-  "raw_gemini_response": "Of course. Here are the narration scripts for each slide in your presentation, following your specified requirements.\n\n***\n\n**Slide 1:**\nHello everyone, and welcome. This is the module introduction for AI-Assisted Programming, part of your curriculum here at Atlantic Technological University. In this initial session, we will cover the foundational information you need to get started and succeed in this course.\n\n**(Pause)**\n\n**Slide 2:**\nWelcome to what we believe is the future of software engineering. This module is designed as your launchpad into this new era, where we will explore how to partner with Artificial Intelligence to develop software more efficiently. You will master key tools like GitHub Copilot, boost your overall productivity, and learn advanced techniques for AI-assisted coding and debugging.\n\n**(Pause)**\n\n**Slide 3:**\nFor all administrative and academic inquiries related to this module, the most effective way to contact me is via email. Please make a note of the addres...",
-  "model_used": "gemini-2.5-pro",
+  "raw_gemini_response": "Here are the narration scripts for each slide, designed for an academic tone and within the specified time limits:\n\n**Slide 1:**\nWelcome everyone to the Module Introduction for AI-Assisted Programming. This module, offered through the Atlantic Technological University, will introduce you to the transformative field of AI-assisted programming. Throughout this course, we will explore how artificial intelligence is reshaping software development practices and empowering developers to work more efficiently and innovatively.\n\n**Slide 2:**\nThis module serves as your launchpad into the next generation of software development. Our focus will be on understanding how to effectively partner with AI to build better software, and to do so faster. By the end of this course, you will master essential AI tools like GitHub Copilot, significantly boost your coding productivity and creativity, and gain proficiency in writing and debugging code with intelligent AI assistance.\n\n**Slide 3:**\nFor all course-...",
+  "model_used": "gemini-2.5-flash",
   "force_regenerated": true
 }
