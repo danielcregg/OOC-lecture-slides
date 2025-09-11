@@ -326,12 +326,12 @@ jobs:
                     url = base_url
                     print("Using default voice (no cloning)")
                 
-          headers = {
-              "Authorization": f"Bearer {self.minimax_api_key}",
-              "Content-Type": "application/json"
-          }
-          
-          payload = {
+                headers = {
+                    "Authorization": f"Bearer {self.minimax_api_key}",
+                    "Content-Type": "application/json"
+                }
+                
+                payload = {
                     "model": "speech-01-turbo",
                     "text": text,
                     "stream": False,
