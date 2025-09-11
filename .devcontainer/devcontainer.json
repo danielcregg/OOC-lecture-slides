@@ -8,8 +8,8 @@
       // VS Code extensions to install
       "extensions": [
         "github.codespaces",
-        "github.copilot",
-        "github.copilot-chat",
+        "github.copilot@prerelease",
+        "github.copilot-chat@prerelease",
         "github.github-vscode-theme",
         "github.vscode-github-actions",
         "github.vscode-pull-request-github",
