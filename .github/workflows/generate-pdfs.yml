@@ -268,3 +268,13 @@ jobs:
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Trigger README update
+      run: |
+        # Trigger the README update workflow by making a small change
+        echo "PDF generation completed at $(date)" >> .pdf-generation-log
+        git add .pdf-generation-log
+        git commit -m "Trigger README update after PDF generation" || exit 0
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

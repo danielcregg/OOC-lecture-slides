@@ -1,0 +1,167 @@
+name: Update README with New Lectures
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'lectures/**/*.html'
+      - '.pdf-generation-log'  # Trigger when PDFs are generated
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Update README with lecture links
+      run: |
+        # Create a Node.js script to update the README.md file
+        cat > update-readme.js << 'EOF'
+        const fs = require('fs');
+        const path = require('path');
+        
+        function updateReadme() {
+          console.log('Starting README update...');
+          
+          const readmePath = 'README.md';
+          if (!fs.existsSync(readmePath)) {
+            throw new Error('README.md not found');
+          }
+          
+          let readmeContent = fs.readFileSync(readmePath, 'utf8');
+          
+          const lecturesDir = 'lectures';
+          if (!fs.existsSync(lecturesDir)) {
+            throw new Error('Lectures directory does not exist: ' + lecturesDir);
+          }
+          
+          const lectures = fs.readdirSync(lecturesDir, { withFileTypes: true })
+            .filter(dirent => dirent.isFile() && dirent.name.endsWith('.html'))
+            .map(dirent => dirent.name)
+            .sort();
+          
+          console.log('Found lectures: ' + lectures.join(', '));
+          
+          const lectureEntries = [];
+          
+          for (const lectureFile of lectures) {
+            const lectureName = path.basename(lectureFile, '.html');
+            
+            const match = lectureName.match(/^lecture(\d+)-(.+)$/);
+            if (!match) {
+              console.log('Skipping ' + lectureName + ' - does not match expected pattern');
+              continue;
+            }
+            
+            const lectureNumber = parseInt(match[1]);
+            const titleSlug = match[2];
+            
+            const displayTitle = titleSlug
+              .split('-')
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+            
+            const lectureUrl = 'https://danielcregg.github.io/AIAP-lecture-slides/lectures/' + lectureName + '.html';
+            const pdfUrl = 'https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/' + lectureName + '.pdf';
+            
+            const entry = lectureNumber + '. **[' + displayTitle + '](' + lectureUrl + ')** ✅ Available | [📄 PDF](' + pdfUrl + ')';
+            
+            lectureEntries.push({
+              number: lectureNumber,
+              entry: entry
+            });
+          }
+          
+          lectureEntries.sort((a, b) => a.number - b.number);
+          
+          const courseStructureStart = readmeContent.indexOf('## 📚 Course Structure');
+          if (courseStructureStart === -1) {
+            throw new Error('Could not find Course Structure section in README');
+          }
+          
+          const nextSectionMatch = readmeContent.substring(courseStructureStart + 1).match(/\n## /);
+          let courseStructureEnd;
+          if (nextSectionMatch) {
+            courseStructureEnd = courseStructureStart + 1 + nextSectionMatch.index;
+          } else {
+            courseStructureEnd = readmeContent.length;
+          }
+          
+          let introText = '## 📚 Course Structure\n\nThis course consists of a course introduction plus 8 main lectures:\n\n';
+          
+          let newCourseStructure = introText;
+          
+          for (const lectureEntry of lectureEntries) {
+            newCourseStructure += lectureEntry.entry + '\n';
+          }
+          
+          const maxLectures = 9;
+          const remainingLectures = [
+            'Code Generation and Completion',
+            'Code Review and Quality Assurance', 
+            'Testing and Debugging with AI',
+            'Documentation and Communication',
+            'AI in Software Architecture',
+            'Ethics and Limitations',
+            'Future of AI-Assisted Programming'
+          ];
+          
+          for (let i = lectureEntries.length; i < maxLectures; i++) {
+            const lectureNum = i + 1;
+            const title = remainingLectures[i - 1] || 'Lecture ' + lectureNum;
+            newCourseStructure += lectureNum + '. **' + title + '** 🚧 Coming Soon\n';
+          }
+          
+          const beforeSection = readmeContent.substring(0, courseStructureStart);
+          const afterSection = readmeContent.substring(courseStructureEnd);
+          
+          const updatedReadme = beforeSection + newCourseStructure + '\n' + afterSection;
+          
+          fs.writeFileSync(readmePath, updatedReadme);
+          console.log('README.md updated successfully!');
+          
+          console.log('Updated lecture entries:');
+          lectureEntries.forEach(entry => console.log('  ' + entry.entry));
+        }
+        
+        try {
+          updateReadme();
+        } catch (error) {
+          console.error('Error updating README:', error);
+          process.exit(1);
+        }
+        EOF
+        
+    - name: Run README update script
+      run: node update-readme.js
+      
+    - name: Clean up trigger file
+      run: |
+        if [ -f .pdf-generation-log ]; then
+          rm .pdf-generation-log
+          echo "Cleaned up PDF generation trigger file"
+        fi
+      
+    - name: Commit README changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        # Also add the removal of the trigger file if it exists
+        if [ -f .pdf-generation-log ]; then
+          git add .pdf-generation-log
+        fi
+        if git diff --staged --quiet; then
+          echo "No changes to commit to README.md"
+        else
+          git commit -m "Auto-update README with new lectures [skip ci]" || exit 0
+          git push
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
