@@ -150,8 +150,8 @@ jobs:
                 
                 And so on for each slide."""
                 
-                    # Retry logic with fallback model (quota friendly first)
-                    models = ["gemini-1.5-flash", "gemini-2.5-pro"]  # try lighter model first
+                    # Retry logic with optimized model fallback order
+                    models = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-flash-latest"]
                     last_error = None
                     for model_name in models:
                         print(f"Attempting Gemini generation with model: {model_name}")
