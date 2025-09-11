@@ -1,0 +1,68 @@
+{
+  "lecture_name": "lecture1-course-introduction",
+  "generated_at": "2025-09-11 14:11:00",
+  "total_slides": 15,
+  "scripts": [
+    {
+      "slide": 1,
+      "script": "This is slide 1 of the presentation."
+    },
+    {
+      "slide": 2,
+      "script": "This is slide 2 of the presentation."
+    },
+    {
+      "slide": 3,
+      "script": "This is slide 3 of the presentation."
+    },
+    {
+      "slide": 4,
+      "script": "This is slide 4 of the presentation."
+    },
+    {
+      "slide": 5,
+      "script": "This is slide 5 of the presentation."
+    },
+    {
+      "slide": 6,
+      "script": "This is slide 6 of the presentation."
+    },
+    {
+      "slide": 7,
+      "script": "This is slide 7 of the presentation."
+    },
+    {
+      "slide": 8,
+      "script": "This is slide 8 of the presentation."
+    },
+    {
+      "slide": 9,
+      "script": "This is slide 9 of the presentation."
+    },
+    {
+      "slide": 10,
+      "script": "This is slide 10 of the presentation."
+    },
+    {
+      "slide": 11,
+      "script": "This is slide 11 of the presentation."
+    },
+    {
+      "slide": 12,
+      "script": "This is slide 12 of the presentation."
+    },
+    {
+      "slide": 13,
+      "script": "This is slide 13 of the presentation."
+    },
+    {
+      "slide": 14,
+      "script": "This is slide 14 of the presentation."
+    },
+    {
+      "slide": 15,
+      "script": "This is slide 15 of the presentation."
+    }
+  ],
+  "raw_gemini_response": "Of course. Here are the narration scripts for each slide in the presentation, designed for an academic audience and timed for 15-30 seconds per slide.\n\n***\n\n**Slide 1:** Hello everyone, and welcome. This is the module introduction for AI-Assisted Programming, part of the AIAP module here at Atlantic Technological University. My name is Daniel Cregg, and I will be your lecturer for this course.\n\n**(Pause)**\n\n**Slide 2:** In this module, we will explore the frontier of modern software development. You will learn how to effectively partner with artificial intelligence to enhance your programming workflow. Our focus will be on mastering practical tools like GitHub Copilot, boosting your overall productivity, and leveraging AI for complex writing and debugging tasks.\n\n**(Pause)**\n\n**Slide 3:** For all course-related inquiries, the most effective way to reach me is via email. Please direct your questions to daniel.cregg@atu.ie. I will do my best to respond in a timely manner. Make a note of ..."
+}
