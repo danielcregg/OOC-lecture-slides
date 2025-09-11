@@ -203,45 +203,62 @@ jobs:
                         }
                     ])
                     
-                    script = response.text
-                    print("Successfully generated script with Gemini")
-                    scripts = self.parse_script(script)
-                    
-                    # Save the generated scripts for future editing
-                    if scripts:
-                        script_list = []
-                        for slide_num, script_text in scripts.items():
-                            script_list.append({
-                                'slide': slide_num,
-                                'script': script_text
-                            })
-                        
-                        script_data = {
-                            'lecture_name': lecture_name,
-                            'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
-                            'total_slides': len(scripts),
-                            'scripts': script_list
-                        }
-                        
-                        with open(script_file_path, 'w', encoding='utf-8') as f:
-                            json.dump(script_data, f, indent=2, ensure_ascii=False)
-                        
-                        print(f"Scripts saved to {script_file_path}")
-                    
-                    return scripts
-                    
-                except Exception as e:
+              script = response.text
+              print("Successfully generated script with Gemini")
+              scripts = self.parse_script(script)
+              
+              # Fallback: if no scripts parsed, create basic scripts for each slide
+              if not scripts:
+                  print("WARNING: Script parsing failed, creating basic scripts...")
+                  # Extract images to get slide count
+                  images = convert_from_path(pdf_path, dpi=150)  # Lower DPI for counting
+                  scripts = {}
+                  for i in range(1, len(images) + 1):
+                      scripts[i] = f"This is slide {i} of the presentation."
+                  print(f"Created {len(scripts)} basic fallback scripts")
+              
+              # Save the generated scripts for future editing
+              if scripts:
+                  script_list = []
+                  for slide_num, script_text in scripts.items():
+                      script_list.append({
+                          'slide': slide_num,
+                          'script': script_text
+                      })
+                  
+                  script_data = {
+                      'lecture_name': lecture_name,
+                      'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
+                      'total_slides': len(scripts),
+                      'scripts': script_list,
+                      'raw_gemini_response': script[:1000] + "..." if len(script) > 1000 else script  # Save first 1000 chars for debugging
+                  }
+                  
+                  with open(script_file_path, 'w', encoding='utf-8') as f:
+                      json.dump(script_data, f, indent=2, ensure_ascii=False)
+                  
+                  print(f"Scripts saved to {script_file_path}")
+              
+              return scripts                except Exception as e:
                     print(f"Error generating script: {e}")
                     return None
                     
             def parse_script(self, script_text):
                 """Parse script into individual slide scripts"""
+                print("=== DEBUGGING SCRIPT PARSING ===")
+                print(f"Script text preview (first 500 chars):")
+                print(script_text[:500])
+                print("=== END PREVIEW ===")
+                
                 scripts = {}
                 current_slide = None
                 current_text = []
                 
                 for line in script_text.split('\n'):
                     line = line.strip()
+                    print(f"Processing line: '{line}'")  # Debug each line
+                    
+                    # More flexible parsing - handle different formats
                     if line.startswith('Slide ') and ':' in line:
                         # Save previous slide
                         if current_slide and current_text:
@@ -249,8 +266,37 @@ jobs:
                         
                         # Start new slide
                         parts = line.split(':', 1)
-                        current_slide = int(parts[0].replace('Slide ', ''))
-                        current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
+                        slide_part = parts[0].replace('Slide ', '').strip()
+                        try:
+                            current_slide = int(slide_part)
+                            current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
+                            print(f"Found slide {current_slide}")
+                        except ValueError:
+                            print(f"Could not parse slide number from: {slide_part}")
+                            continue
+                            
+                    # Also try to match numbered slides without "Slide" prefix
+                    elif line and line[0].isdigit() and (':' in line or '.' in line):
+                        # Handle "1:" or "1." format
+                        if ':' in line:
+                            parts = line.split(':', 1)
+                        else:
+                            parts = line.split('.', 1)
+                            
+                        try:
+                            slide_num = int(parts[0].strip())
+                            
+                            # Save previous slide
+                            if current_slide and current_text:
+                                scripts[current_slide] = ' '.join(current_text).strip()
+                            
+                            current_slide = slide_num
+                            current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
+                            print(f"Found slide {current_slide} (numbered format)")
+                        except (ValueError, IndexError):
+                            if current_slide and line:
+                                current_text.append(line)
+                                
                     elif current_slide and line:
                         current_text.append(line)
                 
@@ -258,6 +304,7 @@ jobs:
                 if current_slide and current_text:
                     scripts[current_slide] = ' '.join(current_text).strip()
                     
+                print(f"Final parsed scripts: {list(scripts.keys())}")
                 print(f"Parsed scripts for {len(scripts)} slides")
                 return scripts
                 
@@ -277,9 +324,9 @@ jobs:
                     print("Using default voice (no cloning)")
                 
                 headers = {
-                    "Authorization": f"Bearer {self.minimax_api_key}",
-                    "Content-Type": "application/json"
-                }
+              "Authorization": f"Bearer {self.minimax_api_key}",
+              "Content-Type": "application/json"
+          }
                 
                 payload = {
                     "model": "speech-01-turbo",
