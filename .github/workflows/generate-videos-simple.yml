@@ -137,7 +137,7 @@ jobs:
                         print(f"Error loading script: {e}")
                 
                 print("Generating script with Gemini...")
-                scripts = self.generate_script_with_gemini(pdf_path, force_regenerate)
+                with open(pdf_path, 'rb') as f:
                     pdf_data = f.read()
                 
                 prompt = """Create narration scripts for each slide in this PDF lecture presentation.
