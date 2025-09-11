@@ -153,9 +153,14 @@ jobs:
                     
                     script = response.text
                     print("Generated script with Gemini")
+                    print(f"Gemini response length: {len(script)}")
+                    print(f"First 500 chars: {script[:500]}")
+                    
                     scripts = self.parse_script(script)
+                    print(f"Parsed {len(scripts)} scripts from Gemini response")
                     
                     if not scripts:
+                        print("Script parsing failed, using fallback")
                         images = convert_from_path(pdf_path, dpi=150)
                         scripts = {}
                         for i in range(1, len(images) + 1):
@@ -427,21 +432,42 @@ jobs:
                     return True
                 
                 try:
+                    print(f"Extracting slides from PDF...")
                     slide_paths = self.extract_slides_from_pdf(pdf_path, lecture_name)
+                    print(f"Extracted {len(slide_paths)} slides")
+                    
+                    print(f"Generating scripts with Gemini...")
                     scripts = self.generate_script_with_gemini(pdf_path)
+                    print(f"Generated scripts for {len(scripts) if scripts else 0} slides")
+                    
                     if not scripts:
+                        print("No scripts generated, cannot continue")
                         return False
                     
+                    print(f"Generating audio for {len(scripts)} slides...")
                     audio_paths = []
                     for i, slide_path in enumerate(slide_paths, 1):
                         if i in scripts:
+                            print(f"Generating audio for slide {i}...")
                             audio_path = self.generate_audio_with_minimax(scripts[i], i, lecture_name)
                             audio_paths.append(audio_path)
+                            if audio_path:
+                                print(f"Audio generated for slide {i}")
+                            else:
+                                print(f"Audio generation failed for slide {i}")
                             time.sleep(1)
                         else:
                             print(f"No script for slide {i}")
                             audio_paths.append(None)
                     
+                    valid_audio = [p for p in audio_paths if p is not None]
+                    print(f"Generated {len(valid_audio)}/{len(audio_paths)} audio files")
+                    
+                    if not valid_audio:
+                        print("No audio files generated, cannot create video")
+                        return False
+                    
+                    print(f"Creating video...")
                     video_path = self.create_video_with_ffmpeg(slide_paths, audio_paths, lecture_name)
                     
                     if video_path:
@@ -451,14 +477,17 @@ jobs:
                             'generated_at': time.time()
                         }
                         self.save_cache()
-                        print(f"Processed {lecture_name}")
+                        print(f"Successfully processed {lecture_name}")
                         return True
+                    else:
+                        print(f"Video creation failed for {lecture_name}")
+                        return False
                     
                 except Exception as e:
                     print(f"Error processing {lecture_name}: {e}")
+                    import traceback
+                    traceback.print_exc()
                     return False
-                
-                return False
                 
             def cleanup_temp_files(self):
                 import shutil
