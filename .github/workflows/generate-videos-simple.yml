@@ -285,7 +285,7 @@ jobs:
                 """Generate audio using MiniMax TTS API"""
                 print(f"Generating audio for slide {slide_num}")
                 
-                base_url = "https://api.minimax.chat/v1/t2a_pro"
+                base_url = "https://api.minimax.io/v1/t2a_v2"
                 
                 if self.minimax_group_id:
                     url = f"{base_url}?GroupId={self.minimax_group_id}"
@@ -300,13 +300,14 @@ jobs:
                 }
                 
                 payload = {
-                    "model": "speech-01-turbo",
+                    "model": "speech-2.5-hd-preview",  # Updated model from working code
                     "text": text,
                     "stream": False,
                     "voice_setting": {
                         "voice_id": "male-qn-qingse",
                         "speed": 1.0,
-                        "vol": 1.0
+                        "vol": 1.0,
+                        "pitch": 0  # Added pitch parameter
                     },
                     "audio_setting": {
                         "sample_rate": 32000,
@@ -324,40 +325,32 @@ jobs:
                     print(f"MiniMax API response keys: {list(result.keys())}")
                     print(f"MiniMax API response (first 500 chars): {str(result)[:500]}")
                     
-                    if 'audio_file' in result:
-                        audio_url = result['audio_file']
-                        print(f"Found audio_file URL: {audio_url}")
-                        audio_response = requests.get(audio_url)
-                        audio_response.raise_for_status()
-                        audio_data = audio_response.content
-                    elif 'data' in result and 'audio' in result['data']:
-                        hex_audio = result['data']['audio']
-                        print(f"Found hex audio data (length: {len(hex_audio)})")
-                        audio_data = bytes.fromhex(hex_audio)
-                    elif 'audio' in result:
-                        # Try direct audio field
-                        audio_data = result['audio']
-                        print(f"Found direct audio field (type: {type(audio_data)})")
-                        if isinstance(audio_data, str):
-                            # Assume it's base64 or hex
-                            try:
-                                audio_data = bytes.fromhex(audio_data)
-                                print("Converted hex string to bytes")
-                            except ValueError:
-                                # Try base64
-                                import base64
-                                audio_data = base64.b64decode(audio_data)
-                                print("Converted base64 string to bytes")
+                    # Check for successful response
+                    base_resp = result.get("base_resp", {})
+                    if base_resp.get("status_code") != 0:
+                        print(f"MiniMax API error: {base_resp.get('status_msg', 'Unknown error')}")
+                        return None
+                    
+                    # Extract audio from data.audio (hex format)
+                    data = result.get("data", {})
+                    if isinstance(data, dict) and "audio" in data:
+                        audio_hex = data["audio"]
+                        print(f"Found hex audio data (length: {len(audio_hex)})")
+                        try:
+                            audio_bytes = bytes.fromhex(audio_hex)
+                            print("Successfully decoded hex audio")
+                        except ValueError as e:
+                            print(f"Failed to decode hex audio: {e}")
+                            return None
                     else:
-                        print(f"No audio data for slide {slide_num}")
-                        print(f"Available keys in response: {list(result.keys())}")
+                        print(f"No audio data found in response data: {list(data.keys()) if isinstance(data, dict) else type(data)}")
                         return None
                     
                     audio_path = self.temp_dir / lecture_name / f"audio_slide_{slide_num:03d}.mp3"
                     audio_path.parent.mkdir(parents=True, exist_ok=True)
                     
                     with open(audio_path, 'wb') as f:
-                        f.write(audio_data)
+                        f.write(audio_bytes)
                     
                     print(f"Generated audio for slide {slide_num}")
                     return audio_path
