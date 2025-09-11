@@ -11,7 +11,8 @@ This directory contains automatically generated videos for the AIAP lecture slid
 
 ## Available Videos
 
-- No videos available yet
+- [lecture1-course-introduction](./lecture1-course-introduction.mp4)
+- [lecture2-ai-assisted-programming-intro](./lecture2-ai-assisted-programming-intro.mp4)
 
 ## Video Specifications
 
