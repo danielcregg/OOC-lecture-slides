@@ -1,0 +1,474 @@
+name: Generate Lecture Videos
+
+on:
+  workflow_dispatch:
+    inputs:
+      lecture_filter:
+        description: 'Generate videos for specific lectures (e.g., "lecture1,lecture2" or "all")'
+        required: false
+        default: 'all'
+        type: string
+      force_regenerate:
+        description: 'Force regenerate all videos (ignore cache)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  generate-videos:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Get full history for change detection
+        
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg poppler-utils imagemagick
+        # Configure ImageMagick to allow PDF processing
+        sudo sed -i 's/rights="none" pattern="PDF"/rights="read|write" pattern="PDF"/' /etc/ImageMagick-6/policy.xml
+        
+    - name: Install Python dependencies
+      run: |
+        pip install --upgrade pip
+        pip install google-generativeai requests pdf2image pillow python-dotenv
+        
+    - name: Create video generation script
+      run: |
+        cat > generate_videos.py << 'EOF'
+        import os
+        import json
+        import hashlib
+        import requests
+        import time
+        from pathlib import Path
+        from pdf2image import convert_from_path
+        from PIL import Image
+        import google.generativeai as genai
+        import subprocess
+        import base64
+        
+        class LectureVideoGenerator:
+            def __init__(self):
+                self.setup_apis()
+                self.videos_dir = Path("videos")
+                self.temp_dir = Path("temp_video_generation")
+                self.cache_file = Path("video_generation_cache.json")
+                self.voice_sample = Path("my-voice-sample.wav")
+                
+                # Create directories
+                self.videos_dir.mkdir(exist_ok=True)
+                self.temp_dir.mkdir(exist_ok=True)
+                
+                # Load cache
+                self.cache = self.load_cache()
+                
+            def setup_apis(self):
+                """Setup API clients"""
+                genai.configure(api_key=os.getenv('GOOGLE_AI_STUDIO_API_KEY'))
+                self.model = genai.GenerativeModel('gemini-1.5-flash')
+                self.minimax_api_key = os.getenv('MINIMAX_API_KEY')
+                
+            def load_cache(self):
+                """Load video generation cache"""
+                if self.cache_file.exists():
+                    with open(self.cache_file, 'r') as f:
+                        return json.load(f)
+                return {}
+                
+            def save_cache(self):
+                """Save video generation cache"""
+                with open(self.cache_file, 'w') as f:
+                    json.dump(self.cache, f, indent=2)
+                    
+            def get_pdf_hash(self, pdf_path):
+                """Get hash of PDF file for change detection"""
+                with open(pdf_path, 'rb') as f:
+                    return hashlib.md5(f.read()).hexdigest()
+                    
+            def should_regenerate_video(self, lecture_name, pdf_path, force=False):
+                """Check if video should be regenerated"""
+                if force:
+                    return True
+                    
+                video_path = self.videos_dir / f"{lecture_name}.mp4"
+                if not video_path.exists():
+                    return True
+                    
+                current_hash = self.get_pdf_hash(pdf_path)
+                cached_hash = self.cache.get(lecture_name, {}).get('pdf_hash')
+                
+                return current_hash != cached_hash
+                
+            def extract_slides_from_pdf(self, pdf_path, lecture_name):
+                """Extract slides as images from PDF"""
+                print(f"Extracting slides from {pdf_path}")
+                
+                slides_dir = self.temp_dir / lecture_name / "slides"
+                slides_dir.mkdir(parents=True, exist_ok=True)
+                
+                # Convert PDF to images
+                images = convert_from_path(pdf_path, dpi=300, fmt='PNG')
+                
+                slide_paths = []
+                for i, image in enumerate(images):
+                    slide_path = slides_dir / f"slide_{i+1:03d}.png"
+                    image.save(slide_path, 'PNG')
+                    slide_paths.append(slide_path)
+                    
+                print(f"Extracted {len(slide_paths)} slides")
+                return slide_paths
+                
+            def generate_script_with_gemini(self, pdf_path):
+                """Generate narration script using Gemini"""
+                print("Generating script with Gemini...")
+                
+                # Read PDF file
+                with open(pdf_path, 'rb') as f:
+                    pdf_data = f.read()
+                
+                # Create prompt
+                prompt = """Create a short educational narration script for each slide in this PDF lecture presentation. 
+                
+                Requirements:
+                - Use an academic tone suitable for university students
+                - Keep each slide narration concise but informative (approximately 15-30 seconds when spoken)
+                - Include natural pauses between slides
+                - Number each slide script clearly (e.g., "Slide 1:", "Slide 2:", etc.)
+                - Focus on explaining key concepts and connecting ideas
+                - Avoid reading bullet points verbatim - instead explain and elaborate
+                
+                Format your response as:
+                Slide 1: [narration text]
+                
+                Slide 2: [narration text]
+                
+                And so on for each slide."""
+                
+                try:
+                    # Upload PDF to Gemini
+                    response = self.model.generate_content([
+                        prompt,
+                        {
+                            "mime_type": "application/pdf",
+                            "data": pdf_data
+                        }
+                    ])
+                    
+                    script = response.text
+                    print("Successfully generated script with Gemini")
+                    return self.parse_script(script)
+                    
+                except Exception as e:
+                    print(f"Error generating script: {e}")
+                    return None
+                    
+            def parse_script(self, script_text):
+                """Parse script into individual slide scripts"""
+                scripts = {}
+                current_slide = None
+                current_text = []
+                
+                for line in script_text.split('\n'):
+                    line = line.strip()
+                    if line.startswith('Slide ') and ':' in line:
+                        # Save previous slide
+                        if current_slide and current_text:
+                            scripts[current_slide] = ' '.join(current_text).strip()
+                        
+                        # Start new slide
+                        parts = line.split(':', 1)
+                        current_slide = int(parts[0].replace('Slide ', ''))
+                        current_text = [parts[1].strip()] if len(parts) > 1 and parts[1].strip() else []
+                    elif current_slide and line:
+                        current_text.append(line)
+                
+                # Save last slide
+                if current_slide and current_text:
+                    scripts[current_slide] = ' '.join(current_text).strip()
+                    
+                print(f"Parsed scripts for {len(scripts)} slides")
+                return scripts
+                
+            def generate_audio_with_minimax(self, text, slide_num, lecture_name):
+                """Generate audio using MiniMax TTS with voice cloning"""
+                print(f"Generating audio for slide {slide_num}")
+                
+                # Read voice sample
+                with open(self.voice_sample, 'rb') as f:
+                    voice_data = base64.b64encode(f.read()).decode('utf-8')
+                
+                # MiniMax TTS API call
+                url = "https://api.minimax.chat/v1/text_to_speech"
+                headers = {
+                    "Authorization": f"Bearer {self.minimax_api_key}",
+                    "Content-Type": "application/json"
+                }
+                
+                payload = {
+                    "text": text,
+                    "voice_setting": {
+                        "voice_id": "voice_clone",
+                        "voice_clone_data": voice_data,
+                        "speed": 1.0,
+                        "pitch": 0.0,
+                        "volume": 1.0
+                    },
+                    "audio_setting": {
+                        "format": "wav",
+                        "sample_rate": 22050
+                    }
+                }
+                
+                try:
+                    response = requests.post(url, headers=headers, json=payload, timeout=60)
+                    response.raise_for_status()
+                    
+                    audio_path = self.temp_dir / lecture_name / f"audio_slide_{slide_num:03d}.wav"
+                    audio_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    with open(audio_path, 'wb') as f:
+                        f.write(response.content)
+                    
+                    print(f"Generated audio for slide {slide_num}")
+                    return audio_path
+                    
+                except Exception as e:
+                    print(f"Error generating audio for slide {slide_num}: {e}")
+                    return None
+                    
+            def create_video_with_ffmpeg(self, slide_paths, audio_paths, lecture_name):
+                """Create final video using FFmpeg"""
+                print(f"Creating video for {lecture_name}")
+                
+                video_inputs = []
+                filter_complex = []
+                
+                # Create video segments for each slide
+                for i, (slide_path, audio_path) in enumerate(zip(slide_paths, audio_paths)):
+                    if audio_path and audio_path.exists():
+                        # Get audio duration
+                        duration_cmd = [
+                            'ffprobe', '-v', 'quiet', '-show_entries', 'format=duration',
+                            '-of', 'csv=p=0', str(audio_path)
+                        ]
+                        try:
+                            duration = float(subprocess.check_output(duration_cmd).decode().strip())
+                        except:
+                            duration = 3.0  # Default duration
+                        
+                        video_inputs.extend(['-loop', '1', '-t', str(duration), '-i', str(slide_path)])
+                        video_inputs.extend(['-i', str(audio_path)])
+                        
+                        # Create filter for this segment
+                        video_idx = i * 2
+                        audio_idx = i * 2 + 1
+                        filter_complex.append(f"[{video_idx}:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2[v{i}]")
+                        filter_complex.append(f"[v{i}][{audio_idx}:a]concat=n=1:v=1:a=1[v{i}a{i}]")
+                
+                if not filter_complex:
+                    print("No audio generated, cannot create video")
+                    return None
+                
+                # Concatenate all segments
+                concat_inputs = ''.join([f"[v{i}a{i}]" for i in range(len(audio_paths)) if audio_paths[i]])
+                filter_complex.append(f"{concat_inputs}concat=n={len([a for a in audio_paths if a])}:v=1:a=1[final]")
+                
+                output_path = self.videos_dir / f"{lecture_name}.mp4"
+                
+                cmd = [
+                    'ffmpeg', '-y'  # Overwrite output
+                ] + video_inputs + [
+                    '-filter_complex', ';'.join(filter_complex),
+                    '-map', '[final]',
+                    '-c:v', 'libx264', '-crf', '23', '-preset', 'medium',
+                    '-c:a', 'aac', '-b:a', '128k',
+                    '-movflags', '+faststart',
+                    str(output_path)
+                ]
+                
+                try:
+                    subprocess.run(cmd, check=True, capture_output=True)
+                    print(f"Successfully created video: {output_path}")
+                    return output_path
+                except subprocess.CalledProcessError as e:
+                    print(f"Error creating video: {e}")
+                    print(f"FFmpeg stderr: {e.stderr.decode()}")
+                    return None
+                    
+            def process_lecture(self, pdf_path, force_regenerate=False):
+                """Process a single lecture PDF into video"""
+                lecture_name = pdf_path.stem
+                print(f"\n=== Processing {lecture_name} ===")
+                
+                if not self.should_regenerate_video(lecture_name, pdf_path, force_regenerate):
+                    print(f"Video for {lecture_name} is up to date, skipping")
+                    return True
+                
+                try:
+                    # Extract slides
+                    slide_paths = self.extract_slides_from_pdf(pdf_path, lecture_name)
+                    
+                    # Generate script
+                    scripts = self.generate_script_with_gemini(pdf_path)
+                    if not scripts:
+                        return False
+                    
+                    # Generate audio for each slide
+                    audio_paths = []
+                    for i, slide_path in enumerate(slide_paths, 1):
+                        if i in scripts:
+                            audio_path = self.generate_audio_with_minimax(scripts[i], i, lecture_name)
+                            audio_paths.append(audio_path)
+                            # Add pause between slides
+                            time.sleep(1)
+                        else:
+                            print(f"No script found for slide {i}")
+                            audio_paths.append(None)
+                    
+                    # Create video
+                    video_path = self.create_video_with_ffmpeg(slide_paths, audio_paths, lecture_name)
+                    
+                    if video_path:
+                        # Update cache
+                        self.cache[lecture_name] = {
+                            'pdf_hash': self.get_pdf_hash(pdf_path),
+                            'video_path': str(video_path),
+                            'generated_at': time.time()
+                        }
+                        self.save_cache()
+                        
+                        print(f"Successfully processed {lecture_name}")
+                        return True
+                    
+                except Exception as e:
+                    print(f"Error processing {lecture_name}: {e}")
+                    return False
+                
+                return False
+                
+            def cleanup_temp_files(self):
+                """Clean up temporary files"""
+                import shutil
+                if self.temp_dir.exists():
+                    shutil.rmtree(self.temp_dir)
+                    
+        def main():
+            generator = LectureVideoGenerator()
+            
+            # Get input parameters
+            lecture_filter = os.getenv('LECTURE_FILTER', 'all')
+            force_regenerate = os.getenv('FORCE_REGENERATE', 'false').lower() == 'true'
+            
+            # Find PDFs to process
+            pdfs_dir = Path("pdfs")
+            pdf_files = list(pdfs_dir.glob("lecture*.pdf"))
+            
+            if not pdf_files:
+                print("No lecture PDFs found")
+                return
+            
+            # Filter PDFs if specified
+            if lecture_filter != 'all':
+                filter_names = [name.strip() for name in lecture_filter.split(',')]
+                pdf_files = [pdf for pdf in pdf_files if any(filter_name in pdf.stem for filter_name in filter_names)]
+            
+            print(f"Processing {len(pdf_files)} PDFs: {[pdf.stem for pdf in pdf_files]}")
+            
+            success_count = 0
+            for pdf_path in pdf_files:
+                if generator.process_lecture(pdf_path, force_regenerate):
+                    success_count += 1
+            
+            print(f"\n=== Summary ===")
+            print(f"Successfully processed: {success_count}/{len(pdf_files)} lectures")
+            
+            # Cleanup
+            generator.cleanup_temp_files()
+            
+        if __name__ == "__main__":
+            main()
+        EOF
+        
+    - name: Run video generation
+      env:
+        GOOGLE_AI_STUDIO_API_KEY: ${{ secrets.GOOGLE_AI_STUDIO_API_KEY }}
+        MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
+        LECTURE_FILTER: ${{ inputs.lecture_filter }}
+        FORCE_REGENERATE: ${{ inputs.force_regenerate }}
+      run: python generate_videos.py
+      
+    - name: Create videos directory README
+      run: |
+        cat > videos/README.md << 'EOF'
+        # AI-Generated Lecture Videos
+        
+        This directory contains automatically generated videos for the AIAP lecture slides.
+        
+        ## How Videos Are Generated
+        
+        1. **PDF Processing**: Each lecture PDF is processed by Google Gemini AI
+        2. **Script Generation**: Gemini creates educational narration scripts for each slide
+        3. **Voice Synthesis**: MiniMax TTS generates audio using voice cloning
+        4. **Video Assembly**: FFmpeg combines slides and audio into final videos
+        
+        ## Available Videos
+        
+        EOF
+        
+        # List all video files
+        for file in videos/*.mp4; do
+          if [ -f "$file" ]; then
+            filename=$(basename "$file" .mp4)
+            echo "- [${filename}](./${filename}.mp4)" >> videos/README.md
+          fi
+        done
+        
+        if ! ls videos/*.mp4 1> /dev/null 2>&1; then
+          echo "- No videos available yet" >> videos/README.md
+        fi
+        
+        cat >> videos/README.md << 'EOF'
+        
+        ## Video Specifications
+        
+        - **Resolution**: 1920x1080 (Full HD)
+        - **Format**: MP4 (H.264 video, AAC audio)
+        - **Frame Rate**: Variable (based on audio duration)
+        - **Audio**: AI-generated narration with voice cloning
+        
+        ## Regeneration
+        
+        Videos are automatically regenerated when:
+        - The source PDF is updated
+        - Manual regeneration is triggered via GitHub Actions
+        
+        ---
+        
+        *Videos generated automatically using AI tools*
+        EOF
+        
+    - name: Commit generated videos
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add videos/ video_generation_cache.json
+        if git diff --staged --quiet; then
+          echo "No new videos to commit"
+        else
+          git commit -m "Auto-generate lecture videos [skip ci]" || exit 0
+          git push
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
