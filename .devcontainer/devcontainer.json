@@ -1,0 +1,105 @@
+{
+  "name": "AIAP Lecture Slides Codespace",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  
+  // Configure tool-specific properties
+  "customizations": {
+    "vscode": {
+      // VS Code extensions to install
+      "extensions": [
+        "github.codespaces",
+        "github.copilot",
+        "github.copilot-chat",
+        "github.github-vscode-theme",
+        "github.vscode-github-actions",
+        "github.vscode-pull-request-github",
+        "google.geminicodeassist",
+        "mathematic.vscode-pdf",
+        "ms-vscode.live-server",
+        "ms-vscode.vscode-copilot-vision",
+        "ms-vscode.vscode-websearchforcopilot"
+      ],
+      
+      // VS Code settings
+      "settings": {
+        "editor.fontSize": 14,
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.wordWrap": "on",
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000,
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "workbench.colorTheme": "GitHub Dark",
+        "editor.minimap.enabled": true,
+        "editor.bracketPairColorization.enabled": true,
+        "editor.guides.bracketPairs": true,
+        "html.format.indentInnerHtml": true,
+        "html.format.wrapLineLength": 120,
+        "css.format.spaceAroundSelectorSeparator": true,
+        "javascript.format.insertSpaceAfterCommaDelimiter": true,
+        "javascript.format.insertSpaceAfterSemicolonInForStatements": true,
+        "liveServer.settings.donotShowInfoMsg": true,
+        "liveServer.settings.port": 5500,
+        "liveServer.settings.CustomBrowser": "chrome"
+      }
+    }
+  },
+
+  // Features to add to the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "nodeGypDependencies": true,
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "ppa": true,
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true,
+      "version": "latest"
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally
+  "forwardPorts": [
+    5500,  // Live Server default port
+    8000,  // Common Python HTTP server port
+    3000,  // Common Node.js development port
+    4000   // Common static site generator port
+  ],
+
+  // Configure port attributes
+  "portsAttributes": {
+    "5500": {
+      "label": "Live Server",
+      "onAutoForward": "openBrowser"
+    },
+    "8000": {
+      "label": "Python HTTP Server",
+      "onAutoForward": "openBrowser"
+    },
+    "3000": {
+      "label": "Development Server",
+      "onAutoForward": "openBrowser"
+    },
+    "4000": {
+      "label": "Static Site Server",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  // Commands to run after the container is created
+  "postCreateCommand": "npm install -g http-server && echo 'Development environment ready! 🚀'",
+
+  // Commands to run when attaching to the container
+  "postAttachCommand": "echo 'Welcome to AIAP Lecture Slides development environment! 📚'",
+
+  // Mount the local git config and credentials
+  "mounts": [
+    "source=${localEnv:HOME}/.gitconfig,target=/home/codespace/.gitconfig,type=bind,consistency=cached"
+  ],
+
+  // Dockerfile or image to use
+  "remoteUser": "codespace"
+}
