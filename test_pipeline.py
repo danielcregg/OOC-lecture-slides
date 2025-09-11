@@ -34,44 +34,24 @@ class TestVideoGenerator:
         print("✅ MiniMax API configured")
 
     def setup_voice_cloning(self):
-        """Setup voice cloning using the user's voice sample"""
-        voice_sample_path = Path("my-voice-sample.wav")
-        if not voice_sample_path.exists():
-            print("⚠️  Voice sample file 'my-voice-sample.wav' not found, using default voice")
-            return
-
+        """Setup voice cloning using the user's existing cloned voice"""
         print("🎤 Setting up voice cloning...")
-        try:
-            # First, upload the voice sample to create a clone
-            self.cloned_voice_id = self.create_voice_clone(voice_sample_path)
-            if self.cloned_voice_id:
-                print(f"✅ Voice clone created successfully: {self.cloned_voice_id}")
-            else:
-                print("⚠️  Voice cloning failed, falling back to default voice")
-        except Exception as e:
-            print(f"⚠️  Voice cloning setup failed: {e}, using default voice")
 
-    def create_voice_clone(self, voice_sample_path):
-        """Create a voice clone from the user's voice sample"""
-        print(f"   📤 Attempting to use voice sample directly in TTS request: {voice_sample_path}")
+        # Use the user's existing cloned voice ID from MiniMax
+        self.cloned_voice_id = "MyClonedVoice1"
+        print(f"✅ Using existing cloned voice: {self.cloned_voice_id}")
+        print("📄 File ID: 311103389282466")
 
-        try:
-            # Read the voice sample file
-            with open(voice_sample_path, 'rb') as f:
-                audio_data = f.read()
+        # Check if voice sample exists for reference
+        voice_sample_path = Path("my-voice-sample.wav")
+        if voice_sample_path.exists():
+            print(f"📁 Voice sample file found: {voice_sample_path}")
+        else:
+            print("⚠️  Voice sample file not found, but using existing clone")
 
-            # Convert to base64 for potential use in TTS request
-            import base64
-            self.voice_sample_base64 = base64.b64encode(audio_data).decode('utf-8')
-            print(f"   ✅ Voice sample loaded ({len(audio_data)} bytes)")
+        return True
 
-            # For now, return a placeholder - we'll use the sample directly in TTS
-            # Some TTS services allow voice samples in the request
-            return "user_voice"
 
-        except Exception as e:
-            print(f"   ❌ Voice sample loading failed: {e}")
-            return None
 
     def test_pdf_processing(self, num_slides=2):
         """Test PDF to image conversion for multiple slides"""
