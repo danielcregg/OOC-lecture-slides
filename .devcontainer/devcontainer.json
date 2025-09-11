@@ -30,7 +30,7 @@
         "files.autoSaveDelay": 1000,
         "terminal.integrated.defaultProfile.linux": "bash",
         "workbench.colorTheme": "GitHub Dark",
-        "editor.minimap.enabled": true,
+        "editor.minimap.enabled": false,
         "editor.bracketPairColorization.enabled": true,
         "editor.guides.bracketPairs": true,
         "html.format.indentInnerHtml": true,
