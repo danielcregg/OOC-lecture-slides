@@ -10,8 +10,8 @@ A comprehensive collection of interactive lecture slides for the AI-Assisted Pro
 
 This course consists of a course introduction plus 8 main lectures:
 
-1. **[Course Introduction](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture1-course-introduction.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture1-course-introduction.pdf)
-2. **[Ai Assisted Programming Intro](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture2-ai-assisted-programming-intro.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture2-ai-assisted-programming-intro.pdf)
+1. **[Module Introduction](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture1-course-introduction.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture1-course-introduction.pdf)
+2. **[AI Assisted Programming Intro](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture2-ai-assisted-programming-intro.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture2-ai-assisted-programming-intro.pdf)
 3. **Code Review and Quality Assurance** 🚧 Coming Soon
 4. **Testing and Debugging with AI** 🚧 Coming Soon
 5. **Documentation and Communication** 🚧 Coming Soon
