@@ -10,14 +10,14 @@ A comprehensive collection of interactive lecture slides for the AI-Assisted Pro
 
 This module consists of a module introduction plus 8 main lectures:
 
-1. **[Module Introduction](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture1-module-introduction.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture1-module-introduction.pdf) | [🎥 Video](https://danielcregg.github.io/AIAP-lecture-slides/videos/lecture1-module-introduction.mp4)
-2. **[AI Assisted Programming Intro](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture2-ai-assisted-programming-intro.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture2-ai-assisted-programming-intro.pdf) | [🎥 Video](https://danielcregg.github.io/AIAP-lecture-slides/videos/lecture2-ai-assisted-programming-intro.mp4)
-3. **Code Review and Quality Assurance** 🚧 Coming Soon
-4. **Testing and Debugging with AI** 🚧 Coming Soon
-5. **Documentation and Communication** 🚧 Coming Soon
-6. **AI in Software Architecture** 🚧 Coming Soon
-7. **Ethics and Limitations** 🚧 Coming Soon
-8. **Future of AI-Assisted Programming** 🚧 Coming Soon
+1. **[Module Introduction](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture1-module-introduction.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture1-module-introduction.pdf)
+2. **[Ai Assisted Programming Intro](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture2-ai-assisted-programming-intro.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture2-ai-assisted-programming-intro.pdf) | [🎥 Video](https://danielcregg.github.io/AIAP-lecture-slides/videos/lecture2-ai-assisted-programming-intro.mp4)
+3. **Testing and Debugging with AI** 🚧 Coming Soon
+4. **Documentation and Communication** 🚧 Coming Soon
+5. **AI in Software Architecture** 🚧 Coming Soon
+6. **Ethics and Limitations** 🚧 Coming Soon
+7. **Future of AI-Assisted Programming** 🚧 Coming Soon
+8. **Lecture 8** 🚧 Coming Soon
 9. **Lecture 9** 🚧 Coming Soon
 
 
