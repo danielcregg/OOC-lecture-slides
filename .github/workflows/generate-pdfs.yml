@@ -4,13 +4,13 @@ on:
   push:
     branches: [ main ]
     paths: 
-      - 'lectures/**/*.html'
+      - 'lectures/*.html'
       - 'theme/**/*.css'
       - 'dist/**'
   pull_request:
     branches: [ main ]
     paths: 
-      - 'lectures/**/*.html'
+      - 'lectures/*.html'
       - 'theme/**/*.css'
       - 'dist/**'
   workflow_dispatch: # Allow manual triggering
