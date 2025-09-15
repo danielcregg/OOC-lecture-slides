@@ -2,13 +2,253 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
+    <!-- Optimized viewport for Reveal.js presentations -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
     <title>Lecture Week 2: Introduction to AI Assisted Programming</title>
     <link rel="stylesheet" href="../dist/reset.css">
     <link rel="stylesheet" href="../dist/reveal.css">
     <link rel="stylesheet" href="../dist/theme/white.css" id="theme">
     <link rel="stylesheet" href="../theme/aiap-custom.css">
     <link rel="stylesheet" href="../plugin/highlight/light-professional.css">
+    <style>
+        /* Enhanced responsive design following Reveal.js best practices */
+        .reveal .slides section {
+            text-align: left;
+        }
+        
+        .reveal .slides section[data-state="title"] {
+            text-align: center;
+        }
+        
+        /* Responsive title styling with Reveal.js patterns */
+        .title-slide h1 {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            /* Use relative sizing for better scaling */
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+        
+        .instructor-info {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+        
+        .section-divider {
+            width: min(100px, 20vw);
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            margin: 2rem auto;
+            border-radius: 2px;
+        }
+        
+        /* Professional list styling with responsive sizing */
+        .reveal ul li::marker {
+            color: var(--primary-color);
+        }
+        
+        .reveal ul li {
+            padding-left: 0.3rem;
+            margin-bottom: 0.4rem;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            line-height: 1.4;
+        }
+        
+        /* Responsive image enhancements */
+        .reveal img {
+            border-radius: 12px;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            max-width: 100%;
+            height: auto;
+            /* Prevent images from becoming too small on mobile */
+            min-width: 200px;
+        }
+        
+        /* Enhanced quote styling with responsive design */
+        .professional-quote {
+            background: var(--accent-color);
+            border-left: 5px solid var(--primary-color);
+            padding: clamp(1rem, 3vw, 2rem) clamp(1.2rem, 4vw, 2rem);
+            margin: 2rem 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        /* Improved responsive grid handling - following Reveal.js patterns */
+        @media (max-width: 768px) {
+            div[style*="grid-template-columns"] {
+                display: block !important;
+            }
+            
+            div[style*="grid-template-columns"] > div {
+                margin-bottom: 1.5rem;
+            }
+            
+            div[style*="grid-template-columns"] > div:last-child {
+                margin-bottom: 0;
+            }
+            
+            /* Better mobile typography */
+            .reveal h2 {
+                font-size: clamp(1.5rem, 4vw, 2.2rem) !important;
+                line-height: 1.3 !important;
+            }
+            
+            .reveal h3 {
+                font-size: clamp(1.2rem, 3vw, 1.8rem) !important;
+                line-height: 1.3 !important;
+            }
+        }
+        
+        /* Responsive table design */
+        .comparison-table {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: clamp(0.6rem, 2vw, 1rem) clamp(0.5rem, 1.5vw, 0.8rem);
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        /* Responsive stat cards */
+        .stat-card {
+            padding: clamp(1rem, 3vw, 1.8rem) clamp(0.8rem, 2vw, 1.5rem);
+            text-align: center;
+            background: var(--accent-color);
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .stat-number {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+        
+        /* Enhanced mobile responsiveness following Reveal.js guidelines */
+        @media (max-width: 480px) {
+            .reveal img {
+                min-width: 150px;
+            }
+            
+            .professional-quote {
+                margin: 1rem 0;
+            }
+            
+            .section-divider {
+                width: 60px;
+                margin: 1.5rem auto;
+            }
+        }
+        
+        /* Reveal.js Layout Helper Classes - Enhanced for content fitting */
+        .r-fit-text {
+            /* Allow Reveal.js to automatically size text to fit container */
+            white-space: nowrap;
+            overflow: visible;
+        }
+        
+        .r-stretch {
+            /* Make element fill available vertical space */
+            height: auto !important;
+            max-height: 100% !important;
+        }
+        
+        .r-hstack {
+            /* Horizontal stack with responsive behavior */
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: clamp(1rem, 3vw, 2rem);
+            align-items: flex-start;
+            justify-content: center;
+        }
+        
+        .r-hstack > * {
+            flex: 1 1 0px;
+            min-width: 0;
+        }
+        
+        .r-vstack {
+            /* Vertical stack */
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.8rem, 2vw, 1.2rem);
+            align-items: center;
+        }
+        
+        /* Mobile responsiveness for layout helpers */
+        @media (max-width: 768px) {
+            .r-hstack {
+                flex-direction: column;
+                gap: clamp(1rem, 2vw, 1.5rem);
+            }
+            
+            .r-hstack > * {
+                flex: none;
+                width: 100%;
+            }
+            
+            .r-fit-text {
+                white-space: normal;
+                line-height: 1.2;
+            }
+        }
+        
+        /* Stat grid responsive design */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+            gap: clamp(15px, 3vw, 20px);
+            margin: 2rem 0;
+        }
+        
+        /* Chart container responsive improvements */
+        .chart-container {
+            margin: 2rem 0;
+        }
+        
+        .chart-container h3 {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Pros and cons styling */
+        .pros {
+            color: var(--success-color) !important;
+        }
+        
+        .cons {
+            color: var(--warning-color) !important;
+        }
+    </style>
 </head>
 <body>
     <div class="reveal">
@@ -16,7 +256,7 @@
             <!-- Title Slide -->
             <section data-state="title" class="title-slide">
                 <div class="fade-in">
-                    <h1>AI-Assisted Programming</h1>
+                    <h1 class="r-fit-text">AI-Assisted Programming</h1>
                     <div class="section-divider"></div>
                     <h3 class="subtitle">Lecture 01: Introduction to the Future of Development</h3>
                     <div class="instructor-info">
@@ -136,7 +376,7 @@
 
                 <section>
                     <h3>Copilot Capabilities</h3>
-                    <div class="grid-2-col">
+                    <div class="r-hstack">
                         <div>
                             <h4 class="pros">✅ Strengths</h4>
                             <ul>
@@ -237,7 +477,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
                 <h2>Productivity Impact</h2>
                 <div class="chart-container">
                     <h3 style="color: #333;">Developer Task Time Reduction</h3>
-                    <div class="grid-2-col" style="color: #333; gap: 30px;">
+                    <div class="r-hstack" style="color: #333;">
                         <div>
                             <ul>
                                 <li>Code writing: <strong>55% faster</strong></li>
@@ -262,7 +502,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Benefits -->
             <section>
                 <h2>Key Benefits</h2>
-                <div class="grid-2-col" style="gap: 30px;">
+                <div class="r-hstack">
                     <div class="fragment">
                         <h3 class="pros">🚀 For Developers</h3>
                         <ul>
@@ -287,7 +527,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Challenges -->
             <section>
                 <h2>Challenges & Considerations</h2>
-                <div class="grid-2-col" style="gap: 30px;">
+                <div class="r-hstack">
                     <div class="fragment">
                         <h3 class="cons">⚠️ Technical Challenges</h3>
                         <ul>
@@ -358,7 +598,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Course Preview -->
             <section>
                 <h2>This Course Preview</h2>
-                <div class="grid-2-col">
+                <div class="r-hstack">
                     <div>
                         <h4>Upcoming Lectures:</h4>
                         <ul style="font-size: 0.8em;">
@@ -410,11 +650,11 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             hash: true,
             
             // Professional transitions and animations
-            transition: 'convex', // More professional than 'slide'
+            transition: 'convex',
             transitionSpeed: 'default',
             backgroundTransition: 'zoom',
             
-            // Layout and display options
+            // Layout and display options optimized for content fitting
             controls: true,
             controlsTutorial: false,
             progress: true,
@@ -431,24 +671,29 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             showNotes: false,
             autoPlayMedia: null,
             preloadIframes: null,
+            
+            // Auto-animate for smooth content transitions
             autoAnimate: true,
             autoAnimateEasing: 'cubic-bezier(0.4, 0, 0.2, 1)',
             autoAnimateUnmatched: false,
             autoAnimateDuration: 0.8,
             
-            // Responsive sizing - let Reveal.js handle content fitting automatically
+            // Optimal responsive sizing - following Reveal.js best practices
+            // These dimensions provide the best scaling across devices
             width: 960,
             height: 700,
             margin: 0.04,
             minScale: 0.2,
             maxScale: 2.0,
             
-            // Enable Reveal.js built-in content fitting
+            // Enhanced content fitting options
             disableLayout: false,
-            
-            // Better content fitting
             scrollActivationWidth: null,
             hideInactiveCursor: true,
+            
+            // Improved mobile and touch support
+            touch: true,
+            touchActivationWidth: null,
             
             // Display quality
             display: 'block',
@@ -462,7 +707,7 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
                 40: 'down'  // Down arrow
             },
             
-            // Plugins
+            // Plugin configuration for better performance
             plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ],
             
             // Legacy dependencies (keeping for compatibility)

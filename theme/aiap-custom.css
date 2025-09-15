@@ -1,6 +1,7 @@
 /*
 ================================================================================
 AI-Assisted Programming Course - Custom Theme
+Enhanced with Reveal.js best practices for optimal content fitting
 ================================================================================
 */
 
@@ -16,45 +17,69 @@ AI-Assisted Programming Course - Custom Theme
     --warning-color: #dc2626; /* Red for cons/warnings */
 }
 
+/* Enhanced responsive base styles */
 .reveal .slides section {
     text-align: left;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    line-height: 1.4;
 }
 
 .reveal .slides section[data-state="title"] {
     text-align: center;
 }
 
-/* Title Slide Styling */
+/* Responsive heading styles */
+.reveal h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem) !important;
+    line-height: 1.2 !important;
+}
+
+.reveal h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem) !important;
+    line-height: 1.3 !important;
+    margin-bottom: clamp(1rem, 2vw, 1.5rem) !important;
+}
+
+.reveal h3 {
+    font-size: clamp(1.2rem, 3vw, 1.8rem) !important;
+    line-height: 1.3 !important;
+    margin-bottom: clamp(0.8rem, 1.5vw, 1.2rem) !important;
+}
+
+/* Title Slide Styling with responsive enhancements */
 .title-slide h1 {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 2rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.2;
 }
 
 .subtitle {
-    font-size: 1.1em;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
     color: var(--text-color);
     margin-bottom: 1.5rem;
     opacity: 0.8;
+    line-height: 1.4;
 }
 
 .instructor-info {
-    font-size: 0.9em;
+    font-size: clamp(0.8rem, 2vw, 1rem);
     color: var(--text-color);
     opacity: 0.7;
 }
 
 .section-divider {
-    width: 100px;
+    width: min(100px, 20vw);
     height: 4px;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     margin: 2rem auto;
     border-radius: 2px;
 }
 
-/* Professional list styling */
+/* Professional list styling with responsive sizing */
 .reveal ul li::marker {
     color: var(--primary-color);
 }
@@ -62,30 +87,35 @@ AI-Assisted Programming Course - Custom Theme
 .reveal ul li {
     padding-left: 0.3rem;
     margin-bottom: 0.4rem;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    line-height: 1.4;
 }
 
-/* Image enhancements */
+/* Responsive image enhancements */
 .reveal img {
     border-radius: 12px;
     box-shadow: 0 8px 16px var(--shadow-color);
     max-width: 100%;
     height: auto;
+    min-width: 200px; /* Prevent images from becoming too small */
 }
 
-/* Quote styling */
+/* Enhanced quote styling with responsive design */
 .professional-quote {
     background: var(--accent-color);
     border-left: 5px solid var(--primary-color);
-    padding: 1.5rem 2rem;
+    padding: clamp(1rem, 3vw, 2rem) clamp(1.2rem, 4vw, 2rem);
     margin: 2rem 0;
     border-radius: 0 12px 12px 0;
     font-style: italic;
+    font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+    line-height: 1.5;
     position: relative;
 }
 
 .professional-quote::before {
     content: '"';
-    font-size: 4em;
+    font-size: clamp(2.5em, 6vw, 4em);
     color: var(--primary-color);
     position: absolute;
     top: -10px;
@@ -93,11 +123,121 @@ AI-Assisted Programming Course - Custom Theme
     opacity: 0.3;
 }
 
-/* Reusable Grid Layout */
+/* Reveal.js Layout Helper Classes - Global styles for all slides */
+.r-fit-text {
+    /* Allow Reveal.js to automatically size text to fit container */
+    white-space: nowrap;
+    overflow: visible;
+}
+
+.r-stretch {
+    /* Make element fill available vertical space */
+    height: auto !important;
+    max-height: 100% !important;
+}
+
+.r-hstack {
+    /* Horizontal stack with responsive behavior */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: clamp(1rem, 3vw, 2rem);
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.r-hstack > * {
+    flex: 1 1 0px;
+    min-width: 0;
+}
+
+.r-vstack {
+    /* Vertical stack */
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.8rem, 2vw, 1.2rem);
+    align-items: center;
+}
+
+/* Responsive grid layout */
 .grid-2-col {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: clamp(1rem, 3vw, 2rem);
+}
+
+/* Responsive table styling */
+.comparison-table {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: clamp(0.6rem, 2vw, 1rem) clamp(0.5rem, 1.5vw, 0.8rem);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Responsive stat cards */
+.stat-card {
+    padding: clamp(1rem, 3vw, 1.8rem) clamp(0.8rem, 2vw, 1.5rem);
+    text-align: center;
+    background: var(--accent-color);
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+}
+
+.stat-number {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+/* Assessment card styling */
+.assessment-card {
+    background: var(--accent-color);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    text-align: center;
+    transition: all 0.3s ease;
+    min-width: 0; /* Prevent grid overflow */
+}
+
+.assessment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.assessment-title {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.assessment-weight {
+    font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+    font-weight: 800;
+    color: var(--secondary-color);
+    margin: 0.5rem 0;
+    line-height: 1.2;
+}
+
+.week-info {
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+    color: var(--text-color);
+    opacity: 0.8;
 }
 
 /* Responsive grid improvements */
@@ -113,35 +253,36 @@ AI-Assisted Programming Course - Custom Theme
     .grid-2-col > div:last-child {
         margin-bottom: 0 !important;
     }
-}
-
-/* Enhanced mobile responsiveness for tables and cards */
-@media (max-width: 768px) {
-    .comparison-table {
-        font-size: 0.85em;
+    
+    /* Mobile optimizations for layout helpers */
+    .r-hstack {
+        flex-direction: column;
+        gap: clamp(1rem, 2vw, 1.5rem);
     }
     
-    .comparison-table th,
-    .comparison-table td {
-        padding: 0.8rem 0.6rem;
+    .r-hstack > * {
+        flex: none;
+        width: 100%;
     }
     
-    .stat-card {
-        padding: 1.5rem 1rem;
+    .r-fit-text {
+        white-space: normal;
+        line-height: 1.2;
     }
 }
 
+/* Mobile specific adjustments */
 @media (max-width: 480px) {
-    .comparison-table {
-        font-size: 0.8em;
+    .reveal img {
+        min-width: 150px;
     }
     
-    .comparison-table th,
-    .comparison-table td {
-        padding: 0.7rem 0.5rem;
+    .professional-quote {
+        margin: 1rem 0;
     }
     
-    .stat-card {
-        padding: 1.2rem 0.8rem;
+    .section-divider {
+        width: 60px;
+        margin: 1.5rem auto;
     }
 }
