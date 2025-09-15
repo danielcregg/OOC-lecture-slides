@@ -1,14 +1,14 @@
 # AI-Assisted Programming - Lecture Slides
 
-A comprehensive collection of interactive lecture slides for the AI-Assisted Programming course, built with Reveal.js and hosted on GitHub Pages.
+A comprehensive collection of interactive lecture slides for the AI-Assisted Programming module, built with Reveal.js and hosted on GitHub Pages.
 
 ## 🚀 View Slides Online
 
-**Main Course Index**: [https://danielcregg.github.io/AIAP-lecture-slides/](https://danielcregg.github.io/AIAP-lecture-slides/)
+**Main Module Index**: [https://danielcregg.github.io/AIAP-lecture-slides/](https://danielcregg.github.io/AIAP-lecture-slides/)
 
-## 📚 Course Structure
+## 📚 Module Structure
 
-This course consists of a course introduction plus 8 main lectures:
+This module consists of a module introduction plus 8 main lectures:
 
 1. **[Module Introduction](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture1-module-introduction.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture1-module-introduction.pdf)
 2. **[AI Assisted Programming Intro](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture2-ai-assisted-programming-intro.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture2-ai-assisted-programming-intro.pdf)
@@ -62,12 +62,12 @@ All lectures are available as PDF downloads for offline viewing and printing:
 
 ```
 AIAP-lecture-slides/
-├── index.html                                    # Main course index page
+├── index.html                                    # Main module index page
 ├── lectures/                                     # Individual lecture files
-│   ├── lecture1-course-introduction.html        # Course introduction
+│   ├── lecture1-module-introduction.html        # Module introduction
 │   └── lecture2-ai-assisted-programming-intro.html # Lecture 2 slides
 ├── pdfs/                                         # Auto-generated PDF exports
-│   ├── lecture1-course-introduction.pdf
+│   ├── lecture1-module-introduction.pdf
 │   └── lecture2-ai-assisted-programming-intro.pdf
 ├── dist/                                         # Reveal.js core files
 ├── plugin/                                       # Reveal.js plugins
@@ -79,7 +79,7 @@ AIAP-lecture-slides/
 
 ## 🎯 Learning Objectives
 
-By the end of this course, students will be able to:
+By the end of this module, students will be able to:
 
 - Understand the landscape of AI-assisted programming tools
 - Effectively use GitHub Copilot and similar AI coding assistants
@@ -139,7 +139,7 @@ To add a new lecture:
 
 - **Format**: `lecture#-descriptive-title.html`
 - **Examples**: 
-  - `lecture1-course-introduction.html`
+  - `lecture1-module-introduction.html`
   - `lecture2-ai-assisted-programming-intro.html`
   - `lecture3-code-generation-basics.html`
 
@@ -152,7 +152,7 @@ Each lecture should include:
 - Code examples with syntax highlighting
 - Interactive elements (statistics, comparisons, etc.)
 - Q&A section
-- Navigation back to course index
+- Navigation back to module index
 
 ## 🎨 Customization
 
@@ -178,7 +178,7 @@ All statistics and information are sourced from:
 
 ## 🤝 Contributing
 
-We welcome contributions to improve the course content:
+We welcome contributions to improve the module content:
 
 1. **Fork the repository**
 2. **Create a feature branch**: `git checkout -b feature/new-lecture`
@@ -207,7 +207,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-- **Course Instructor**: [Your Name]
+- **Module Instructor**: [Your Name]
 - **Email**: [your.email@institution.edu]
 - **GitHub Issues**: Use this repository's issue tracker for questions and suggestions
 
