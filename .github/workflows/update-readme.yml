@@ -6,6 +6,7 @@ on:
     paths: 
       - 'lectures/**/*.html'
       - '.pdf-generation-log'  # Trigger when PDFs are generated
+      - '.video-generation-log'  # Trigger when videos are generated
   workflow_dispatch: # Allow manual triggering
 
 permissions:
@@ -69,8 +70,25 @@ jobs:
             
             const lectureUrl = 'https://danielcregg.github.io/AIAP-lecture-slides/lectures/' + lectureName + '.html';
             const pdfUrl = 'https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/' + lectureName + '.pdf';
+            const videoUrl = 'https://danielcregg.github.io/AIAP-lecture-slides/videos/' + lectureName + '.mp4';
             
-            const entry = lectureNumber + '. **[' + displayTitle + '](' + lectureUrl + ')** ✅ Available | [📄 PDF](' + pdfUrl + ')';
+            // Check if PDF exists
+            const pdfPath = 'pdfs/' + lectureName + '.pdf';
+            const pdfExists = fs.existsSync(pdfPath);
+            
+            // Check if video exists
+            const videoPath = 'videos/' + lectureName + '.mp4';
+            const videoExists = fs.existsSync(videoPath);
+            
+            let entry = lectureNumber + '. **[' + displayTitle + '](' + lectureUrl + ')** ✅ Available';
+            
+            if (pdfExists) {
+              entry += ' | [📄 PDF](' + pdfUrl + ')';
+            }
+            
+            if (videoExists) {
+              entry += ' | [🎥 Video](' + videoUrl + ')';
+            }
             
             lectureEntries.push({
               number: lectureNumber,
@@ -80,48 +98,49 @@ jobs:
           
           lectureEntries.sort((a, b) => a.number - b.number);
           
-          const courseStructureStart = readmeContent.indexOf('## 📚 Course Structure');
-          if (courseStructureStart === -1) {
-            throw new Error('Could not find Course Structure section in README');
+          const moduleStructureStart = readmeContent.indexOf('## 📚 Module Structure');
+          if (moduleStructureStart === -1) {
+            throw new Error('Could not find Module Structure section in README');
           }
           
-          const nextSectionMatch = readmeContent.substring(courseStructureStart + 1).match(/\n## /);
-          let courseStructureEnd;
+          const nextSectionMatch = readmeContent.substring(moduleStructureStart + 1).match(/\n## /);
+          let moduleStructureEnd;
           if (nextSectionMatch) {
-            courseStructureEnd = courseStructureStart + 1 + nextSectionMatch.index;
+            moduleStructureEnd = moduleStructureStart + 1 + nextSectionMatch.index;
           } else {
-            courseStructureEnd = readmeContent.length;
+            moduleStructureEnd = readmeContent.length;
           }
           
-          let introText = '## 📚 Course Structure\n\nThis course consists of a course introduction plus 8 main lectures:\n\n';
+          let introText = '## 📚 Module Structure\n\nThis module consists of a module introduction plus 8 main lectures:\n\n';
           
-          let newCourseStructure = introText;
+          let newModuleStructure = introText;
           
           for (const lectureEntry of lectureEntries) {
-            newCourseStructure += lectureEntry.entry + '\n';
+            newModuleStructure += lectureEntry.entry + '\n';
           }
           
           const maxLectures = 9;
           const remainingLectures = [
-            'Code Generation and Completion',
-            'Code Review and Quality Assurance', 
-            'Testing and Debugging with AI',
+            'Code Review and Quality Assurance',
+            'Testing and Debugging with AI', 
             'Documentation and Communication',
             'AI in Software Architecture',
             'Ethics and Limitations',
-            'Future of AI-Assisted Programming'
+            'Future of AI-Assisted Programming',
+            'Lecture 8',
+            'Lecture 9'
           ];
           
           for (let i = lectureEntries.length; i < maxLectures; i++) {
             const lectureNum = i + 1;
             const title = remainingLectures[i - 1] || 'Lecture ' + lectureNum;
-            newCourseStructure += lectureNum + '. **' + title + '** 🚧 Coming Soon\n';
+            newModuleStructure += lectureNum + '. **' + title + '** 🚧 Coming Soon\n';
           }
           
-          const beforeSection = readmeContent.substring(0, courseStructureStart);
-          const afterSection = readmeContent.substring(courseStructureEnd);
+          const beforeSection = readmeContent.substring(0, moduleStructureStart);
+          const afterSection = readmeContent.substring(moduleStructureEnd);
           
-          const updatedReadme = beforeSection + newCourseStructure + '\n' + afterSection;
+          const updatedReadme = beforeSection + newModuleStructure + '\n' + afterSection;
           
           fs.writeFileSync(readmePath, updatedReadme);
           console.log('README.md updated successfully!');
@@ -141,11 +160,15 @@ jobs:
     - name: Run README update script
       run: node update-readme.js
       
-    - name: Clean up trigger file
+    - name: Clean up trigger files
       run: |
         if [ -f .pdf-generation-log ]; then
           rm .pdf-generation-log
           echo "Cleaned up PDF generation trigger file"
+        fi
+        if [ -f .video-generation-log ]; then
+          rm .video-generation-log
+          echo "Cleaned up video generation trigger file"
         fi
       
     - name: Commit README changes
@@ -153,9 +176,12 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add README.md
-        # Also add the removal of the trigger file if it exists
+        # Also add the removal of the trigger files if they exist
         if [ -f .pdf-generation-log ]; then
           git add .pdf-generation-log
+        fi
+        if [ -f .video-generation-log ]; then
+          git add .video-generation-log
         fi
         if git diff --staged --quiet; then
           echo "No changes to commit to README.md"

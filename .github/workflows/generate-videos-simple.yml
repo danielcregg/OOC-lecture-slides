@@ -662,3 +662,13 @@ jobs:
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Trigger README update for videos
+      run: |
+        # Create a trigger file to let the README update workflow know videos were generated
+        echo "Video generation completed at $(date)" >> .video-generation-log
+        git add .video-generation-log
+        git commit -m "Trigger README update after video generation" || exit 0
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
