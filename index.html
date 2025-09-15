@@ -5,7 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Assisted Programming - Lecture Slides</title>
     <link rel="stylesheet" href="dist/reset.css">
-    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="styleshee        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .lecture-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .lecture-card {
+                padding: 1.5rem;
+            }
+            
+            .ai-tutor-section {
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+            
+            .ai-tutor-card {
+                padding: 1.5rem;
+            }
+            
+            .ai-tutor-header h3 {
+                font-size: 1.3rem;
+            }
+            
+            .ai-tutor-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }reveal.css">
     <link rel="stylesheet" href="dist/theme/white.css" id="theme">
     <link rel="stylesheet" href="theme/aiap-custom.css">
     <style>
@@ -189,6 +220,66 @@
             pointer-events: none;
         }
         
+        .ai-tutor-section {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .ai-tutor-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .ai-tutor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .ai-tutor-header h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .ai-tutor-header p {
+            margin: 0 0 1.5rem 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .ai-tutor-content p {
+            margin: 0 0 1.5rem 0;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .ai-tutor-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .ai-tutor-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            color: #5a67d8;
+        }
+        
         .pdf-link {
             margin-top: 2rem;
             text-align: center;
@@ -342,6 +433,21 @@
             </div>
         </div>
         </div>
+    
+    <div class="ai-tutor-section">
+        <div class="ai-tutor-card">
+            <div class="ai-tutor-header">
+                <h3>🤖 AI Programming Tutor</h3>
+                <p>Get personalized help with your programming questions</p>
+            </div>
+            <div class="ai-tutor-content">
+                <p>Access our dedicated ChatGPT assistant trained specifically for AI-assisted programming concepts, debugging help, and coding best practices.</p>
+                <a href="https://chatgpt.com/g/g-68c81a9635ec8191b3558e5cfedc5434-ai-programming-tutor" target="_blank" class="ai-tutor-button">
+                    💬 Chat with AI Tutor
+                </a>
+            </div>
+        </div>
+    </div>
     
     <div class="pdf-link">
         <a href="pdfs/">
