@@ -89,13 +89,12 @@ jobs:
                 print("APIs configured")
                 
             def setup_voice_cloning(self):
-                """Setup voice cloning using the user's existing cloned voice"""
+                """Setup voice cloning using the user's cloned voice"""
                 print("🎤 Setting up voice cloning...")
                 
-                # Use the user's existing cloned voice ID from MiniMax
-                self.cloned_voice_id = "MyClonedVoice1"
-                print(f"✅ Using existing cloned voice: {self.cloned_voice_id}")
-                print("📄 File ID: 311103389282466")
+                # Use the user's current cloned voice ID
+                self.cloned_voice_id = "danielVoice15092025"
+                print(f"✅ Using cloned voice: {self.cloned_voice_id}")
                 
                 # Check if voice sample exists for reference
                 if self.voice_sample.exists():
