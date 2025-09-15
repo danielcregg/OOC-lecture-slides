@@ -636,7 +636,12 @@ jobs:
         *Videos generated automatically using AI tools*
         EOF
         
-    - name: Commit generated content
+    - name: Update front page with new videos
+      run: |
+        echo "🔄 Updating front page with new video links..."
+        python update_front_page.py
+        
+    - name: Commit generated content and front page updates
       run: |
         # Configure Git for commits
         git config user.name "Daniel Cregg"
@@ -652,11 +657,12 @@ jobs:
         if [ -f "video_generation_cache.json" ]; then
           git add video_generation_cache.json
         fi
+        git add index.html
         
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Auto-generate lecture videos and scripts [skip ci]" || exit 0
+          git commit -m "Auto-generate lecture videos, scripts, and update front page [skip ci]" || exit 0
           git push
         fi
       env:

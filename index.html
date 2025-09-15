@@ -141,6 +141,54 @@
             cursor: pointer;
         }
         
+        .lecture-resources {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .pdf-resource {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .pdf-resource:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+        }
+        
+        .video-resource {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .video-resource:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+        }
+        
+        .coming-soon .lecture-resources {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        
         .pdf-link {
             margin-top: 2rem;
             text-align: center;
@@ -196,80 +244,104 @@
                 Welcome to AIAP! Module overview, learning outcomes, assessment details, and getting started with tools.
             </div>
             <div class="lecture-duration">45 minutes</div>
+            <div class="lecture-resources">
+                <a href="https://danielcregg.github.io/AIAP-lecture-slides/pdfs/lecture1-module-introduction.pdf" class="resource-link pdf-resource" onclick="event.stopPropagation();" target="_blank">
+                    📄 PDF
+                </a>
+                <a href="https://danielcregg.github.io/AIAP-lecture-slides/videos/lecture1-module-introduction.mp4" class="resource-link video-resource" onclick="event.stopPropagation();" target="_blank">
+                    🎥 Video
+                </a>
+            </div>
         </div>
-        
         <div class="lecture-card available" onclick="window.location.href='lectures/lecture2-ai-assisted-programming-intro.html'">
             <div class="lecture-number">Week 2</div>
-            <div class="lecture-title">Introduction to AI Assisted Programming</div>
+            <div class="lecture-title">AI Assisted Programming Intro</div>
             <div class="lecture-description">
                 Overview of AI tools in software development, GitHub Copilot, and the future of programming with AI assistance.
             </div>
             <div class="lecture-duration">60 minutes</div>
+            <div class="lecture-resources">
+                <a href="https://danielcregg.github.io/AIAP-lecture-slides/pdfs/lecture2-ai-assisted-programming-intro.pdf" class="resource-link pdf-resource" onclick="event.stopPropagation();" target="_blank">
+                    📄 PDF
+                </a>
+                <a href="https://danielcregg.github.io/AIAP-lecture-slides/videos/lecture2-ai-assisted-programming-intro.mp4" class="resource-link video-resource" onclick="event.stopPropagation();" target="_blank">
+                    🎥 Video
+                </a>
+            </div>
         </div>
-        
-        <div class="lecture-card coming-soon">
+        <div class="lecture-card coming-soon" >
             <div class="lecture-number">Week 3</div>
-            <div class="lecture-title">Code Generation and Completion</div>
+            <div class="lecture-title">Placeholder</div>
             <div class="lecture-description">
-                Deep dive into AI-powered code generation, best practices, and hands-on exercises with various AI tools.
+                Comprehensive coverage of AI-assisted programming concepts and practical applications.
             </div>
             <div class="lecture-duration">60 minutes - Coming Soon</div>
+            <div class="lecture-resources">
+                <span class="resource-link pdf-resource">📄 PDF</span>
+                <span class="resource-link video-resource">🎥 Video</span>
+            </div>
         </div>
-        
-        <div class="lecture-card coming-soon">
+        <div class="lecture-card coming-soon" >
             <div class="lecture-number">Week 4</div>
-            <div class="lecture-title">Code Review and Quality Assurance</div>
+            <div class="lecture-title">Placeholder</div>
             <div class="lecture-description">
-                Using AI for code review, bug detection, and maintaining code quality in collaborative environments.
+                Comprehensive coverage of AI-assisted programming concepts and practical applications.
             </div>
             <div class="lecture-duration">60 minutes - Coming Soon</div>
+            <div class="lecture-resources">
+                <span class="resource-link pdf-resource">📄 PDF</span>
+                <span class="resource-link video-resource">🎥 Video</span>
+            </div>
         </div>
-        
-        <div class="lecture-card coming-soon">
+        <div class="lecture-card coming-soon" >
             <div class="lecture-number">Week 5</div>
-            <div class="lecture-title">Testing and Debugging with AI</div>
+            <div class="lecture-title">Placeholder</div>
             <div class="lecture-description">
-                AI-assisted test generation, automated debugging techniques, and improving software reliability.
+                Comprehensive coverage of AI-assisted programming concepts and practical applications.
             </div>
             <div class="lecture-duration">60 minutes - Coming Soon</div>
+            <div class="lecture-resources">
+                <span class="resource-link pdf-resource">📄 PDF</span>
+                <span class="resource-link video-resource">🎥 Video</span>
+            </div>
         </div>
-        
-        <div class="lecture-card coming-soon">
+        <div class="lecture-card coming-soon" >
             <div class="lecture-number">Week 6</div>
-            <div class="lecture-title">Documentation and Communication</div>
+            <div class="lecture-title">Placeholder</div>
             <div class="lecture-description">
-                Generating documentation, comments, and technical communication using AI tools and best practices.
+                Comprehensive coverage of AI-assisted programming concepts and practical applications.
             </div>
             <div class="lecture-duration">60 minutes - Coming Soon</div>
+            <div class="lecture-resources">
+                <span class="resource-link pdf-resource">📄 PDF</span>
+                <span class="resource-link video-resource">🎥 Video</span>
+            </div>
         </div>
-        
-        <div class="lecture-card coming-soon">
+        <div class="lecture-card coming-soon" >
             <div class="lecture-number">Week 7</div>
-            <div class="lecture-title">AI in Software Architecture</div>
+            <div class="lecture-title">Placeholder</div>
             <div class="lecture-description">
-                Using AI for system design, architecture decisions, and scalability planning in modern applications.
+                Comprehensive coverage of AI-assisted programming concepts and practical applications.
             </div>
             <div class="lecture-duration">60 minutes - Coming Soon</div>
+            <div class="lecture-resources">
+                <span class="resource-link pdf-resource">📄 PDF</span>
+                <span class="resource-link video-resource">🎥 Video</span>
+            </div>
         </div>
-        
-        <div class="lecture-card coming-soon">
+        <div class="lecture-card coming-soon" >
             <div class="lecture-number">Week 8</div>
-            <div class="lecture-title">Ethics and Limitations</div>
+            <div class="lecture-title">Placeholder</div>
             <div class="lecture-description">
-                Understanding the ethical implications, limitations, and responsible use of AI in software development.
+                Comprehensive coverage of AI-assisted programming concepts and practical applications.
             </div>
             <div class="lecture-duration">60 minutes - Coming Soon</div>
-        </div>
-        
-        <div class="lecture-card coming-soon">
-            <div class="lecture-number">Week 9</div>
-            <div class="lecture-title">Future of AI Assisted Programming</div>
-            <div class="lecture-description">
-                Emerging trends, new tools, and preparing for the evolving landscape of AI-assisted development.
+            <div class="lecture-resources">
+                <span class="resource-link pdf-resource">📄 PDF</span>
+                <span class="resource-link video-resource">🎥 Video</span>
             </div>
-            <div class="lecture-duration">60 minutes - Coming Soon</div>
         </div>
-    </div>
+        </div>
     
     <div class="pdf-link">
         <a href="pdfs/">

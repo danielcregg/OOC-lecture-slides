@@ -255,15 +255,25 @@ jobs:
         echo "" >> pdfs/README.md
         echo "*Last updated: $(date -u '+%Y-%m-%d %H:%M:%S UTC') by GitHub Actions*" >> pdfs/README.md
       
-    - name: Commit PDF files
+    - name: Setup Python for front page update
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Update front page with new PDFs
+      run: |
+        echo "🔄 Updating front page with new PDF links..."
+        python update_front_page.py
+        
+    - name: Commit PDF files and front page updates
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add pdfs/
+        git add pdfs/ index.html
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Auto-generate PDF slides [skip ci]" || exit 0
+          git commit -m "Auto-generate PDF slides and update front page [skip ci]" || exit 0
           git push
         fi
       env:
