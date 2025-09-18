@@ -22,4 +22,4 @@ This directory contains PDF exports of all lecture slides, automatically generat
 
 ---
 
-*Last updated: 2025-09-15 14:02:56 UTC by GitHub Actions*
+*Last updated: 2025-09-18 09:59:00 UTC by GitHub Actions*
