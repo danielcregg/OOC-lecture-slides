@@ -1,7 +1,8 @@
 /*
 ================================================================================
 AI-Assisted Programming Course - Custom Theme
-Enhanced with Reveal.js best practices for optimal content fitting
+Enhanced with Reveal.js best practices for optimal responsive design
+Following Context7 recommendations for slide structure and organization
 ================================================================================
 */
 
@@ -16,6 +17,13 @@ Enhanced with Reveal.js best practices for optimal content fitting
     --success-color: #16a34a; /* Green for pros/success */
     --warning-color: #dc2626; /* Red for cons/warnings */
 }
+
+/* 
+================================================================================
+REVEAL.JS FRAMEWORK OPTIMIZATIONS
+Following official Reveal.js patterns for content organization
+================================================================================
+*/
 
 /* Enhanced responsive base styles */
 .reveal .slides section {
@@ -240,7 +248,7 @@ Enhanced with Reveal.js best practices for optimal content fitting
     opacity: 0.8;
 }
 
-/* Responsive grid improvements */
+/* Responsive grid improvements - following Reveal.js patterns */
 @media (max-width: 768px) {
     .grid-2-col {
         grid-template-columns: 1fr;
@@ -268,6 +276,19 @@ Enhanced with Reveal.js best practices for optimal content fitting
     .r-fit-text {
         white-space: normal;
         line-height: 1.2;
+    }
+    
+    /* Better responsive handling for inline grids */
+    div[style*="grid-template-columns"] {
+        display: block !important;
+    }
+    
+    div[style*="grid-template-columns"] > div {
+        margin-bottom: 1.5rem;
+    }
+    
+    div[style*="grid-template-columns"] > div:last-child {
+        margin-bottom: 0;
     }
 }
 

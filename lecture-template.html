@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!-- Optimized viewport for Reveal.js presentations -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+    <title>Lecture Week X: [LECTURE TITLE]</title>
+    <link rel="stylesheet" href="../dist/reset.css">
+    <link rel="stylesheet" href="../dist/reveal.css">
+    <link rel="stylesheet" href="../dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="../theme/aiap-custom.css">
+    <link rel="stylesheet" href="../plugin/highlight/light-professional.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section data-state="title" class="title-slide">
+                <div class="r-vstack">
+                    <h1>[LECTURE TITLE]</h1>
+                    <div class="subtitle">[LECTURE SUBTITLE]</div>
+                    <div class="section-divider"></div>
+                    <div class="instructor-info">
+                        <strong>AI Assisted Programming</strong><br>
+                        [Week X] | [Duration] minutes
+                    </div>
+                </div>
+            </section>
+
+            <!-- Learning Outcomes -->
+            <section>
+                <h2>Learning Outcomes</h2>
+                <div class="r-vstack">
+                    <p>By the end of this lecture, you will be able to:</p>
+                    <ul>
+                        <li class="fragment">Outcome 1</li>
+                        <li class="fragment">Outcome 2</li>
+                        <li class="fragment">Outcome 3</li>
+                        <li class="fragment">Outcome 4</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Main Content Section -->
+            <section>
+                <h2>Section Title</h2>
+                <div class="r-vstack">
+                    <p>Content goes here...</p>
+                </div>
+            </section>
+
+            <!-- Example with Two-Column Layout -->
+            <section>
+                <h2>Two-Column Layout Example</h2>
+                <div class="r-hstack">
+                    <div>
+                        <h3>Left Column</h3>
+                        <ul>
+                            <li class="fragment">Point 1</li>
+                            <li class="fragment">Point 2</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Right Column</h3>
+                        <ul>
+                            <li class="fragment">Point A</li>
+                            <li class="fragment">Point B</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Example with Quote -->
+            <section>
+                <h2>Professional Quote Example</h2>
+                <div class="professional-quote">
+                    This is an example of a professional quote that stands out from the main content.
+                </div>
+                <p>Regular content continues here...</p>
+            </section>
+
+            <!-- Example with Image -->
+            <section>
+                <h2>Image Example</h2>
+                <div class="r-vstack">
+                    <img src="path/to/image.jpg" alt="Description" class="r-stretch">
+                    <p><small>Image caption or description</small></p>
+                </div>
+            </section>
+
+            <!-- Summary/Conclusion -->
+            <section>
+                <h2>Summary</h2>
+                <div class="r-vstack">
+                    <ul>
+                        <li class="fragment">Key takeaway 1</li>
+                        <li class="fragment">Key takeaway 2</li>
+                        <li class="fragment">Key takeaway 3</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section>
+                <h2>Next Steps</h2>
+                <div class="r-vstack">
+                    <ul>
+                        <li class="fragment">Preparation for next lecture</li>
+                        <li class="fragment">Recommended reading/practice</li>
+                        <li class="fragment">Assignment or exercises</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Final Slide -->
+            <section data-state="title" class="title-slide">
+                <div class="r-vstack">
+                    <h1>Thank You</h1>
+                    <div class="subtitle">Questions & Discussion</div>
+                    <div class="section-divider"></div>
+                    <div class="instructor-info">
+                        <strong>AI Assisted Programming</strong><br>
+                        Next: [Next Lecture Topic]
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Core Scripts -->
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script>
+        // Reveal.js Configuration - Following Best Practices
+        Reveal.initialize({
+            // Core layout - optimal for responsive content
+            width: 960,
+            height: 700,
+            margin: 0.04,
+            minScale: 0.2,
+            maxScale: 2.0,
+            
+            // Navigation and controls
+            hash: true,
+            controls: true,
+            controlsTutorial: false,
+            progress: true,
+            center: true,
+            touch: true,
+            loop: false,
+            rtl: false,
+            navigationMode: 'default',
+            shuffle: false,
+            fragments: true,
+            fragmentInURL: false,
+            embedded: false,
+            help: true,
+            showNotes: false,
+            
+            // Professional transitions optimized for educational content
+            transition: 'convex',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            
+            // Auto-animate for smooth content transitions
+            autoAnimate: true,
+            autoAnimateEasing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            autoAnimateUnmatched: false,
+            
+            // Mathematical typesetting
+            math: {
+                mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                tex2jax: {
+                    inlineMath: [['\\(','\\)']],
+                    displayMath: [['\\[','\\]']],
+                    balanceBraces: true,
+                    processEscapes: false,
+                    processRefs: true,
+                    processEnvironments: true,
+                    preview: 'TeX',
+                    skipTags: ['script','noscript','style','textarea','pre','code'],
+                    ignoreClass: 'tex2jax_ignore',
+                    processClass: 'tex2jax_process'
+                }
+            },
+            
+            // Plugins
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ]
+        });
+    </script>
+</body>
+</html>
