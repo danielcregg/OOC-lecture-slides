@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <!-- Optimized viewport for Reveal.js presentations -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-    <title>Lecture Week 2: Introduction to AI Assisted Programming</title>
+        <title>AI-Assisted Programming - Lecture 2</title>
     <link rel="stylesheet" href="../dist/reset.css">
     <link rel="stylesheet" href="../dist/reveal.css">
     <link rel="stylesheet" href="../dist/theme/white.css" id="theme">
@@ -42,21 +42,35 @@
 
             <!-- What is AI-Assisted Programming? -->
             <section>
-                <h2>What is Assisted Programming?</h2>
+                <h2>What is AI-Assisted Programming?</h2>
                 <div class="fragment">
                     <p>AI-Assisted Programming is the use of artificial intelligence tools to:</p>
                     <ul>
                         <li class="fragment">Generate code automatically</li>
                         <li class="fragment">Complete code as you type</li>
                         <li class="fragment">Suggest improvements and optimizations</li>
-                        <li class="fragment">Find and fix bugs</li>
-                        <li class="fragment">Generate documentation and tests</li>
+                        <li class="fragment">Debug and fix errors</li>
                         <li class="fragment">Translate between programming languages</li>
+                        <li class="fragment">Generate documentation and tests</li>
                     </ul>
                 </div>
             </section>
 
-            <!-- Current Market Statistics -->
+            <!-- AI Programming Workflow Diagram -->
+            <section>
+                <h2>AI Programming Workflow</h2>
+                <div class="r-stretch">
+                    <div class="mermaid">
+graph LR
+    A[👨‍💻 Developer] --> B[🤖 AI Tool]
+    B --> C[💡 Suggestion]
+    C --> D[✅ Accept]
+    C --> E[❌ Reject]
+    D --> F[🚀 Faster Development]
+    E --> A
+                    </div>
+                </div>
+            </section>
             <section>
                 <h2>Market Adoption (2024)</h2>
                 <div class="stat-grid">
@@ -119,6 +133,40 @@
                         </tr>
                     </tbody>
                 </table>
+            </section>
+
+            <!-- AI Tools Ecosystem -->
+            <section>
+                <h2>AI Development Ecosystem</h2>
+                <div class="r-stretch">
+                    <svg viewBox="0 0 500 300" style="width: 100%; height: auto; background: #f8f9fa; border-radius: 10px; padding: 20px;">
+                        <!-- Central circle -->
+                        <circle cx="250" cy="150" r="50" fill="#2563eb" opacity="0.2" stroke="#2563eb" stroke-width="2"/>
+                        <text x="250" y="155" text-anchor="middle" font-size="12" font-weight="bold" fill="#2563eb">Developer</text>
+                        
+                        <!-- Tool categories -->
+                        <rect x="170" y="50" width="160" height="30" rx="15" fill="#4f46e5"/>
+                        <text x="250" y="70" text-anchor="middle" font-size="11" fill="white">Code Completion</text>
+                        
+                        <rect x="350" y="120" width="120" height="30" rx="15" fill="#16a34a"/>
+                        <text x="410" y="140" text-anchor="middle" font-size="11" fill="white">AI Assistants</text>
+                        
+                        <rect x="170" y="220" width="160" height="30" rx="15" fill="#dc2626"/>
+                        <text x="250" y="240" text-anchor="middle" font-size="11" fill="white">Code Review</text>
+                        
+                        <rect x="30" y="120" width="120" height="30" rx="15" fill="#7c3aed"/>
+                        <text x="90" y="140" text-anchor="middle" font-size="11" fill="white">Documentation</text>
+                        
+                        <!-- Connection lines -->
+                        <line x1="250" y1="100" x2="250" y2="80" stroke="#666" stroke-width="1"/>
+                        <line x1="300" y1="150" x2="350" y2="135" stroke="#666" stroke-width="1"/>
+                        <line x1="250" y1="200" x2="250" y2="220" stroke="#666" stroke-width="1"/>
+                        <line x1="200" y1="150" x2="150" y2="135" stroke="#666" stroke-width="1"/>
+                        
+                        <!-- Title -->
+                        <text x="250" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#374151">AI Tools Support Every Development Stage</text>
+                    </svg>
+                </div>
             </section>
 
             <!-- GitHub Copilot Deep Dive -->
@@ -398,6 +446,13 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
             <!-- Thank You -->
             <section>
                 <h1>Thank You!</h1>
+                <h3>Introduction to AI-Assisted Programming</h3>
+                <p>
+                    <small>
+                        <a href="../">← Back to Module Index</a><br>
+                        <a href="lecture1-module-introduction.html">← Previous Lecture: Module Introduction</a>
+                    </small>
+                </p>
             </section>
         </div>
     </div>
@@ -406,6 +461,101 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
     <script src="../plugin/notes/notes.js"></script>
     <script src="../plugin/markdown/markdown.js"></script>
     <script src="../plugin/highlight/highlight.js"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Enhanced Mermaid configuration for better PDF compatibility
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Arial, sans-serif',
+            themeVariables: {
+                fontSize: '14px',
+                fontFamily: 'Arial, sans-serif'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                nodeSpacing: 50,
+                rankSpacing: 50
+            }
+        });
+
+        // Global flag to track if we're in PDF generation mode
+        window.isPDFGeneration = false;
+
+        // Function to render Mermaid diagrams on current slide
+        async function renderMermaidOnSlide() {
+            const currentSlide = Reveal.getCurrentSlide();
+            const mermaidElements = currentSlide.querySelectorAll('.mermaid:not([data-processed])');
+
+            for (const element of mermaidElements) {
+                try {
+                    const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+                    const result = await mermaid.render(id, element.textContent.trim());
+                    element.innerHTML = result.svg;
+                    element.setAttribute('data-processed', 'true');
+                } catch (error) {
+                    console.error('Mermaid render error:', error);
+                    // Fallback: show the raw text if rendering fails
+                    element.innerHTML = '<pre>' + element.textContent.trim() + '</pre>';
+                }
+            }
+        }
+
+        // Function to render ALL Mermaid diagrams (for PDF generation)
+        async function renderAllMermaidDiagrams() {
+            const allMermaidElements = document.querySelectorAll('.mermaid:not([data-processed])');
+
+            for (const element of allMermaidElements) {
+                try {
+                    const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+                    const result = await mermaid.render(id, element.textContent.trim());
+                    element.innerHTML = result.svg;
+                    element.setAttribute('data-processed', 'true');
+                } catch (error) {
+                    console.error('Mermaid render error:', error);
+                    element.innerHTML = '<pre>' + element.textContent.trim() + '</pre>';
+                }
+            }
+        }
+
+        // Detect if we're running in a headless browser (PDF generation)
+        function detectPDFGeneration() {
+            // Check for headless indicators
+            const isHeadless = navigator.webdriver ||
+                              !navigator.languages ||
+                              navigator.plugins.length === 0;
+
+            // Check for Puppeteer indicators
+            const hasPuppeteer = window.navigator.userAgent.includes('HeadlessChrome') ||
+                                window.navigator.userAgent.includes('Puppeteer');
+
+            return isHeadless || hasPuppeteer;
+        }
+
+        // Initialize Mermaid rendering
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we're in PDF generation mode
+            window.isPDFGeneration = detectPDFGeneration();
+
+            if (window.isPDFGeneration) {
+                // For PDF generation, render all diagrams immediately
+                console.log('PDF generation detected, rendering all Mermaid diagrams...');
+                setTimeout(renderAllMermaidDiagrams, 500);
+            } else if (typeof Reveal !== 'undefined') {
+                // For normal viewing, use Reveal.js events
+                Reveal.addEventListener('slidechanged', renderMermaidOnSlide);
+                Reveal.addEventListener('ready', function() {
+                    setTimeout(renderMermaidOnSlide, 100);
+                });
+            }
+        });
+
+        // Expose render function globally for PDF generation scripts
+        window.renderAllMermaidDiagrams = renderAllMermaidDiagrams;
+    </script>
     <script>
         Reveal.initialize({
             hash: true,
@@ -478,4 +628,5 @@ console.log(fibonacciMemo(50)); // Much faster for large numbers
         });
     </script>
 </body>
+<!-- Test trigger for PDF generation -->
 </html>

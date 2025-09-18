@@ -307,3 +307,42 @@ Following official Reveal.js patterns for content organization
         margin: 1.5rem auto;
     }
 }
+
+/* Mermaid diagram styling for better PDF rendering */
+.mermaid {
+    font-family: Arial, sans-serif !important;
+    font-size: 14px !important;
+    text-align: center;
+    margin: 1rem auto;
+    max-width: 100%;
+}
+
+.mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 14px !important;
+}
+
+/* Ensure Mermaid nodes have proper spacing in PDF */
+.mermaid .node {
+    font-family: Arial, sans-serif !important;
+    font-size: 14px !important;
+    fill: #374151 !important;
+}
+
+/* Override any Reveal.js styles that might interfere with Mermaid */
+@media print {
+    .mermaid {
+        font-family: Arial, sans-serif !important;
+        font-size: 12px !important;
+        break-inside: avoid;
+    }
+
+    .mermaid svg {
+        max-width: 100% !important;
+        height: auto !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 12px !important;
+    }
+}

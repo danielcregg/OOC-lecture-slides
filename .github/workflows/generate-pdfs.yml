@@ -96,7 +96,24 @@ jobs:
             { timeout: 10000 }
           );
           
-          console.log('Reveal.js is ready, adding print styles...');
+          console.log('Reveal.js is ready, waiting for Mermaid diagrams and adding print styles...');
+          
+          // Wait for Mermaid diagrams to render (if any exist)
+          try {
+            await page.waitForFunction(
+              () => {
+                const mermaidElements = document.querySelectorAll('.mermaid');
+                if (mermaidElements.length === 0) return true; // No diagrams to wait for
+                return Array.from(mermaidElements).every(el => el.hasAttribute('data-processed'));
+              },
+              { timeout: 10000 }
+            );
+            console.log('All Mermaid diagrams rendered successfully');
+          } catch (error) {
+            console.log('Timeout waiting for Mermaid diagrams, proceeding anyway:', error.message);
+          }
+          
+          console.log('Adding print styles...');
           
           // Add reveal.js print CSS
           await page.addStyleTag({
