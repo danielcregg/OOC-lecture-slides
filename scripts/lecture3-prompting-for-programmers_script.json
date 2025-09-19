@@ -1,0 +1,34 @@
+{
+  "lecture_name": "lecture3-prompting-for-programmers",
+  "generated_at": "2025-09-19 00:00:00",
+  "total_slides": 11,
+  "timeboxed_plan": [
+    { "range": "0–5 min", "topic": "Why prompting matters" },
+    { "range": "5–12 min", "topic": "Mental model: shape, constraints, format" },
+    { "range": "12–25 min", "topic": "Prompt patterns cheat‑sheet" },
+    { "range": "25–40 min", "topic": "Live demo: Java subtle bug" },
+    { "range": "40–50 min", "topic": "Anti‑patterns & quick fixes" },
+    { "range": "50–58 min", "topic": "Prompt gym (pairs)" },
+    { "range": "58–60 min", "topic": "Wrap & assign" }
+  ],
+  "scripts": [
+    { "slide": 1, "script": "Welcome to Prompting for Programmers: how to turn vague asks into reproducible results by shaping context, constraints, and output format." },
+    { "slide": 2, "script": "Learning outcomes: we’ll reason about how prompts steer models, apply patterns for generate/refactor/explain/test/debug, enforce structured outputs like JSON or unified diffs, and iterate quickly." },
+    { "slide": 3, "script": "Contrast a bad prompt—underspecified, no constraints—with a SPEC-style prompt that sets role, task, context, constraints, examples, and output format. Emphasize that clarity beats secret phrases." },
+    { "slide": 4, "script": "Mental model: LLMs are next‑token generators. More tokens don’t help unless relevant. Use levers: goal, scoped context, constraints, format, and feedback. For coding, keep sampling conservative (low temperature). The chart shows variance dropping when we fix the shape." },
+    { "slide": 5, "script": "Cheat‑sheet patterns. SPEC: role, task, context, constraints, format. Explain & verify: force a summary plus edge cases. Test generator: require coverage for happy path, nulls, boundaries." },
+    { "slide": 6, "script": "Bug hunt: ask for likely failure points + minimal fix + diff + short rationale. Docs & examples: generate Javadoc/KDoc and compiling examples. Structured output: JSON schema or unified diff. Constrain the sandbox to prevent invention—allow one clarifying question." },
+    { "slide": 7, "script": "Live demo setup: Java class uses Map.of which is immutable. Vague prompt likely yields noisy edits. SPEC + format should produce a minimal, correct change (e.g., new HashMap<>(Map.of(...)))." },
+    { "slide": 8, "script": "Run Prompt B: request a unified diff and a single test name only—this tends to avoid verbose explanations and gives a patch you can apply. Discuss pros/cons of each suggested fix." },
+    { "slide": 9, "script": "Prompt C: tests-first drives clarity. Generate 4 JUnit 5 tests for success, missing item, insufficient stock, and non‑positive qty. Then use Explain & Verify to summarize changes in two bullets." },
+    { "slide": 10, "script": "Anti‑patterns and quick fixes. Adoption is rising per SO surveys (76% using/plan in 2024; growth in 2025 with mixed trust). Add a small rubric to any prompt: correctness, completeness, style, safety, and format compliance." },
+    { "slide": 11, "script": "Prompt gym: pairs practice with an Angular 18 truncate pipe. Two rounds: initial prompt, then refine with SPEC + format + example. Wrap: bring a small function next week to refactor using these patterns." }
+  ],
+  "sources": [
+    "OpenAI, Introducing Structured Outputs (2024)",
+    "Anthropic prompting guidance (2024–2025)",
+    "GitHub Research on Copilot productivity (55% faster JS task)",
+    "Stack Overflow Developer Survey 2024/2025 (AI usage and sentiment)",
+    "Unified diff prompting patterns (Aider blog, community posts)"
+  ]
+}
