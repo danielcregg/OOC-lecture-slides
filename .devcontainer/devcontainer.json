@@ -1,5 +1,5 @@
 {
-  "name": "AIAP Lecture Slides Codespace",
+  "name": "OOC Lecture Slides Codespace",
   "image": "mcr.microsoft.com/devcontainers/universal:2",
   
   // Configure tool-specific properties
@@ -18,8 +18,7 @@
         "ms-vscode.live-server",
         "ms-vscode.vscode-copilot-vision",
         "ms-vscode.vscode-websearchforcopilot",
-        "ritwickdey.LiveServer",
-        "GitHub.copilot-chat"
+        "ritwickdey.LiveServer"
       ],
       
       // VS Code settings
