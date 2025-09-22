@@ -11,7 +11,7 @@ A comprehensive collection of interactive lecture slides for the AI-Assisted Pro
 This module consists of a module introduction plus 8 main lectures:
 
 1. **[Module Introduction](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture1-module-introduction.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture1-module-introduction.pdf) | [🎥 Video](https://danielcregg.github.io/AIAP-lecture-slides/videos/lecture1-module-introduction.mp4)
-2. **Code Review and Quality Assurance** 🚧 Coming Soon
+2. **[Structure](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture2-structure.html)** ✅ Available
 3. **Testing and Debugging with AI** 🚧 Coming Soon
 4. **Documentation and Communication** 🚧 Coming Soon
 5. **AI in Software Architecture** 🚧 Coming Soon
