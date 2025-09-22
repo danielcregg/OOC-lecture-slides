@@ -94,7 +94,7 @@
   "postCreateCommand": "npm install -g http-server && echo 'Development environment ready! 🚀'",
 
   // Commands to run when attaching to the container
-  "postAttachCommand": "echo 'Welcome to AIAP Lecture Slides development environment! 📚' && echo 'Starting slide server on port 8000...' && nohup python -m http.server 8000 > /dev/null 2>&1 & echo 'Slides available at: http://localhost:8000'",
+  "postAttachCommand": "echo 'Welcome to OOC Lecture Slides development environment! 📚' && echo 'Starting slide server on port 8000...' && nohup python -m http.server 8000 > /dev/null 2>&1 & echo 'Slides available at: http://localhost:8000'",
 
   // Mount the local git config and credentials
   "mounts": [
