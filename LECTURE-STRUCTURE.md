@@ -15,7 +15,7 @@ This guide explains the standardized structure for AI Assisted Programming lectu
 ```
 lectures/
 ├── lecture1-module-introduction.html       ✅ Clean
-├── lecture2-ai-assisted-programming-intro.html ✅ Clean
+├── lecture2-structure.html ✅ Clean
 ├── lecture-template.html                   📋 Template
 └── [future lectures...]
 

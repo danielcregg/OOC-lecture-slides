@@ -71,7 +71,7 @@ class FrontPageUpdater:
         """Get appropriate description for each lecture."""
         descriptions = {
             'lecture1-module-introduction': 'Welcome to AIAP! Module overview, learning outcomes, assessment details, and getting started with tools.',
-            'lecture2-ai-assisted-programming-intro': 'Overview of AI tools in software development, GitHub Copilot, and the future of programming with AI assistance.',
+            'lecture2-structure': 'Hello World, program structure, compile/run, variables, control flow, methods, arrays, objects.',
             'lecture3-code-generation-completion': 'Deep dive into AI-powered code generation, best practices, and hands-on exercises with various AI tools.',
             'lecture4-debugging-testing': 'AI-powered debugging techniques, automated testing with AI, and quality assurance strategies.',
             'lecture5-documentation-comments': 'Generating documentation with AI, code commenting best practices, and maintaining code clarity.',
@@ -85,7 +85,7 @@ class FrontPageUpdater:
         """Get duration for each lecture."""
         durations = {
             'lecture1-module-introduction': '45 minutes',
-            'lecture2-ai-assisted-programming-intro': '60 minutes',
+            'lecture2-structure': '60 minutes',
             'lecture3-code-generation-completion': '60 minutes',
             'lecture4-debugging-testing': '55 minutes',
             'lecture5-documentation-comments': '50 minutes',

@@ -61,7 +61,7 @@ MINIMAX_GROUP_ID=your_minimax_group_id
 videos/
 ├── README.md                                    # Auto-generated video index
 ├── lecture1-course-introduction.mp4            # Generated video files
-├── lecture2-ai-assisted-programming-intro.mp4
+├── lecture2-structure.mp4
 └── ...
 ```
 

@@ -4,9 +4,9 @@
     "video_path": "videos/lecture1-course-introduction.mp4",
     "generated_at": 1757633257.4857216
   },
-  "lecture2-ai-assisted-programming-intro": {
+  "lecture2-structure": {
     "pdf_hash": "ba934a4679a4d2646b0404a3fec2dcf8",
-    "video_path": "videos/lecture2-ai-assisted-programming-intro.mp4",
+    "video_path": "videos/lecture2-structure.mp4",
     "generated_at": 1757944518.6354053
   }
 }

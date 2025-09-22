@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!-- Optimized viewport for Reveal.js presentations -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+    <title>Lecture Week 2: Java Program Structure and Basic Concepts</title>
+    <link rel="stylesheet" href="../dist/reset.css">
+    <link rel="stylesheet" href="../dist/reveal.css">
+    <link rel="stylesheet" href="../dist/theme/white.css" id="theme">
+    <link rel="stylesheet" href="../theme/aiap-custom.css">
+    <link rel="stylesheet" href="../plugin/highlight/light-professional.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Title Slide -->
+            <section data-state="title" class="title-slide">
+                <div class="r-vstack">
+                    <h1>Java Program Structure and Basic Concepts</h1>
+                    <div class="subtitle">Syntax, Types, Control Flow, and OOP Basics</div>
+                    <div class="section-divider"></div>
+                    <div class="instructor-info">
+                        <strong>AI Assisted Programming</strong><br>
+                        Week 2 | 60 minutes
+                    </div>
+                </div>
+            </section>
+
+            <!-- Learning Outcomes -->
+            <section>
+                <h2>Learning Outcomes</h2>
+                <div class="r-vstack">
+                    <p>By the end of this lecture, you will be able to:</p>
+                    <ul>
+                        <li class="fragment">Explain Java program structure: classes, methods, and the <code>main</code> entry point.</li>
+                        <li class="fragment">Write, compile, and run a simple Java program from the command line.</li>
+                        <li class="fragment">Use variables, primitive types, operators, and strings appropriately.</li>
+                        <li class="fragment">Apply control flow (if/switch/loops) and define methods with parameters and returns.</li>
+                        <li class="fragment">Work with arrays and create simple classes and objects.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Agenda -->
+            <section>
+                <h2>Agenda</h2>
+                <ul>
+                    <li class="fragment">Hello World and program structure</li>
+                    <li class="fragment">Compile and run: <code>javac</code> and <code>java</code></li>
+                    <li class="fragment">Variables, primitive types, operators, and strings</li>
+                    <li class="fragment">Control flow: if, switch, loops</li>
+                    <li class="fragment">Methods, arrays, and simple objects</li>
+                </ul>
+            </section>
+
+            <!-- Hello World -->
+            <section>
+                <h2>Hello, World!</h2>
+                <pre><code class="language-java">public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}
+                </code></pre>
+                <ul>
+                    <li class="fragment">File name must match public class: <code>HelloWorld.java</code></li>
+                    <li class="fragment"><code>main</code> is the entry point: <code>public static void main(String[] args)</code></li>
+                </ul>
+            </section>
+
+            <!-- Compile and Run -->
+            <section>
+                <h2>Compile and Run</h2>
+                <div class="r-hstack">
+                    <div>
+                        <h3>Commands</h3>
+                        <pre><code>javac HelloWorld.java
+java HelloWorld
+                        </code></pre>
+                    </div>
+                    <div>
+                        <h3>Notes</h3>
+                        <ul>
+                            <li class="fragment"><code>javac</code> compiles source to <code>.class</code> bytecode</li>
+                            <li class="fragment"><code>java</code> runs the class by name (no <code>.class</code>)</li>
+                            <li class="fragment">Ensure JDK is installed and on PATH</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Variables and Types -->
+            <section>
+                <h2>Variables and Types</h2>
+                <div class="r-hstack">
+                    <div>
+                        <h3>Primitives</h3>
+                        <ul>
+                            <li class="fragment"><code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code></li>
+                            <li class="fragment"><code>float</code>, <code>double</code></li>
+                            <li class="fragment"><code>char</code>, <code>boolean</code></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Example</h3>
+                        <pre><code class="language-java">int count = 3;
+double price = 19.99;
+char grade = 'A';
+boolean done = false;
+String name = "Ada"; // reference type
+                        </code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Operators and Strings -->
+            <section>
+                <h2>Operators and Strings</h2>
+                <ul>
+                    <li class="fragment">Arithmetic: <code>+ - * / %</code>; Assignment: <code>= += -=</code></li>
+                    <li class="fragment">Comparison: <code>== != &lt; &gt; &lt;= &gt;=</code>; Logical: <code>&amp;&amp; || !</code></li>
+                    <li class="fragment">String concatenation: <code>"Hello, " + name</code></li>
+                    <li class="fragment">Use <code>.equals()</code> to compare strings, not <code>==</code></li>
+                </ul>
+            </section>
+
+            <!-- Control Flow -->
+            <section>
+                <h2>Control Flow</h2>
+                <div class="r-hstack">
+                    <div>
+                        <h3>If / Else</h3>
+                        <pre><code class="language-java">if (score &gt;= 50) {
+    System.out.println("Pass");
+} else {
+    System.out.println("Fail");
+}
+                        </code></pre>
+                    </div>
+                    <div>
+                        <h3>Switch</h3>
+                        <pre><code class="language-java">switch (day) {
+    case 1: System.out.println("Mon"); break;
+    case 2: System.out.println("Tue"); break;
+    default: System.out.println("Other");
+}
+                        </code></pre>
+                    </div>
+                </div>
+                <div class="r-hstack">
+                    <div>
+                        <h3>Loops</h3>
+                        <pre><code class="language-java">for (int i = 0; i &lt; 3; i++) {
+    System.out.println(i);
+}
+
+int j = 0;
+while (j &lt; 3) {
+    j++;
+}
+                        </code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Methods -->
+            <section>
+                <h2>Methods</h2>
+                <pre><code class="language-java">static int add(int a, int b) {
+    return a + b;
+}
+
+public static void main(String[] args) {
+    int sum = add(2, 3);
+    System.out.println(sum);
+}
+                </code></pre>
+                <ul>
+                    <li class="fragment">Methods can be <code>static</code> or instance</li>
+                    <li class="fragment">Parameters, return types, and overloading</li>
+                </ul>
+            </section>
+
+            <!-- Arrays -->
+            <section>
+                <h2>Arrays</h2>
+                <pre><code class="language-java">int[] nums = {1, 2, 3};
+System.out.println(nums.length);
+for (int n : nums) {
+    System.out.println(n);
+}
+                </code></pre>
+                <ul>
+                    <li class="fragment">Fixed-size, zero-indexed sequences</li>
+                    <li class="fragment">Use enhanced for-loop for iteration</li>
+                </ul>
+            </section>
+
+            <!-- Objects and Classes -->
+            <section>
+                <h2>Objects and Classes</h2>
+                <pre><code class="language-java">class Person {
+    String name;
+    Person(String name) { this.name = name; }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Person p = new Person("Ada");
+        System.out.println(p.name);
+    }
+}
+                </code></pre>
+                <ul>
+                    <li class="fragment">Classes define state (fields) and behavior (methods)</li>
+                    <li class="fragment">Create objects with <code>new</code>; constructors initialize state</li>
+                </ul>
+            </section>
+
+            <!-- Tips and Common Errors -->
+            <section>
+                <h2>Tips and Common Errors</h2>
+                <ul>
+                    <li class="fragment">File/class name mismatch: <code>PublicClass.java</code> must match <code>public class PublicClass</code></li>
+                    <li class="fragment">Missing semicolons and braces</li>
+                    <li class="fragment">Using <code>==</code> instead of <code>.equals()</code> for strings</li>
+                    <li class="fragment">Package and directory structure must align</li>
+                </ul>
+            </section>
+
+            <!-- Summary/Conclusion -->
+            <section>
+                <h2>Summary</h2>
+                <div class="r-vstack">
+                    <ul>
+                        <li class="fragment">Java programs are class-based with a <code>main</code> entry point</li>
+                        <li class="fragment">Compile with <code>javac</code>, run with <code>java</code></li>
+                        <li class="fragment">Use primitives, strings, operators, and control flow to model logic</li>
+                        <li class="fragment">Organize code with methods, arrays, and simple classes</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Next Steps -->
+            <section>
+                <h2>Next Steps</h2>
+                <div class="r-vstack">
+                    <ul>
+                        <li class="fragment">Practice: write a program that reads a name and greets</li>
+                        <li class="fragment">Implement FizzBuzz and a simple calculator using methods</li>
+                        <li class="fragment">Explore arrays and loops with small exercises</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Final Slide -->
+            <section data-state="title" class="title-slide">
+                <div class="r-vstack">
+                    <h1>Thank You</h1>
+                    <div class="subtitle">Questions & Discussion</div>
+                    <div class="section-divider"></div>
+                    <div class="instructor-info">
+                        <strong>AI Assisted Programming</strong><br>
+                        Next: Prompting for Programmers
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Core Scripts -->
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script>
+        // Reveal.js Configuration - Following Best Practices
+        Reveal.initialize({
+            // Core layout - optimal for responsive content
+            width: 960,
+            height: 700,
+            margin: 0.04,
+            minScale: 0.2,
+            maxScale: 2.0,
+            
+            // Navigation and controls
+            hash: true,
+            controls: true,
+            controlsTutorial: false,
+            progress: true,
+            center: true,
+            touch: true,
+            loop: false,
+            rtl: false,
+            navigationMode: 'default',
+            shuffle: false,
+            fragments: true,
+            fragmentInURL: false,
+            embedded: false,
+            help: true,
+            showNotes: false,
+            
+            // Professional transitions optimized for educational content
+            transition: 'convex',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            
+            // Auto-animate for smooth content transitions
+            autoAnimate: true,
+            autoAnimateEasing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            autoAnimateUnmatched: false,
+            
+            // Mathematical typesetting
+            math: {
+                mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+                config: 'TeX-AMS_HTML-full',
+                tex2jax: {
+                    inlineMath: [['\\(','\\)']],
+                    displayMath: [['\\[','\\]']],
+                    balanceBraces: true,
+                    processEscapes: false,
+                    processRefs: true,
+                    processEnvironments: true,
+                    preview: 'TeX',
+                    skipTags: ['script','noscript','style','textarea','pre','code'],
+                    ignoreClass: 'tex2jax_ignore',
+                    processClass: 'tex2jax_process'
+                }
+            },
+            
+            // Plugins
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ]
+        });
+    </script>
+</body>
+</html>

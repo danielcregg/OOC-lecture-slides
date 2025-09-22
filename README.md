@@ -65,10 +65,10 @@ AIAP-lecture-slides/
 ├── index.html                                    # Main module index page
 ├── lectures/                                     # Individual lecture files
 │   ├── lecture1-module-introduction.html        # Module introduction
-│   └── lecture2-ai-assisted-programming-intro.html # Lecture 2 slides
+│   └── lecture2-structure.html # Lecture 2 slides
 ├── pdfs/                                         # Auto-generated PDF exports
 │   ├── lecture1-module-introduction.pdf
-│   └── lecture2-ai-assisted-programming-intro.pdf
+│   └── lecture2-structure.pdf
 ├── dist/                                         # Reveal.js core files
 ├── plugin/                                       # Reveal.js plugins
 ├── theme/                                        # Custom theme files
@@ -124,7 +124,7 @@ To add a new lecture:
 1. **Create lecture file**:
    ```bash
    # Follow the naming convention: lecture#-descriptive-title.html
-   cp lectures/lecture2-ai-assisted-programming-intro.html lectures/lecture3-new-topic.html
+   cp lectures/lecture2-structure.html lectures/lecture3-new-topic.html
    ```
 
 2. **Update content**: Edit the new HTML file with your content
@@ -140,7 +140,7 @@ To add a new lecture:
 - **Format**: `lecture#-descriptive-title.html`
 - **Examples**: 
   - `lecture1-module-introduction.html`
-  - `lecture2-ai-assisted-programming-intro.html`
+   - `lecture2-structure.html`
   - `lecture3-code-generation-basics.html`
 
 ### Lecture Template Structure

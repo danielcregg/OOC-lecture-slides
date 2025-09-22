@@ -12,7 +12,7 @@ This directory contains automatically generated videos for the AIAP lecture slid
 ## Available Videos
 
 - [lecture1-module-introduction](./lecture1-module-introduction.mp4)
-- [lecture2-ai-assisted-programming-intro](./lecture2-ai-assisted-programming-intro.mp4)
+- [lecture2-structure](./lecture2-structure.mp4)
 
 ## Video Specifications
 
