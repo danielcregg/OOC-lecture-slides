@@ -36,3 +36,12 @@ __pycache__/
 # Local development
 .env
 .env.local
+
+# Audio/video test files
+*.wav
+*.mp3
+
+# Generation logs and cache
+.pdf-generation-log
+.video-generation-log
+video_generation_cache.json

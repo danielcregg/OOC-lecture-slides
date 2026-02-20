@@ -366,13 +366,6 @@
             scrollActivationWidth: null,
             hideInactiveCursor: true,
             
-            // Improved mobile and touch support
-            touch: true,
-            touchActivationWidth: null,
-            
-            // Display quality
-            display: 'block',
-            
             // Keyboard navigation
             keyboard: {
                 32: null, // Don't use space for next slide
@@ -382,13 +375,8 @@
                 40: 'down'  // Down arrow
             },
             
-            // Plugin configuration for better performance
-            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ],
-            
-            // Legacy dependencies (keeping for compatibility)
-            dependencies: [
-                { src: '../plugin/highlight/highlight.js', async: true }
-            ]
+            // Plugin configuration
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
         });
     </script>
 </body>

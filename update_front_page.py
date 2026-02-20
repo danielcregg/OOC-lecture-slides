@@ -12,7 +12,7 @@ from typing import Dict, List, Tuple, Optional
 
 class FrontPageUpdater:
     def __init__(self):
-        self.github_pages_base = "https://danielcregg.github.io/AIAP-lecture-slides"
+        self.github_pages_base = "https://danielcregg.github.io/OOC-lecture-slides"
         self.index_file = Path("index.html")
         self.pdfs_dir = Path("pdfs")
         self.videos_dir = Path("videos")
