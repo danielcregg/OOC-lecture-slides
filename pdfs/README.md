@@ -5,7 +5,8 @@ This directory contains PDF exports of all lecture slides, automatically generat
 ## Available Lectures:
 
 - [Lecture 1: Module Introduction](./lecture1-module-introduction.pdf) - lecture1-module-introduction slides
-- [Lecture 2: Java Program Structure and Basics](./lecture2-structure.pdf) - lecture2-structure slides
+- [Lecture 2: Ai Assisted Programming Intro](./lecture2-ai-assisted-programming-intro.pdf) - lecture2-ai-assisted-programming-intro slides
+- [Lecture 2: Structure](./lecture2-structure.pdf) - lecture2-structure slides
 
 ## Features:
 
@@ -22,4 +23,4 @@ This directory contains PDF exports of all lecture slides, automatically generat
 
 ---
 
-*Last updated: 2025-09-18 11:04:15 UTC by GitHub Actions*
+*Last updated: 2026-02-20 15:43:28 UTC by GitHub Actions*
