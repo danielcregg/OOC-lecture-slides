@@ -1,218 +1,83 @@
-# AI-Assisted Programming - Lecture Slides
+# OOC Lecture Slides
 
-A comprehensive collection of interactive lecture slides for the AI-Assisted Programming module, built with Reveal.js and hosted on GitHub Pages.
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)
 
-## 🚀 View Slides Online
+A comprehensive collection of interactive lecture slides for the Object-Oriented Computing (OOC) module, built with Reveal.js and hosted on GitHub Pages.
 
-**Main Module Index**: [https://danielcregg.github.io/AIAP-lecture-slides/](https://danielcregg.github.io/AIAP-lecture-slides/)
+## Overview
 
-## 📚 Module Structure
+This repository contains the full set of weekly lecture presentations for the OOC module at ATU. Each lecture is an interactive HTML slide deck covering Java programming fundamentals, object-oriented concepts, and AI-assisted programming techniques. The project also includes tooling for automated PDF generation and AI-narrated video creation of lectures.
 
-This module consists of a module introduction plus 8 main lectures:
+## Features
 
-1. **[Module Introduction](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture1-module-introduction.html)** ✅ Available | [📄 PDF](https://github.com/danielcregg/AIAP-lecture-slides/raw/main/pdfs/lecture1-module-introduction.pdf) | [🎥 Video](https://danielcregg.github.io/AIAP-lecture-slides/videos/lecture1-module-introduction.mp4)
-2. **[Structure](https://danielcregg.github.io/AIAP-lecture-slides/lectures/lecture2-structure.html)** ✅ Available
-3. **Testing and Debugging with AI** 🚧 Coming Soon
-4. **Documentation and Communication** 🚧 Coming Soon
-5. **AI in Software Architecture** 🚧 Coming Soon
-6. **Ethics and Limitations** 🚧 Coming Soon
-7. **Future of AI-Assisted Programming** 🚧 Coming Soon
-8. **Lecture 8** 🚧 Coming Soon
-9. **Lecture 9** 🚧 Coming Soon
+- Interactive Reveal.js slide decks with keyboard navigation, speaker notes, and overview mode
+- Responsive design that works on desktop, tablet, and mobile browsers
+- Automated PDF export via GitHub Actions and Puppeteer
+- AI-powered video generation with voice cloning for lecture narration
+- Custom white theme with professional styling and animations
+- GitHub Codespaces dev container for easy authoring
+- Lecture template for consistent slide creation
 
+## Prerequisites
 
-## 📄 PDF Downloads
+- A modern web browser (Chrome 90+, Firefox 88+, Safari 14+, or Edge 90+)
+- [Node.js](https://nodejs.org/) 18+ (for local development and PDF generation)
+- [Python](https://www.python.org/) 3.10+ (for video generation scripts, optional)
 
-All lectures are available as PDF downloads for offline viewing and printing:
+## Getting Started
 
-- **[Download All PDFs](pdfs/)** - Browse the complete PDF directory
-- **Individual PDFs** - Click the 📄 PDF links next to each lecture above
-- **Auto-Generated** - PDFs are automatically updated when slides change
+### Installation
 
-## 🛠 Technology Stack
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/danielcregg/OOC-lecture-slides.git
+   cd OOC-lecture-slides
+   ```
 
-- **Framework**: [Reveal.js](https://revealjs.com/) - Modern HTML presentation framework
-- **Hosting**: GitHub Pages
-- **Styling**: Custom CSS with responsive design
-- **PDF Generation**: Automated via GitHub Actions with Puppeteer
-- **Features**: 
-  - Interactive navigation
-  - Syntax highlighting for code examples
-  - Responsive design for different screen sizes
-  - Speaker notes support
-  - Progress indicators
-  - Automated PDF export
+2. Install Node.js dependencies (for PDF generation):
+   ```bash
+   npm install
+   ```
 
-## 📖 Features
+### Usage
 
-### Interactive Presentations
-- **Keyboard Navigation**: Use arrow keys, spacebar, or touch gestures
-- **Full-Screen Mode**: Press `F` for full-screen presentation
-- **Speaker Notes**: Press `S` to open speaker notes window
-- **Overview Mode**: Press `Esc` to see all slides at once
+**View slides online:**
+Visit the [GitHub Pages site](https://danielcregg.github.io/OOC-lecture-slides/) to browse all lectures.
 
-### Content Features
-- **Up-to-date Statistics**: All data reflects 2024 market research
-- **Code Examples**: Syntax-highlighted code with live editing capability
-- **Interactive Elements**: Animated reveals and transitions
-- **Visual Data**: Charts, graphs, and statistical visualizations
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
+**Serve locally:**
 
-## 🏗 Repository Structure
+```bash
+# Using Python
+python -m http.server 8000
 
-```
-AIAP-lecture-slides/
-├── index.html                                    # Main module index page
-├── lectures/                                     # Individual lecture files
-│   ├── lecture1-module-introduction.html        # Module introduction
-│   └── lecture2-structure.html # Lecture 2 slides
-├── pdfs/                                         # Auto-generated PDF exports
-│   ├── lecture1-module-introduction.pdf
-│   └── lecture2-structure.pdf
-├── dist/                                         # Reveal.js core files
-├── plugin/                                       # Reveal.js plugins
-├── theme/                                        # Custom theme files
-├── .github/workflows/                            # GitHub Actions for PDF generation
-├── _config.yml                                   # GitHub Pages configuration
-└── README.md                                     # This file
+# Using Node.js
+npx http-server
 ```
 
-## 🎯 Learning Objectives
+Then open `http://localhost:8000` in your browser.
 
-By the end of this module, students will be able to:
+**Slide navigation:**
 
-- Understand the landscape of AI-assisted programming tools
-- Effectively use GitHub Copilot and similar AI coding assistants
-- Apply best practices for AI-assisted development
-- Evaluate code quality and security in AI-generated code
-- Navigate ethical considerations in AI-assisted programming
-- Prepare for the evolving future of software development
+| Key | Action |
+|-----|--------|
+| Arrow keys / Space | Navigate slides |
+| `F` | Full-screen mode |
+| `S` | Speaker notes |
+| `Esc` | Overview mode |
 
-## 💻 Local Development
+## Tech Stack
 
-To run these slides locally:
+- **Framework:** [Reveal.js](https://revealjs.com/) -- HTML presentation framework
+- **Hosting:** GitHub Pages
+- **PDF Generation:** Puppeteer via GitHub Actions
+- **Video Generation:** Python with MiniMax TTS and voice cloning
+- **Styling:** Custom CSS with responsive design
+- **Dev Environment:** GitHub Codespaces / VS Code Dev Containers
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/danielcregg/AIAP-lecture-slides.git
-   cd AIAP-lecture-slides
-   ```
+## License
 
-2. **Serve locally** (choose one method):
-   
-   **Using Python:**
-   ```bash
-   python -m http.server 8000
-   ```
-   
-   **Using Node.js:**
-   ```bash
-   npx http-server
-   ```
-   
-   **Using PHP:**
-   ```bash
-   php -S localhost:8000
-   ```
-
-3. **Open in browser**: Navigate to `http://localhost:8000`
-
-## 📝 Adding New Lectures
-
-To add a new lecture:
-
-1. **Create lecture file**:
-   ```bash
-   # Follow the naming convention: lecture#-descriptive-title.html
-   cp lectures/lecture2-structure.html lectures/lecture3-new-topic.html
-   ```
-
-2. **Update content**: Edit the new HTML file with your content
-
-3. **Update main index**: Add the new lecture to `index.html`
-
-4. **Follow naming convention**: Use `lecture-##-descriptive-title.html` format
-
-5. **PDF Generation**: PDFs will be automatically generated by GitHub Actions
-
-### Lecture File Naming
-
-- **Format**: `lecture#-descriptive-title.html`
-- **Examples**: 
-  - `lecture1-module-introduction.html`
-   - `lecture2-structure.html`
-  - `lecture3-code-generation-basics.html`
-
-### Lecture Template Structure
-
-Each lecture should include:
-- Title slide with lecture number and topic
-- Learning objectives
-- Content sections with fragments for progressive reveal
-- Code examples with syntax highlighting
-- Interactive elements (statistics, comparisons, etc.)
-- Q&A section
-- Navigation back to module index
-
-## 🎨 Customization
-
-### Themes
-- Current theme: Modified "Black" theme with custom blue accents (#42affa)
-- Theme files located in `dist/theme/`
-- Custom styles in each lecture's `<style>` section
-
-### Colors
-- Primary: #42affa (Blue)
-- Success: #4CAF50 (Green)
-- Warning: #f44336 (Red)
-- Background: #191919 (Dark gray)
-
-## 📊 Content Sources
-
-All statistics and information are sourced from:
-- Stack Overflow Developer Survey 2024
-- GitHub Research Studies
-- Industry reports from major tech companies
-- Academic research papers
-- Official documentation from AI tool providers
-
-## 🤝 Contributing
-
-We welcome contributions to improve the module content:
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/new-lecture`
-3. **Make your changes**
-4. **Test locally** to ensure slides work properly
-5. **Submit a pull request**
-
-### Contribution Guidelines
-- Ensure all statistics are current and properly sourced
-- Follow the existing slide structure and styling
-- Test on multiple screen sizes
-- Include speaker notes for complex topics
-- Maintain consistent formatting and terminology
-
-## 📱 Browser Support
-
-Tested and supported on:
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-## 📜 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📧 Contact
-
-- **Module Instructor**: [Your Name]
-- **Email**: [your.email@institution.edu]
-- **GitHub Issues**: Use this repository's issue tracker for questions and suggestions
-
-## 🙏 Acknowledgments
-
-- [Reveal.js](https://revealjs.com/) for the excellent presentation framework
-- [GitHub Pages](https://pages.github.com/) for free hosting
-- The AI development community for valuable insights and statistics
+This project is licensed under the [MIT License](LICENSE).

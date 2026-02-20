@@ -28,6 +28,11 @@ logs/
 # Coverage reports
 coverage/
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
 # Local development
 .env
 .env.local
